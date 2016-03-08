@@ -14,10 +14,13 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    authwindow.cpp
+    authwindow.cpp \
+    addfriend.cpp
 
 HEADERS  += mainwindow.h \
-    authwindow.h
+    authwindow.h \
+    addfriend.h
 
 FORMS    += mainwindow.ui \
-    authwindow.ui
+    authwindow.ui \
+    addfriend.ui

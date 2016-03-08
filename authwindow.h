@@ -19,6 +19,10 @@ public slots:
     void on_EnterButton_clicked();
 signals:
     void showMainWindow();
+    void closeMainWindow();
+private slots:
+    void on_CloseButton_clicked();
+
 private:
     Ui::authwindow *ui;
     bool checklogin(QString login, QString password);

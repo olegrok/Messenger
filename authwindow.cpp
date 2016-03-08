@@ -9,8 +9,6 @@ authwindow::authwindow(QWidget *parent) :
     ui(new Ui::authwindow)
 {
     ui->setupUi(this);
-    ui->Login->setPlaceholderText("Login");
-    ui->Password->setPlaceholderText("Password");
     connect(ui->EnterButton, SIGNAL(clicked()), this, SLOT(on_EnterButton_clicked()), Qt::UniqueConnection);
 }
 
@@ -38,4 +36,9 @@ void authwindow::on_EnterButton_clicked()
     }
     else
         ui->StatusLine->setText("Wrong password");
+}
+
+void authwindow::on_CloseButton_clicked()
+{
+    emit closeMainWindow();
 }
