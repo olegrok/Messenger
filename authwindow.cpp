@@ -28,10 +28,10 @@ void authwindow::on_EnterButton_clicked()
     QString login = ui->Login->text();
     QString password = ui->Password->text();
 
-    if(authwindow::checklogin(login, password))
-    {
-        qDebug() << login << " " << password;
-        emit showMainWindow();
+    if(authwindow::checklogin(login, password)) //it's hard expandable way
+    {						//better to use some struct
+        qDebug() << login << " " << password;   //which holds login and pass
+        emit showMainWindow();			// struct foo { login , pass }
         this->close();
     }
     else
