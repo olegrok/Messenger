@@ -23,8 +23,8 @@ MainWindow::MainWindow(QWidget *parent) :
     auth->show();
     connect(auth, &authwindow::showMainWindow, this, &MainWindow::show, Qt::UniqueConnection);
     connect(auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
-    connect(ui->SendButton, SIGNAL(clicked()), this, SLOT(on_SendButton_clicked()), Qt::UniqueConnection);
-    connect(ui->AddContactButton, SIGNAL(clicked()), this, SLOT(on_AddContactButton_clicked()), Qt::UniqueConnection);
+    //connect(ui->SendButton, SIGNAL(clicked()), this, SLOT(on_SendButton_clicked()), Qt::UniqueConnection);
+    //connect(ui->AddContactButton, SIGNAL(clicked()), this, SLOT(on_AddContactButton_clicked()), Qt::UniqueConnection);
     connect(addfriend, &AddFriend::sendNick, this, &MainWindow::addContact, Qt::UniqueConnection);
 }
 
@@ -50,4 +50,18 @@ void MainWindow::addContact(QString nick)
 {
     ui->ContactsList->addItem(nick);
     addfriend->hide();
+}
+
+void MainWindow::on_ContactsList_itemActivated(QListWidgetItem *item)
+{
+    ui->ChatWindow->clear();
+    //QString msgs = getMessage(item);
+    //ui->ChatWindow->setPlainText(msgs);
+    ui->ChatWindow->setPlainText(item->text()+": Hello");
+}
+
+void MainWindow::on_DeleteContactButton_clicked()
+{
+    QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
+        delete item;
 }

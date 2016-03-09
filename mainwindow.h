@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidgetItem>
 #include "mainwindow.h"
 #include "authwindow.h"
 #include "addfriend.h"
@@ -23,6 +24,10 @@ public:
 private slots:
     void on_SendButton_clicked();
     void on_AddContactButton_clicked();
+
+    void on_ContactsList_itemActivated(QListWidgetItem *item);
+
+    void on_DeleteContactButton_clicked();
 
 private:
     Ui::MainWindow *ui;
