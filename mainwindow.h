@@ -6,7 +6,7 @@
 #include "mainwindow.h"
 #include "authwindow.h"
 #include "addfriend.h"
-
+#include "client.h"
 
 namespace Ui {
 class MainWindow;

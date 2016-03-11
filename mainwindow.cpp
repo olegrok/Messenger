@@ -6,6 +6,7 @@
 #include "authwindow.h"
 #include "ui_authwindow.h"
 #include "addfriend.h"
+#include "client.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
