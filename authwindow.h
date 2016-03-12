@@ -26,12 +26,10 @@ signals:
     void closeMainWindow();
 private slots:
     void on_CloseButton_clicked();
-
     void on_RegisterButton_clicked();
-
 private:
     Ui::authwindow *ui;
-    bool checklogin(Auth auth);
+    bool checklogin(accountRequest auth);
 };
 
 #endif // AUTHWINDOW_H

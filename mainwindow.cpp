@@ -22,8 +22,6 @@ MainWindow::MainWindow(QWidget *parent) :
     auth->show();
     connect(auth, &authwindow::showMainWindow, this, &MainWindow::show, Qt::UniqueConnection);
     connect(auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
-    //connect(ui->SendButton, SIGNAL(clicked()), this, SLOT(on_SendButton_clicked()), Qt::UniqueConnection);
-    //connect(ui->AddContactButton, SIGNAL(clicked()), this, SLOT(on_AddContactButton_clicked()), Qt::UniqueConnection);
     connect(addfriend, &AddFriend::sendNick, this, &MainWindow::addContact, Qt::UniqueConnection);
 }
 

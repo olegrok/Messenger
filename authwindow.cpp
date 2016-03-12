@@ -4,15 +4,17 @@
 #include "ui_authwindow.h"
 #include "client.h"
 #include "mainwindow.h"
+#include "structsforrequests.h"
 
-extern Auth auth;
+extern accountRequest auth;
 
 authwindow::authwindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::authwindow)
 {
     ui->setupUi(this);
-    connect(ui->EnterButton, SIGNAL(clicked()), this, SLOT(on_EnterButton_clicked()), Qt::UniqueConnection);
+    //connect(ui->EnterButton, SIGNAL(clicked()), this, SLOT(on_EnterButton_clicked()), Qt::UniqueConnection);
+    //connect(ui->EnterButton, &Client::changeAuthStatus, this, SLOT(changeAuthStatus), Qt::UniqueConnection);
 }
 
 authwindow::~authwindow()
@@ -20,10 +22,10 @@ authwindow::~authwindow()
     delete ui;
 }
 
-bool authwindow::checklogin(Auth auth)
+bool authwindow::checklogin(accountRequest auth)
 {
-    Request arg = {auth.login, auth.password, "account", "account_autorisation"};
-    Client().request(arg);
+    accountRequest arg = {auth.login, auth.password};
+    Client().accountRequest(arg, "account_authorisation");
 
     return true;
 }
@@ -32,14 +34,18 @@ void authwindow::on_EnterButton_clicked()
 {
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
-    if(authwindow::checklogin(auth))
+    accountRequest arg = {auth.login, auth.password};
+    Reply reply = Client::accountRequest(arg, "account_authorisation");
+
+    switch(reply.statusCode)
     {
-        qDebug() << auth.login << " " << auth.password;
+        case 200: ui->StatusLine->setText("Successeful autorisation!");
         emit showMainWindow();
-        this->close();
+        this->close();break;
+        default: ui->StatusLine->setText(reply.replyContent); break;
     }
-    else
-        ui->StatusLine->setText("Wrong password");
+
+    return;
 }
 
 void authwindow::on_CloseButton_clicked()
@@ -52,6 +58,17 @@ void authwindow::on_RegisterButton_clicked()
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
 
-    Request arg = {auth.login, auth.password, "account", "account_registration"};
-    Client().request(arg);
+    accountRequest arg = {auth.login, auth.password};
+    Reply reply = Client::accountRequest(arg, "account_registration");
+
+    switch(reply.statusCode)
+    {
+        case 200: ui->StatusLine->setText("Successeful registration!");
+        emit showMainWindow();
+        this->close();break;
+        default: ui->StatusLine->setText(reply.replyContent); break;
+    }
+
 }
+
+

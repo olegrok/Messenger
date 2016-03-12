@@ -24,7 +24,8 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h \
     authwindow.h \
     addfriend.h \
-    client.h
+    client.h \
+    structsforrequests.h
 
 FORMS    += mainwindow.ui \
     authwindow.ui \

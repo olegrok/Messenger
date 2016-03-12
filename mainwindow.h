@@ -22,6 +22,7 @@ public:
     ~MainWindow();
     void addContact(QString);
     static Client client;
+    authwindow *auth;
 
 private slots:
     void on_SendButton_clicked();
@@ -31,7 +32,6 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
-    authwindow *auth;
     AddFriend *addfriend;
 };
 
