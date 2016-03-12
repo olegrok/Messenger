@@ -2,6 +2,10 @@
 #define AUTHWINDOW_H
 
 #include <QDialog>
+#include <QLineEdit>
+#include <QDebug>
+#include "ui_authwindow.h"
+#include "client.h"
 
 namespace Ui {
 class authwindow;
@@ -23,9 +27,11 @@ signals:
 private slots:
     void on_CloseButton_clicked();
 
+    void on_RegisterButton_clicked();
+
 private:
     Ui::authwindow *ui;
-    bool checklogin(QString login, QString password);
+    bool checklogin(Auth auth);
 };
 
 #endif // AUTHWINDOW_H

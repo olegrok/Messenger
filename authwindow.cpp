@@ -2,7 +2,10 @@
 #include <QDebug>
 #include "authwindow.h"
 #include "ui_authwindow.h"
+#include "client.h"
 #include "mainwindow.h"
+
+extern Auth auth;
 
 authwindow::authwindow(QWidget *parent) :
     QDialog(parent),
@@ -17,20 +20,21 @@ authwindow::~authwindow()
     delete ui;
 }
 
-bool authwindow::checklogin(QString login, QString password)
+bool authwindow::checklogin(Auth auth)
 {
-    //todo
+    Request arg = {auth.login, auth.password, "account", "account_autorisation"};
+    Client().request(arg);
+
     return true;
 }
 
 void authwindow::on_EnterButton_clicked()
 {
-    QString login = ui->Login->text();
-    QString password = ui->Password->text();
-
-    if(authwindow::checklogin(login, password)) //it's hard expandable way
+    auth.login = ui->Login->text();
+    auth.password = ui->Password->text();
+    if(authwindow::checklogin(auth)) //it's hard expandable way
     {						                                //better to use some struct
-        qDebug() << login << " " << password;   //which holds login and pass
+        qDebug() << auth.login << " " << auth.password;   //which holds login and pass
         emit showMainWindow();			            // struct foo { login , pass }
         this->close();
     }
@@ -41,4 +45,13 @@ void authwindow::on_EnterButton_clicked()
 void authwindow::on_CloseButton_clicked()
 {
     emit closeMainWindow();
+}
+
+void authwindow::on_RegisterButton_clicked()
+{
+    auth.login = ui->Login->text();
+    auth.password = ui->Password->text();
+
+    Request arg = {auth.login, auth.password, "account", "account_registration"};
+    Client().request(arg);
 }

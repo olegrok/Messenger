@@ -1,6 +1,5 @@
 #include "addfriend.h"
 #include "ui_addfriend.h"
-#include "mainwindow.h"
 
 AddFriend::AddFriend(QWidget *parent) :
     QDialog(parent),

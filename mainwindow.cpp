@@ -3,10 +3,8 @@
 #include <QDesktopWidget>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "authwindow.h"
-#include "ui_authwindow.h"
 #include "addfriend.h"
-#include "client.h"
+#include "authwindow.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

@@ -13,16 +13,41 @@
 #include <QThread>
 #include <QDebug>
 
+
+typedef
+struct autorization
+{
+  QString login;
+  QString password;
+} Auth;
+
+typedef
+struct argumentsForRequest
+{
+    QString login;
+    QString key;
+    QString request;
+    QString sub_reqest;
+} Request;
+
+typedef
+struct argumentsFromReply
+{
+    QString status_code;
+    QString reply_content;
+} Reply;
+
 class Client : public QObject
 {
    Q_OBJECT
 public:
     explicit Client(QObject *parent = 0);
-    //virtual ~Client();
+    ~Client();
     QString login;
     QString password;
     QUrl *url;
     QNetworkAccessManager *client;
+    Reply request(Request req);
 
 //signals:
 

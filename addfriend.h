@@ -1,6 +1,5 @@
 #ifndef ADDFRIEND_H
 #define ADDFRIEND_H
-
 #include <QDialog>
 
 namespace Ui {
