@@ -1,7 +1,10 @@
 #include <QNetworkRequest>
 #include <cpprest/json.h>
 #include <cpprest/http_client.h>
+#include <cpprest/http_msg.h>
 #include "client.h"
+
+#include <iostream>
 
 using namespace web;
 using namespace web::http;
@@ -12,23 +15,7 @@ Auth auth;
 Client::Client(QObject *parent) :
     QObject(parent)
 {
-    qDebug() << "ctor";
-    //url = new QUrl("http://localhost:7777");
-    url = new QUrl("http://192.168.1.204:7777");
-    QJsonObject json;
-    json["key"] = "key";
-    json["request"] = "account";
-    json["login"] = "alex";
-    json["sub_request"] = "account_authorisation";
-    qDebug() << json;
-    QByteArray reqest = QJsonDocument(json).toBinaryData();
-    client = new QNetworkAccessManager;
-    QObject::connect(client, SIGNAL(finished(QNetworkReply*)),
-                     this, SLOT(finishedSlot(QNetworkReply*)), Qt::UniqueConnection);
-    QNetworkRequest req;
-    req.setHeader(QNetworkRequest::ContentTypeHeader,"Content-Type: application/json");
-    req.setUrl(*url);
-    client->post(req, reqest);
+
 }
 
 /*
@@ -55,14 +42,25 @@ Reply Client::request(Request req)
     json["key"]          = json::value( U(req.key.toStdString()) );
     Reply reply;
     http_client client(U("http://localhost"));
+
+    try
+        {
     client.request( web::http::methods::POST ,U("") , json )
      .then( [=]( pplx::task<web::http::http_response> task )
          {
              http_response response = task.get();
-             Reply.status_code = response.status_code();
+             //reply.statusCode = response.status_code();
             //JsonParser
-          })
-     .wait();
+          }).wait();
+
+
+          }
+      catch (const std::exception &e)
+          {
+              qDebug() << "Error exception:" << e.what();
+          }
+
+
 
 }
 

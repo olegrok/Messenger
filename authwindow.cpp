@@ -32,10 +32,10 @@ void authwindow::on_EnterButton_clicked()
 {
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
-    if(authwindow::checklogin(auth)) //it's hard expandable way
-    {						                                //better to use some struct
-        qDebug() << auth.login << " " << auth.password;   //which holds login and pass
-        emit showMainWindow();			            // struct foo { login , pass }
+    if(authwindow::checklogin(auth))
+    {
+        qDebug() << auth.login << " " << auth.password;
+        emit showMainWindow();
         this->close();
     }
     else

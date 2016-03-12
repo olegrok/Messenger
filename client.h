@@ -12,7 +12,13 @@
 #include <QNetworkReply>
 #include <QThread>
 #include <QDebug>
+#include <cpprest/filestream.h>
+#include <cpprest/http_msg.h>
 
+using namespace web;
+using namespace web::http;
+using namespace web::http::client;
+//using namespace utility;
 
 typedef
 struct autorization
@@ -33,8 +39,8 @@ struct argumentsForRequest
 typedef
 struct argumentsFromReply
 {
-    QString status_code;
-    QString reply_content;
+    //http::status_code statusCode;
+    QString replyContent;
 } Reply;
 
 class Client : public QObject
