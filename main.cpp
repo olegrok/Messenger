@@ -1,5 +1,5 @@
 #include "mainwindow.h"
-#include "client.h"
+#include "database.h"
 #include <QApplication>
 
 //using namespace json;
@@ -7,6 +7,9 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
+    sndMsg msg = {122, "azaza", "not recived", 1};
+    DataBase x;
+    //x.sendMessage(msg);
     return a.exec();
 }
 

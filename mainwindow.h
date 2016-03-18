@@ -24,6 +24,7 @@ public:
     static Client client;
     authwindow *auth;
 
+
 private slots:
     void on_SendButton_clicked();
     void on_AddContactButton_clicked();

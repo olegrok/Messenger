@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT       += network
+QT       += sql
 CONFIG   += console c++11
 
 
@@ -19,13 +20,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     authwindow.cpp \
     addfriend.cpp \
-    client.cpp
+    client.cpp \
+    database.cpp
 
 HEADERS  += mainwindow.h \
     authwindow.h \
     addfriend.h \
     client.h \
-    structsforrequests.h
+    structsforrequests.h \
+    database.h
 
 FORMS    += mainwindow.ui \
     authwindow.ui \

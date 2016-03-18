@@ -1,20 +1,13 @@
-#include <QNetworkRequest>
 #include <cpprest/json.h>
 #include <cpprest/http_client.h>
 #include <cpprest/http_msg.h>
 #include "client.h"
-#include "authwindow.h"
-#include "mainwindow.h"
 #include "structsforrequests.h"
-#include <iostream>
-
-
 
 using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-extern MainWindow w;
 accountRequest auth;
 
 Client::Client(QObject *parent) :
@@ -80,19 +73,4 @@ Reply Client::accountRequest(accRequest req, QString property)
     qDebug() << reply.statusCode << reply.replyContent;
     return reply;
 
-}
-
-void Client::finishedSlot(QNetworkReply *reply)
-{
-    if (reply->error() == QNetworkReply::NoError)
-    {
-        QByteArray bytes = reply->readAll();
-        QString string(bytes);
-        qDebug() << string;
-    }
-    else
-    {
-        qDebug() << reply->errorString();
-    }
-    delete reply;
 }

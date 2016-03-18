@@ -2,24 +2,19 @@
 #define CLIENT_H
 
 #include <QObject>
-#include <QJsonDocument>
 #include <QString>
-#include <QNetworkAccessManager>
-#include <QUrl>
-#include <QByteArray>
-#include <QJsonObject>
-#include <QNetworkRequest>
-#include <QNetworkReply>
-#include <QThread>
 #include <QDebug>
-#include <cpprest/filestream.h>
-#include <cpprest/http_msg.h>
+#include <cpprest/details/basic_types.h>
 #include "structsforrequests.h"
 
 using namespace web;
 using namespace web::http;
 using namespace web::http::client;
-//using namespace utility;
+
+typedef
+struct argumentsFromReply Reply;
+typedef
+struct accountRequest accRequest;
 
 class Client : public QObject
 {
@@ -29,8 +24,8 @@ public:
     ~Client();
     static Reply accountRequest(accRequest, QString);
 
-public slots:
-    void finishedSlot(QNetworkReply* reply);
+//public slots:
+
 };
 
 #endif // CLIENT_H

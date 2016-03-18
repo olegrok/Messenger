@@ -5,7 +5,9 @@
 #include <cpprest/http_client.h>
 #include "client.h"
 
+
 using namespace web::http;
+
 typedef
 struct accountRequest
 {
@@ -27,8 +29,26 @@ struct argumentsFromReply
 {
     web::http::status_code statusCode;
     QString replyContent;
-} Reply;
+} argReply;
 
+typedef
+struct sendMessage
+{
+    int contactID;
+    QString text;
+    QString status;
+    int filed;
+
+} sndMsg;
+
+typedef
+struct contactInforamtion
+{
+  int id;
+  QString login;
+  int lastMsgId;
+  int unreaded;
+} contInfo;
 
 #endif // STRUCTSFORREQUESTS
 

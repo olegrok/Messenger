@@ -25,7 +25,7 @@ authwindow::~authwindow()
 bool authwindow::checklogin(accountRequest auth)
 {
     accountRequest arg = {auth.login, auth.password};
-    Client().accountRequest(arg, "account_authorisation");
+    Client::accountRequest(arg, "account_authorisation");
 
     return true;
 }
