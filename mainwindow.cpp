@@ -5,6 +5,7 @@
 #include "ui_mainwindow.h"
 #include "addfriend.h"
 #include "authwindow.h"
+#include "database.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,14 +21,26 @@ MainWindow::MainWindow(QWidget *parent) :
     addfriend = new AddFriend();
     auth = new authwindow;
     auth->show();
+
+    accRequest accData = {"oleg", "oleg"};
+    DataBase::createConnection(accData);
+    DataBase::createTable();
+    ui->ContactsList->addItems(DataBase::getContacts());
+
+    this->show();
+
     connect(auth, &authwindow::showMainWindow, this, &MainWindow::show, Qt::UniqueConnection);
     connect(auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
-    connect(addfriend, &AddFriend::sendNick, this, &MainWindow::addContact, Qt::UniqueConnection);
+    connect(addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+    auth->close();
+    addfriend->close();
+    delete auth;
+    delete addfriend;
 }
 
 void MainWindow::on_SendButton_clicked()
@@ -43,9 +56,11 @@ void MainWindow::on_AddContactButton_clicked()
     addfriend->show();
 }
 
-void MainWindow::addContact(QString nick)
+void MainWindow::addContact(contInfo info)
 {
-    ui->ContactsList->addItem(nick);
+
+    DataBase::addContact(info);
+    ui->ContactsList->addItem(info.login);
     addfriend->hide();
 }
 
@@ -60,5 +75,6 @@ void MainWindow::on_ContactsList_itemActivated(QListWidgetItem *item)
 void MainWindow::on_DeleteContactButton_clicked()
 {
     QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
+    DataBase::deleteContact(item->text());
         delete item;
 }

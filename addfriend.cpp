@@ -1,5 +1,6 @@
 #include "addfriend.h"
 #include "ui_addfriend.h"
+#include "structsforrequests.h"
 
 AddFriend::AddFriend(QWidget *parent) :
     QDialog(parent),
@@ -13,20 +14,26 @@ AddFriend::~AddFriend()
     delete ui;
 }
 
-bool AddFriend::CheckFriend(QString nick){
+contInfo AddFriend::CheckFriend(QString nick){
+
+
+    contInfo info;
+    info.login = nick;
+    info.id = qrand();
+    info.lastMsgId = 0;
+    info.unreaded = 0;
 
     //todo
-    return true;
+    return info;
 }
 
 void AddFriend::on_AddButton_clicked()
 {
-    QString nick = ui->FriendLogin->text();
-    if(CheckFriend(nick))
+    contInfo info = CheckFriend(ui->FriendLogin->text());
+
+    if(info.id != -1)
     {
         ui->FriendLogin->clear();
-        emit sendNick(nick);
-
-
+        emit sendContact(info);
     }
 }

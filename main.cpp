@@ -7,9 +7,10 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     MainWindow w;
-    sndMsg msg = {122, "azaza", "not recived", 1};
-    DataBase x;
+    //sndMsg msg = {122, "azaza", "not recived", 1};
+    //DataBase x;
     //x.sendMessage(msg);
+    //qDebug() << DataBase::getContacts();
     return a.exec();
 }
 

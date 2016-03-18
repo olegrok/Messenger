@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void addContact(QString);
+    void addContact(contInfo info);
     static Client client;
     authwindow *auth;
 

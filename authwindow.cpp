@@ -44,8 +44,6 @@ void authwindow::on_EnterButton_clicked()
         this->close();break;
         default: ui->StatusLine->setText(reply.replyContent); break;
     }
-
-    return;
 }
 
 void authwindow::on_CloseButton_clicked()

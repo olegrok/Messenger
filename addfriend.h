@@ -1,6 +1,7 @@
 #ifndef ADDFRIEND_H
 #define ADDFRIEND_H
 #include <QDialog>
+#include "structsforrequests.h"
 
 namespace Ui {
 class AddFriend;
@@ -14,13 +15,13 @@ public:
     explicit AddFriend(QWidget *parent = 0);
     ~AddFriend();
 signals:
-    void sendNick(QString);
+    void sendContact(contInfo);
 private slots:
     void on_AddButton_clicked();
 
 private:
     Ui::AddFriend *ui;
-    bool CheckFriend(QString);
+    contInfo CheckFriend(QString);
 };
 
 #endif // ADDFRIEND_H

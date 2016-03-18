@@ -8,11 +8,12 @@ class DataBase
 public:
     DataBase();
     ~DataBase();
-    static bool createConnection(/*accRequest account*/);
-    bool sendMessage(sndMsg msg);
-    bool createTable();
-    bool addContact(contInfo info);
-
+    static bool createConnection(accRequest account);
+    static bool sendMessage(sndMsg msg);
+    static bool createTable();
+    static bool addContact(contInfo info);
+    static QStringList getContacts();
+    static bool deleteContact(QString);
 private:
 
 signals:

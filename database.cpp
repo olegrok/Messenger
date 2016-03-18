@@ -1,11 +1,14 @@
 #include <QtSql>
 #include <QHostInfo>
+#include <QStringList>
+#include <QSqlRecord>
 #include "database.h"
 #include "structsforrequests.h"
 
 DataBase::DataBase()
 {
-    createConnection();
+    accRequest accData = {"oleg", "oleg"};
+    createConnection(accData);
     createTable();
     sndMsg msg = {111, "azaaza", "not_r", 111};
     sendMessage(msg);
@@ -25,18 +28,17 @@ DataBase::~DataBase()
 }
 
 
-bool DataBase::createConnection(/*accRequest account*/)
+bool DataBase::createConnection(accRequest account)
 {
     QSqlDatabase dbase = QSqlDatabase::addDatabase("QSQLITE");
     dbase.setDatabaseName("data.sqlite");
-    dbase.setUserName(/*account.login*/"oleg");
+    dbase.setUserName(account.login);
     dbase.setHostName(QHostInfo().hostName());
-    dbase.setPassword("account.password");
+    dbase.setPassword(account.password);
     if(!dbase.open()){
         qDebug() << "Can't open database" << dbase.lastError();
         return false;
     }
-
     return true;
 }
 
@@ -54,9 +56,8 @@ bool DataBase::createTable()
         qDebug() << "Unable to create a table";
         return false;
     }
-
               str  = "CREATE TABLE messages ( "
-                         "contact_id INTEGER PRIMARY KEY NOT NULL, "
+                         "contact_id INTEGER, "
                          "text   TEXT, "
                          "status  VARCHAR(15), "
                          "filed  VARCHAR(15) "
@@ -73,7 +74,6 @@ bool DataBase::createTable()
 bool DataBase::sendMessage(sndMsg msg)
 {
     QSqlQuery query;
-    //Adding some information
     QString strF =
           "INSERT INTO  messages (contact_id, text, status, filed) "
           "VALUES(%1, '%2', '%3', '%4');";
@@ -106,3 +106,28 @@ bool DataBase::addContact(contInfo info)
     return true;
 }
 
+QStringList DataBase::getContacts()
+{
+    //qDebug() << "contacts:";
+    QSqlQuery query("SELECT * from contacts");
+    QStringList contList;
+    QString cont;
+    QSqlRecord rec = query.record();
+    while(query.next()){
+        cont = query.value(rec.indexOf("login")).toString();
+        contList << cont;
+    }
+    return contList;
+}
+
+bool DataBase::deleteContact(QString login)
+{
+    QSqlQuery query;
+    QString strF =
+          "DELETE FROM contacts WHERE login = '%1';";
+    QString str = strF.arg(login);
+    if (!query.exec(str)) {
+        qDebug() << "Unable to make delete opeation" << query.lastError();
+        return false;
+    }
+}
