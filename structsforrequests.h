@@ -2,6 +2,7 @@
 #define STRUCTSFORREQUESTS
 
 #include <QString>
+#include <QDateTime>
 #include <cpprest/http_client.h>
 #include "client.h"
 
@@ -35,6 +36,7 @@ typedef
 struct sendMessage
 {
     int contactID;
+    //QString time;
     QString text;
     QString status;
     int filed;
