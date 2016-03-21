@@ -31,7 +31,6 @@ private slots:
     void on_RegisterButton_clicked();
 private:
     Ui::authwindow *ui;
-    bool checklogin(accountRequest auth);
 
 };
 

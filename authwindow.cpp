@@ -22,14 +22,6 @@ authwindow::~authwindow()
     delete ui;
 }
 
-bool authwindow::checklogin(accountRequest auth)
-{
-    accountRequest arg = {auth.login, auth.password};
-    Client::accountRequest(arg, "account_authorisation");
-
-    return true;
-}
-
 void authwindow::on_EnterButton_clicked()
 {
     auth.login = ui->Login->text();

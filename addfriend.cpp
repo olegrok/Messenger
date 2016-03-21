@@ -57,6 +57,7 @@ void AddFriend::on_AddButton_clicked()
         default: info.login = "Unknown error";
             break;
         }
+        ui->AddFriendStatus->setText(info.login);
     }
     emit sendContact(info);
  /*   if(info.uid != -1)

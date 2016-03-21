@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Add new friend</string>
+   <string>Dialog</string>
   </property>
   <widget class="QLineEdit" name="FriendLogin">
    <property name="geometry">

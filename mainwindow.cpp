@@ -57,8 +57,10 @@ void MainWindow::on_AddContactButton_clicked()
 
 void MainWindow::addContact(contInfo info)
 {
-    ui->ContactsList->addItem(info.login);
-    addfriend->hide();
+    if(info.uid != -1){
+        ui->ContactsList->addItem(info.login);
+        addfriend->hide();
+    }
 }
 
 void MainWindow::on_ContactsList_itemActivated(QListWidgetItem *item)

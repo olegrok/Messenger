@@ -13,7 +13,7 @@ using namespace web::http::client;
 
 accountRequest auth = {};
 
-QString ServerURL = "http://192.168.1.204:7777";
+QString ServerURL = "http://localhost:7777";
 
 Client::Client(QObject *parent) :
     QObject(parent)
@@ -59,6 +59,7 @@ Reply Client::accountRequest(accRequest req, QString property)
              {
                  http_response response = task.get();
                  reply.statusCode = response.status_code();
+                 qDebug() << "status code: " << reply.statusCode;
                 //JsonParser
                  json = response.extract_json().get();
                  //std::cout << json;
@@ -93,6 +94,7 @@ AddFriendReply Client::AddFriend(QString login)
              {
                  http_response response = task.get();
                  reply.statusCode = response.status_code();
+                 qDebug() << "status code: " << reply.statusCode;
                 //JsonParser
                  json = response.extract_json().get();
                  reply.login = QString::fromStdString(json.at(U("login")).as_string());
