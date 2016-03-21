@@ -6,30 +6,29 @@
 #include "addfriend.h"
 #include "authwindow.h"
 #include "database.h"
+#include "client.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    //QDesktopWidget screen;
-    //screen.availableGeometry().width();
     ui->setupUi(this);
-    //this->setGeometry(300, 300, this->width(), this->height());
     this->setGeometry(QDesktopWidget().availableGeometry().width()/2 - this->width()/2,
                       QDesktopWidget().availableGeometry().height()/2 - this->width()/2,
                       this->width(), this->height());
-    addfriend = new AddFriend();
+
+    //accRequest accData = {};
+    addfriend = new AddFriend;
     auth = new authwindow;
     auth->show();
 
-    accRequest accData = {"oleg", "oleg"};
-    DataBase::createConnection(accData);
+    /*DataBase::createConnection(accData);
     DataBase::createTable();
-    ui->ContactsList->addItems(DataBase::getContacts());
+    ui->ContactsList->addItems(DataBase::getContacts());*/
 
-    this->show();
+    //this->show();
 
-    connect(auth, &authwindow::showMainWindow, this, &MainWindow::show, Qt::UniqueConnection);
+    connect(auth, &authwindow::showMainWindow, this, &MainWindow::init, Qt::UniqueConnection);
     connect(auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
     connect(addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
 }
@@ -58,8 +57,6 @@ void MainWindow::on_AddContactButton_clicked()
 
 void MainWindow::addContact(contInfo info)
 {
-
-    DataBase::addContact(info);
     ui->ContactsList->addItem(info.login);
     addfriend->hide();
 }
@@ -77,4 +74,13 @@ void MainWindow::on_DeleteContactButton_clicked()
     QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
     DataBase::deleteContact(item->text());
         delete item;
+}
+
+void MainWindow::init(QString inLogin)
+{
+    login = inLogin;
+    DataBase::createConnection(login);
+    DataBase::createTable();
+    ui->ContactsList->addItems(DataBase::getContacts());
+    this->show();
 }

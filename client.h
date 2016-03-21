@@ -15,6 +15,8 @@ typedef
 struct argumentsFromReply Reply;
 typedef
 struct accountRequest accRequest;
+typedef
+struct AddFriendReply AddFriendReply;
 
 class Client : public QObject
 {
@@ -23,8 +25,10 @@ public:
     explicit Client(QObject *parent = 0);
     ~Client();
     static Reply accountRequest(accRequest, QString);
-
+    static AddFriendReply AddFriend(QString login);
+    static QString login;
 //public slots:
+//private:
 
 };
 

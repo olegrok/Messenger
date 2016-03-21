@@ -8,7 +8,7 @@ class DataBase
 public:
     DataBase();
     ~DataBase();
-    static bool createConnection(accRequest account);
+    static bool createConnection(QString login);
     static bool sendMessage(sndMsg msg);
     static bool createTable();
     static bool addContact(contInfo info);

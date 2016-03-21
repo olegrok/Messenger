@@ -20,20 +20,26 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void addContact(contInfo info);
+    void addContact(contInfo);
     static Client client;
-    authwindow *auth;
+    accRequest accData;
+    void setLogin(QString);
+    void setUid(int);
 
 
 private slots:
     void on_SendButton_clicked();
     void on_AddContactButton_clicked();
-    void on_ContactsList_itemActivated(QListWidgetItem *item);
+    void on_ContactsList_itemActivated(QListWidgetItem* item);
     void on_DeleteContactButton_clicked();
+    void init(QString inLogin);
 
 private:
     Ui::MainWindow *ui;
     AddFriend *addfriend;
+    authwindow *auth;
+    QString login;
+
 };
 
 #endif // MAINWINDOW_H

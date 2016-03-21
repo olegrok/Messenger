@@ -5,22 +5,9 @@
 #include "database.h"
 #include "structsforrequests.h"
 
-DataBase::DataBase()
-{
-    accRequest accData = {"oleg", "oleg"};
-    createConnection(accData);
-    createTable();
-    sndMsg msg = {111, "azaaza", "not_r", 111};
-    sendMessage(msg);
-    contInfo info = {111, "abc", 123, 02};
-    addContact(info);
-    QSqlQuery query;
+extern accountRequest auth;
 
-    if (!query.exec("SELECT * FROM contacts;")) {
-        qDebug() << "Unable to execute query - exiting";
-    }
-
-}
+DataBase::DataBase() {};
 
 DataBase::~DataBase()
 {
@@ -28,13 +15,13 @@ DataBase::~DataBase()
 }
 
 
-bool DataBase::createConnection(accRequest account)
+bool DataBase::createConnection(QString login)
 {
     QSqlDatabase dbase = QSqlDatabase::addDatabase("QSQLITE");
-    dbase.setDatabaseName("data.sqlite");
-    dbase.setUserName(account.login);
-    dbase.setHostName(QHostInfo().hostName());
-    dbase.setPassword(account.password);
+    dbase.setDatabaseName(login + ".sqlite");
+    //dbase.setUserName(login);
+    //dbase.setHostName(QHostInfo().hostName());
+    //dbase.setPassword(login.password);
     if(!dbase.open()){
         qDebug() << "Can't open database" << dbase.lastError();
         return false;
@@ -78,7 +65,7 @@ bool DataBase::sendMessage(sndMsg msg)
           "INSERT INTO  messages (contact_id, text, status, filed) "
           "VALUES(%1, '%2', '%3', '%4');";
 
-    QString str = strF.arg(msg.contactID)
+    QString str = strF.arg(msg.contactUID)
               .arg(msg.text)
               .arg(msg.status)
               .arg(msg.filed);
@@ -95,7 +82,7 @@ bool DataBase::addContact(contInfo info)
     QString strF =
           "INSERT INTO  contacts (id, login, last_msg_id, unreaded) "
           "VALUES(%1, '%2', '%3', %4);";
-    QString str = strF.arg(info.id)
+    QString str = strF.arg(info.uid)
               .arg(info.login)
               .arg(info.lastMsgId)
               .arg(info.unreaded);
@@ -130,4 +117,5 @@ bool DataBase::deleteContact(QString login)
         qDebug() << "Unable to make delete opeation" << query.lastError();
         return false;
     }
+    return true;
 }

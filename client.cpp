@@ -1,6 +1,9 @@
 #include <cpprest/json.h>
 #include <cpprest/http_client.h>
 #include <cpprest/http_msg.h>
+#include <cpprest/http_listener.h>
+#include "cpprest/details/basic_types.h"
+#include "cpprest/asyncrt_utils.h"
 #include "client.h"
 #include "structsforrequests.h"
 
@@ -8,7 +11,9 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-accountRequest auth;
+accountRequest auth = {};
+
+QString ServerURL = "http://192.168.1.204:7777";
 
 Client::Client(QObject *parent) :
     QObject(parent)
@@ -48,7 +53,7 @@ Reply Client::accountRequest(accRequest req, QString property)
 //    http_client client(U("http://localhost"));
     try
         {
-            http_client client(U("http://192.168.1.204:7777"));
+            http_client client(U(ServerURL.toStdString()));
             client.request( web::http::methods::POST ,U("") , json )
                 .then( [&]( pplx::task<web::http::http_response> task )
              {
@@ -57,7 +62,7 @@ Reply Client::accountRequest(accRequest req, QString property)
                 //JsonParser
                  json = response.extract_json().get();
                  //std::cout << json;
-              });
+              }).wait();
 
         }
       catch (const std::exception &e)
@@ -68,9 +73,43 @@ Reply Client::accountRequest(accRequest req, QString property)
               return reply;
         }
 
-
-
     qDebug() << reply.statusCode << reply.replyContent;
     return reply;
 
 }
+
+AddFriendReply Client::AddFriend(QString login)
+{
+    json::value json;
+    json["request"]      = json::value( U("account") );
+    json["sub_request"]  = json::value( U("add_contact") );
+    json["login"]        = json::value( U(login.toStdString()) );
+    AddFriendReply reply;
+    try
+        {
+            http_client client(U(ServerURL.toStdString()));
+            client.request( web::http::methods::POST ,U("") , json )
+                .then( [&]( pplx::task<web::http::http_response> task )
+             {
+                 http_response response = task.get();
+                 reply.statusCode = response.status_code();
+                //JsonParser
+                 json = response.extract_json().get();
+                 reply.login = QString::fromStdString(json.at(U("login")).as_string());
+                 reply.uid = json.at(U("uid")).as_integer();
+                 //std::cout << json;
+              }).wait();
+
+        }
+      catch (const std::exception &e)
+        {
+              qDebug() << "Error exception:" << e.what();
+              reply.statusCode = 600;
+              reply.login = e.what();
+              return reply;
+        }
+    return reply;
+
+}
+
+

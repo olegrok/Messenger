@@ -15,6 +15,9 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Messenger
 TEMPLATE = app
 LIBS += -L/usr/local/lib/x86_64-linux-gnu -lcpprest
+#LIBS += -L/home/oleg/Рабочий\ стол/Track/Project/Casablanca/casablanca/Release/build.release/Binaries -lcpprest
+#INCLUDEPATH += -I//home/oleg/Рабочий стол/Track/Project/Casablanca/casablanca/Release/include
+
 
 SOURCES += main.cpp\
         mainwindow.cpp \

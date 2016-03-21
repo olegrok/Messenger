@@ -18,11 +18,13 @@ class authwindow : public QDialog
 public:
     explicit authwindow(QWidget *parent = 0);
     ~authwindow();
+    QString getLogin();
+    int getUid();
 
 public slots:
     void on_EnterButton_clicked();
 signals:
-    void showMainWindow();
+    void showMainWindow(QString login);
     void closeMainWindow();
 private slots:
     void on_CloseButton_clicked();
@@ -30,6 +32,7 @@ private slots:
 private:
     Ui::authwindow *ui;
     bool checklogin(accountRequest auth);
+
 };
 
 #endif // AUTHWINDOW_H

@@ -35,7 +35,7 @@ struct argumentsFromReply
 typedef
 struct sendMessage
 {
-    int contactID;
+    int contactUID;
     //QString time;
     QString text;
     QString status;
@@ -46,11 +46,19 @@ struct sendMessage
 typedef
 struct contactInforamtion
 {
-  int id;
+  int uid;
   QString login;
   int lastMsgId;
   int unreaded;
 } contInfo;
+
+typedef
+struct AddFriendReply
+{
+    web::http::status_code statusCode;
+    QString login;
+    int uid;
+} AddFriendReply;
 
 #endif // STRUCTSFORREQUESTS
 

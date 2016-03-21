@@ -40,8 +40,8 @@ void authwindow::on_EnterButton_clicked()
     switch(reply.statusCode)
     {
         case 200: ui->StatusLine->setText("Successeful autorisation!");
-        emit showMainWindow();
-        this->close();break;
+            emit showMainWindow(auth.login);
+            this->close(); break;
         default: ui->StatusLine->setText(reply.replyContent); break;
     }
 }
@@ -62,11 +62,12 @@ void authwindow::on_RegisterButton_clicked()
     switch(reply.statusCode)
     {
         case 200: ui->StatusLine->setText("Successeful registration!");
-        emit showMainWindow();
+        emit showMainWindow(auth.login);
         this->close();break;
         default: ui->StatusLine->setText(reply.replyContent); break;
     }
 
 }
+
 
 
