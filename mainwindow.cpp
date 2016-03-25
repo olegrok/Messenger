@@ -16,10 +16,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setGeometry(QDesktopWidget().availableGeometry().width()/2 - this->width()/2,
                       QDesktopWidget().availableGeometry().height()/2 - this->width()/2,
                       this->width(), this->height());
-
     //accRequest accData = {};
     addfriend = new AddFriend;
     auth = new authwindow;
+
+    //auth->setStyleSheet("QDialog { background-color: yellow }");
     auth->show();
 
     /*DataBase::createConnection(accData);
@@ -28,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //this->show();
 
-    connect(auth, &authwindow::showMainWindow, this, &MainWindow::init, Qt::UniqueConnection);
+    connect(auth, &authwindow::showMainWindow, this, &MainWindow::databaseInit, Qt::UniqueConnection);
     connect(auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
     connect(addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
 }
@@ -73,16 +74,21 @@ void MainWindow::on_ContactsList_itemActivated(QListWidgetItem *item)
 
 void MainWindow::on_DeleteContactButton_clicked()
 {
+    if(ui->ContactsList->count() == 0)
+        return;
     QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
     DataBase::deleteContact(item->text());
         delete item;
 }
 
-void MainWindow::init(QString inLogin)
+void MainWindow::databaseInit(QString inLogin)
 {
     login = inLogin;
     DataBase::createConnection(login);
     DataBase::createTable();
     ui->ContactsList->addItems(DataBase::getContacts());
     this->show();
+}
+
+void MainWindow::styleInit(){
 }

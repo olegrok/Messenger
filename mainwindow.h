@@ -32,13 +32,14 @@ private slots:
     void on_AddContactButton_clicked();
     void on_ContactsList_itemActivated(QListWidgetItem* item);
     void on_DeleteContactButton_clicked();
-    void init(QString inLogin);
+    void databaseInit(QString inLogin);
 
 private:
     Ui::MainWindow *ui;
     AddFriend *addfriend;
     authwindow *auth;
     QString login;
+    void styleInit();
 
 };
 

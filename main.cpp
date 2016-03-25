@@ -1,11 +1,15 @@
 #include "mainwindow.h"
 #include "database.h"
 #include <QApplication>
+#include <QStyleFactory>
 
 //using namespace json;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    qDebug() << QStyleFactory::keys();
+    QApplication::setStyle(QStyleFactory::create("Breeze"));
+    QApplication::setPalette(Qt::transparent);
     MainWindow w;
     //sndMsg msg = {122, "azaza", "not recived", 1};
     //DataBase x;

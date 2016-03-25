@@ -78,6 +78,9 @@
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
      <widget class="QPushButton" name="EnterButton">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="text">
        <string>Enter</string>
       </property>
@@ -85,6 +88,9 @@
     </item>
     <item>
      <widget class="QPushButton" name="CloseButton">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="text">
        <string>Close</string>
       </property>
@@ -92,6 +98,9 @@
     </item>
     <item>
      <widget class="QPushButton" name="RegisterButton">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="text">
        <string>Register</string>
       </property>

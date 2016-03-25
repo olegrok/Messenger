@@ -28,12 +28,12 @@ void authwindow::on_EnterButton_clicked()
     auth.password = ui->Password->text();
     accountRequest arg = {auth.login, auth.password};
     Reply reply = Client::accountRequest(arg, "account_authorisation");
-
     switch(reply.statusCode)
     {
         case 200: ui->StatusLine->setText("Successeful autorisation!");
             emit showMainWindow(auth.login);
             this->close(); break;
+        case 404: ui->StatusLine->setText("Not Found!");break;
         default: ui->StatusLine->setText(reply.replyContent); break;
     }
 }

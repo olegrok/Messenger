@@ -51,20 +51,16 @@ Reply Client::accountRequest(accRequest req, QString property)
     cl.add_handler(  );
     */
 //    http_client client(U("http://localhost"));
+    http_response response;
     try
         {
             http_client client(U(ServerURL.toStdString()));
             client.request( web::http::methods::POST ,U("") , json )
                 .then( [&]( pplx::task<web::http::http_response> task )
              {
-                 http_response response = task.get();
+                 response = task.get();
                  reply.statusCode = response.status_code();
-                 qDebug() << "status code: " << reply.statusCode;
-                //JsonParser
-                 json = response.extract_json().get();
-                 //std::cout << json;
               }).wait();
-
         }
       catch (const std::exception &e)
         {
@@ -73,7 +69,11 @@ Reply Client::accountRequest(accRequest req, QString property)
               reply.replyContent = e.what();
               return reply;
         }
-
+    if(reply.statusCode == 200){
+        //JsonParser
+         //std::cout << json;
+        json = response.extract_json().get();
+    }
     qDebug() << reply.statusCode << reply.replyContent;
     return reply;
 
