@@ -17,11 +17,12 @@ MainWindow::MainWindow(QWidget *parent) :
                       QDesktopWidget().availableGeometry().height()/2 - this->width()/2,
                       this->width(), this->height());
     //accRequest accData = {};
-    addfriend = new AddFriend;
-    auth = new authwindow;
+
+    //addfriend = new AddFriend;
+    //auth = new authwindow;
 
     //auth->setStyleSheet("QDialog { background-color: yellow }");
-    auth->show();
+    auth.show();
 
     /*DataBase::createConnection(accData);
     DataBase::createTable();
@@ -29,18 +30,18 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //this->show();
 
-    connect(auth, &authwindow::showMainWindow, this, &MainWindow::databaseInit, Qt::UniqueConnection);
-    connect(auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
-    connect(addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
+    connect(&auth, &authwindow::showMainWindow, this, &MainWindow::databaseInit, Qt::UniqueConnection);
+    connect(&auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
+    connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
-    auth->close();
-    addfriend->close();
-    delete auth;
-    delete addfriend;
+    auth.close();
+    addfriend.close();
+    //delete auth;
+    //delete addfriend;
 }
 
 void MainWindow::on_SendButton_clicked()
@@ -53,14 +54,14 @@ void MainWindow::on_SendButton_clicked()
 
 void MainWindow::on_AddContactButton_clicked()
 {
-    addfriend->show();
+    addfriend.show();
 }
 
 void MainWindow::addContact(contInfo info)
 {
     if(info.uid != -1){
         ui->ContactsList->addItem(info.login);
-        addfriend->hide();
+        addfriend.hide();
     }
 }
 

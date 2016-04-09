@@ -5,6 +5,9 @@
 #include <QListWidgetItem>
 #include "mainwindow.h"
 #include "client.h"
+#include "profile.h"
+#include "authwindow.h"
+#include "addfriend.h"
 
 class AddFriend;
 class authwindow;
@@ -35,10 +38,11 @@ private slots:
     void databaseInit(QString inLogin);
 
 private:
-    Ui::MainWindow *ui;
-    AddFriend *addfriend;
-    authwindow *auth;
     QString login;
+    Ui::MainWindow *ui;
+    AddFriend addfriend;
+    authwindow auth;
+    Profile account;
     void styleInit();
 
 };

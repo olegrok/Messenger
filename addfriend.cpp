@@ -3,6 +3,7 @@
 #include "structsforrequests.h"
 #include "database.h"
 
+
 AddFriend::AddFriend(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AddFriend)
@@ -38,15 +39,15 @@ void AddFriend::on_AddButton_clicked()
 {
     //contInfo info = CheckFriend(ui->FriendLogin->text());
     AddFriendReply reply = Client::AddFriend((ui->FriendLogin->text()));
-    contInfo info = {};
+    contInfo info;
     if(reply.statusCode == 200)
     {
-
         info.login = reply.login;
         info.uid = reply.uid;
         info.lastMsgId = 0;
         info.unreaded = 0;
-        DataBase::addContact(info);
+        DataBase::AddContact(info);
+        //qDebug() <<
     }
     else
     {

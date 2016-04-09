@@ -14,7 +14,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = Messenger
 TEMPLATE = app
-LIBS += -lcpprest
+LIBS += -lcpprest -lboost_system
 #LIBS += -L/usr/local/lib/x86_64-linux-gnu -lcpprest
 #LIBS += -L/home/oleg/Рабочий\ стол/Track/Project/Casablanca/casablanca/Release/build.release/Binaries -lcpprest
 #INCLUDEPATH += -I//home/oleg/Рабочий стол/Track/Project/Casablanca/casablanca/Release/include
@@ -25,14 +25,16 @@ SOURCES += main.cpp\
     authwindow.cpp \
     addfriend.cpp \
     client.cpp \
-    database.cpp
+    database.cpp \
+    profile.cpp
 
 HEADERS  += mainwindow.h \
     authwindow.h \
     addfriend.h \
     client.h \
     structsforrequests.h \
-    database.h
+    database.h \
+    profile.h
 
 FORMS    += mainwindow.ui \
     authwindow.ui \

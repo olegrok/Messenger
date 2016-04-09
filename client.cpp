@@ -97,11 +97,11 @@ AddFriendReply Client::AddFriend(QString login)
                  qDebug() << "status code: " << reply.statusCode;
                 //JsonParser
                  json = response.extract_json().get();
+                 std::cout << json << std::endl;
                  reply.login = QString::fromStdString(json.at(U("login")).as_string());
                  reply.uid = json.at(U("uid")).as_integer();
                  //std::cout << json;
               }).wait();
-
         }
       catch (const std::exception &e)
         {

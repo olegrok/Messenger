@@ -2,6 +2,7 @@
 #define ADDFRIEND_H
 #include <QDialog>
 #include "structsforrequests.h"
+#include "database.h"
 
 namespace Ui {
 class AddFriend;
