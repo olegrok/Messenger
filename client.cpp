@@ -13,7 +13,11 @@ using namespace web::http::client;
 
 accountRequest auth = {};
 
-QString ServerURL = "http://localhost:7777";
+QString _login;
+
+
+//QString ServerURL = "http://localhost:7777";
+QString ServerURL = "http://10.55.86.146:7777";
 
 Client::Client(QObject *parent) :
     QObject(parent)
@@ -70,6 +74,7 @@ Reply Client::accountRequest(accRequest req, QString property)
               return reply;
         }
     if(reply.statusCode == 200){
+        _login = req.login;
         //JsonParser
          //std::cout << json;
         json = response.extract_json().get();
@@ -82,24 +87,23 @@ Reply Client::accountRequest(accRequest req, QString property)
 AddFriendReply Client::AddFriend(QString login)
 {
     json::value json;
-    json["request"]      = json::value( U("account") );
-    json["sub_request"]  = json::value( U("add_contact") );
-    json["login"]        = json::value( U(login.toStdString()) );
+    json["request"]         = json::value( U("account") );
+    json["sub_request"]     = json::value( U("add_contact") );
+    json["client_login"]    = json::value( U(_login.toStdString()) );
+    json["contact_login"]   = json::value( U(login.toStdString()) );
+
     AddFriendReply reply;
+    http_response response;
     try
         {
             http_client client(U(ServerURL.toStdString()));
             client.request( web::http::methods::POST ,U("") , json )
                 .then( [&]( pplx::task<web::http::http_response> task )
              {
-                 http_response response = task.get();
+                 response = task.get();
                  reply.statusCode = response.status_code();
+                 std::cout << "status code: " << reply.statusCode << std::endl;
                  qDebug() << "status code: " << reply.statusCode;
-                //JsonParser
-                 json = response.extract_json().get();
-                 std::cout << json << std::endl;
-                 reply.login = QString::fromStdString(json.at(U("login")).as_string());
-                 reply.uid = json.at(U("uid")).as_integer();
                  //std::cout << json;
               }).wait();
         }
@@ -110,6 +114,19 @@ AddFriendReply Client::AddFriend(QString login)
               reply.login = e.what();
               return reply;
         }
+
+    if(reply.statusCode == web::http::status_codes::OK){
+        //JsonParser
+         json = response.extract_json().get();
+         std::cout << json << std::endl;
+         auto jcontact = json.at(U("contact") );
+         std::cout << jcontact.at(U("login")).as_string();
+
+
+         reply.login = QString::fromStdString(jcontact.at(U("login")).as_string());
+         //reply.uid = json.at(U("uid")).as_integer();
+         reply.uid = 1;
+    }
     return reply;
 
 }

@@ -11,6 +11,7 @@ namespace DataBase
     bool AddContact(contInfo info);
     QStringList getContacts();
     bool deleteContact(QString);
+    bool close();
 }
 
 #endif // DATABASE_H

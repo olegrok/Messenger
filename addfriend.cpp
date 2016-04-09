@@ -39,6 +39,7 @@ void AddFriend::on_AddButton_clicked()
 {
     //contInfo info = CheckFriend(ui->FriendLogin->text());
     AddFriendReply reply = Client::AddFriend((ui->FriendLogin->text()));
+    ui->FriendLogin->clear();
     contInfo info;
     if(reply.statusCode == 200)
     {
@@ -46,8 +47,10 @@ void AddFriend::on_AddButton_clicked()
         info.uid = reply.uid;
         info.lastMsgId = 0;
         info.unreaded = 0;
-        DataBase::AddContact(info);
-        //qDebug() <<
+        if(!DataBase::AddContact(info)){
+            ui->AddFriendStatus->setText("Just your friend");
+            return;
+        }
     }
     else
     {

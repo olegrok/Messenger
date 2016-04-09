@@ -29,7 +29,7 @@ bool createTable()
     QSqlQuery query;
     QString   str  = "CREATE TABLE contacts ( "
                          "id INTEGER PRIMARY KEY NOT NULL, "
-                         "login   VARCHAR(15), "
+                         "login   VARCHAR(15) PRIMARY KEY, "
                          "last_msg_id  VARCHAR(15), "
                          "unreaded  INTEGER "
                      ");";
@@ -104,6 +104,7 @@ QStringList getContacts()
 
 bool deleteContact(QString login)
 {
+    qDebug() << login;
     QSqlQuery query;
     QString strF =
           "DELETE FROM contacts WHERE login = '%1';";
@@ -112,6 +113,11 @@ bool deleteContact(QString login)
         qDebug() << "Unable to make delete opeation" << query.lastError();
         return false;
     }
+    return true;
+}
+
+bool close(){
+    QSqlDatabase::removeDatabase("SQLITE");
     return true;
 }
 

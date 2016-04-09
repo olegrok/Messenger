@@ -40,6 +40,7 @@ MainWindow::~MainWindow()
     delete ui;
     auth.close();
     addfriend.close();
+    DataBase::close();
     //delete auth;
     //delete addfriend;
 }
@@ -75,7 +76,7 @@ void MainWindow::on_ContactsList_itemActivated(QListWidgetItem *item)
 
 void MainWindow::on_DeleteContactButton_clicked()
 {
-    if(ui->ContactsList->count() == 0)
+    if(ui->ContactsList->currentRow() == -1)
         return;
     QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
     DataBase::deleteContact(item->text());
