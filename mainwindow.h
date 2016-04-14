@@ -33,7 +33,7 @@ private slots:
     void on_AddContactButton_clicked();
     void on_ContactsList_itemActivated(QListWidgetItem* item);
     void on_DeleteContactButton_clicked();
-    void databaseInit(QString inLogin);
+    void databaseInit(QString _login);
 
 private:
     QString login;

@@ -25,11 +25,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    //auth.close();
-    //addfriend.close();
+    auth.close();
+    addfriend.close();
     DataBase::close();
     delete ui;
-    //qApp->closeAllWindows();
+    qApp->closeAllWindows();
 }
 
 void MainWindow::on_SendButton_clicked()
@@ -73,9 +73,9 @@ void MainWindow::on_DeleteContactButton_clicked()
     }
 }
 
-void MainWindow::databaseInit(QString inLogin)
+void MainWindow::databaseInit(QString _login)
 {
-    login = inLogin;
+    login = _login;
     account.setLogin(login);
     DataBase::createConnection(login);
     DataBase::createTable();

@@ -6,7 +6,7 @@
 class DataBase
 {
 public:
-    DataBase();
+    DataBase(QString login);
     ~DataBase();
     static bool createConnection(QString login);
     static bool sendMessage(sndMsg msg);

@@ -7,6 +7,15 @@
 
 extern accountRequest auth;
 
+DataBase::DataBase(QString login){
+    createConnection(login);
+    createTable();
+}
+
+DataBase::~DataBase(){
+    QSqlDatabase::removeDatabase("SQLITE");
+}
+
 bool DataBase::createConnection(QString login)
 {
     QSqlDatabase dbase = QSqlDatabase::addDatabase("QSQLITE");
@@ -26,7 +35,7 @@ bool DataBase::createTable()
     QSqlQuery query;
     QString   str  = "CREATE TABLE contacts ( "
                          "id INTEGER PRIMARY KEY NOT NULL, "
-                         "login   VARCHAR(15) PRIMARY KEY, "
+                         "login VARCHAR(15) NOT NULL, "
                          "last_msg_id  VARCHAR(15), "
                          "unreaded  INTEGER "
                      ");";
@@ -43,7 +52,7 @@ bool DataBase::createTable()
                      ");";
 
     if (!query.exec(str)) {
-        qDebug() << "Unable to create a table";
+        qDebug() << "Unable to create a table" << query.lastError();
         return false;
     }
     return true;
