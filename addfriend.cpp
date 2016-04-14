@@ -16,38 +16,19 @@ AddFriend::~AddFriend()
     delete ui;
 }
 
-/*contInfo AddFriend::CheckFriend(QString nick){
-
-    contInfo info;
-    AddFriendReply reply = Client::AddFriend((ui->FriendLogin->text()));
-    if(reply.statusCode == 200)
-    {
-
-        info.login = reply.login;
-        info.uid = reply.uid;
-        info.lastMsgId = 0;
-        info.unreaded = 0;
-        DataBase::addContact(info);
-    }
-    else
-        info.uid = -1;
-
-    return info;
-}*/
-
 void AddFriend::on_AddButton_clicked()
 {
     //contInfo info = CheckFriend(ui->FriendLogin->text());
-    AddFriendReply reply = Client::AddFriend((ui->FriendLogin->text()));
-    ui->FriendLogin->clear();
+    FriendReply reply = account->friendRequest((ui->FriendLogin->text()), "add_contact");
     contInfo info;
+
     if(reply.statusCode == 200)
     {
-        info.login = reply.login;
+        info.login = ui->FriendLogin->text();
         info.uid = reply.uid;
         info.lastMsgId = 0;
         info.unreaded = 0;
-        if(!DataBase::AddContact(info)){
+        if(!DataBase::addContact(info)){
             ui->AddFriendStatus->setText("Just your friend");
             return;
         }
@@ -63,6 +44,7 @@ void AddFriend::on_AddButton_clicked()
         }
         ui->AddFriendStatus->setText(info.login);
     }
+    ui->FriendLogin->clear();
     emit sendContact(info);
  /*   if(info.uid != -1)
     {
@@ -70,4 +52,8 @@ void AddFriend::on_AddButton_clicked()
         emit sendContact(info);
     }
 */
+}
+
+void AddFriend::setUpProfile(Profile* acc){
+    account = acc;
 }

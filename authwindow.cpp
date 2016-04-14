@@ -27,7 +27,7 @@ void authwindow::on_EnterButton_clicked()
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
     accountRequest arg = {auth.login, auth.password};
-    Reply reply = Client::accountRequest(arg, "account_authorisation");
+    Reply reply = account->accountRequest(arg, "account_authorisation");
     switch(reply.statusCode)
     {
         case 200: ui->StatusLine->setText("Successeful autorisation!");
@@ -41,7 +41,9 @@ void authwindow::on_EnterButton_clicked()
 
 void authwindow::on_CloseButton_clicked()
 {
-    emit closeMainWindow();
+    qApp->closeAllWindows();
+    //emit closeMainWindow();
+    //this->close();
 }
 
 void authwindow::on_RegisterButton_clicked()
@@ -50,7 +52,7 @@ void authwindow::on_RegisterButton_clicked()
     auth.password = ui->Password->text();
 
     accountRequest arg = {auth.login, auth.password};
-    Reply reply = Client::accountRequest(arg, "account_registration");
+    Reply reply = account->accountRequest(arg, "account_registration");
 
     switch(reply.statusCode)
     {
@@ -62,5 +64,7 @@ void authwindow::on_RegisterButton_clicked()
 
 }
 
-
+void authwindow::setUpProfile(Profile* acc){
+    account = acc;
+}
 

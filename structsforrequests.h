@@ -53,12 +53,12 @@ struct contactInforamtion
 } contInfo;
 
 typedef
-struct AddFriendReply
+struct FriendReply
 {
     web::http::status_code statusCode;
     QString login;
     int uid;
-} AddFriendReply;
+} FriendReply;
 
 #endif // STRUCTSFORREQUESTS
 

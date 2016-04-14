@@ -7,10 +7,7 @@
 
 extern accountRequest auth;
 
-
-namespace DataBase{
-
-bool createConnection(QString login)
+bool DataBase::createConnection(QString login)
 {
     QSqlDatabase dbase = QSqlDatabase::addDatabase("QSQLITE");
     dbase.setDatabaseName(login + ".sqlite");
@@ -24,7 +21,7 @@ bool createConnection(QString login)
     return true;
 }
 
-bool createTable()
+bool DataBase::createTable()
 {
     QSqlQuery query;
     QString   str  = "CREATE TABLE contacts ( "
@@ -53,7 +50,7 @@ bool createTable()
 }
 
 
-bool sendMessage(sndMsg msg)
+bool DataBase::sendMessage(sndMsg msg)
 {
     QSqlQuery query;
     QString strF =
@@ -71,7 +68,7 @@ bool sendMessage(sndMsg msg)
     return true;
 }
 
-bool AddContact(contInfo info)
+bool DataBase::addContact(contInfo info)
 {
     QSqlQuery query;
     QString strF =
@@ -88,7 +85,7 @@ bool AddContact(contInfo info)
     return true;
 }
 
-QStringList getContacts()
+QStringList DataBase::getContacts()
 {
     //qDebug() << "contacts:";
     QSqlQuery query("SELECT * from contacts");
@@ -102,7 +99,7 @@ QStringList getContacts()
     return contList;
 }
 
-bool deleteContact(QString login)
+bool DataBase::deleteContact(QString login)
 {
     qDebug() << login;
     QSqlQuery query;
@@ -116,9 +113,8 @@ bool deleteContact(QString login)
     return true;
 }
 
-bool close(){
+bool DataBase::close(){
     QSqlDatabase::removeDatabase("SQLITE");
     return true;
 }
 
-}

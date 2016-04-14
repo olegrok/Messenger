@@ -16,8 +16,8 @@ accountRequest auth = {};
 QString _login;
 
 
-//QString ServerURL = "http://localhost:7777";
-QString ServerURL = "http://10.55.86.146:7777";
+QString ServerURL = "http://localhost:7777";
+//QString ServerURL = "http://10.55.86.146:7777";
 
 Client::Client(QObject *parent) :
     QObject(parent)
@@ -84,15 +84,15 @@ Reply Client::accountRequest(accRequest req, QString property)
 
 }
 
-AddFriendReply Client::AddFriend(QString login)
+FriendReply Client::friendRequest(QString login, QString property)
 {
     json::value json;
     json["request"]         = json::value( U("account") );
-    json["sub_request"]     = json::value( U("add_contact") );
+    json["sub_request"]     = json::value( U(property.toStdString()) );
     json["client_login"]    = json::value( U(_login.toStdString()) );
     json["contact_login"]   = json::value( U(login.toStdString()) );
 
-    AddFriendReply reply;
+    FriendReply reply;
     http_response response;
     try
         {
@@ -102,9 +102,7 @@ AddFriendReply Client::AddFriend(QString login)
              {
                  response = task.get();
                  reply.statusCode = response.status_code();
-                 std::cout << "status code: " << reply.statusCode << std::endl;
                  qDebug() << "status code: " << reply.statusCode;
-                 //std::cout << json;
               }).wait();
         }
       catch (const std::exception &e)
@@ -117,15 +115,16 @@ AddFriendReply Client::AddFriend(QString login)
 
     if(reply.statusCode == web::http::status_codes::OK){
         //JsonParser
-         json = response.extract_json().get();
-         std::cout << json << std::endl;
-         auto jcontact = json.at(U("contact") );
-         std::cout << jcontact.at(U("login")).as_string();
+        if(property == "add_contact"){
+            json = response.extract_json().get();
+            std::cout << json << std::endl;
+            /*auto jcontact = json.at(U("contact") );
+            std::cout << jcontact.at(U("login")).as_string();*/
 
-
-         reply.login = QString::fromStdString(jcontact.at(U("login")).as_string());
-         //reply.uid = json.at(U("uid")).as_integer();
-         reply.uid = 1;
+            reply.login = login;
+            //reply.uid = json.at(U("uid")).as_integer();
+            reply.uid = qrand();
+        }
     }
     return reply;
 

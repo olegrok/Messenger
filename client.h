@@ -16,7 +16,7 @@ struct argumentsFromReply Reply;
 typedef
 struct accountRequest accRequest;
 typedef
-struct AddFriendReply AddFriendReply;
+struct FriendReply FriendReply;
 
 class Client : public QObject
 {
@@ -25,7 +25,7 @@ public:
     explicit Client(QObject *parent = 0);
     ~Client();
     static Reply accountRequest(accRequest, QString);
-    static AddFriendReply AddFriend(QString login);
+    static FriendReply friendRequest(QString, QString);
     static QString login;
 //public slots:
 //private:

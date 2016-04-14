@@ -3,15 +3,18 @@
 #include <QtSql>
 #include "structsforrequests.h"
 
-namespace DataBase
+class DataBase
 {
-    bool createConnection(QString login);
-    bool sendMessage(sndMsg msg);
-    bool createTable();
-    bool AddContact(contInfo info);
-    QStringList getContacts();
-    bool deleteContact(QString);
-    bool close();
-}
+public:
+    DataBase();
+    ~DataBase();
+    static bool createConnection(QString login);
+    static bool sendMessage(sndMsg msg);
+    static bool createTable();
+    static bool addContact(contInfo info);
+    static QStringList getContacts();
+    static bool deleteContact(QString);
+    static bool close();
+};
 
 #endif // DATABASE_H

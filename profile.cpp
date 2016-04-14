@@ -1,24 +1,22 @@
 #include "structsforrequests.h"
 #include "profile.h"
 
-Profile::Profile()
+Profile::Profile(QString _login)
 {
-
+    login = _login;
 }
 
-QString Profile::enterToAccount(QString password){
-    accountRequest arg = {login, password};
-    Reply reply = Client::accountRequest(arg, "account_authorisation");
-    QString windowStatus;
-    switch(reply.statusCode)
-    {
-        case 200: break;
-//            this->close(); if windowStatus.empty -> close_window
-        case 404: windowStatus = "Not Found!"; break;
-        default: windowStatus = reply.replyContent; break;
-    }
-    return windowStatus;
+Profile::~Profile(){}
+
+bool Profile::setLogin(QString _login){
+    login = _login;
+    return true;
 }
 
-bool Profile::registerAccount(QString login, QString password) {};
-bool Profile::addFriend(QString login) {};
+Reply Profile::accountRequest(accRequest req, QString property){
+    return client.accountRequest(req, property);
+}
+
+FriendReply Profile::friendRequest(QString login, QString property){
+    return client.friendRequest(login, property);
+}

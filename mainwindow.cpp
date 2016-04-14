@@ -6,7 +6,7 @@
 #include "addfriend.h"
 #include "authwindow.h"
 #include "database.h"
-#include "client.h"
+#include "profile.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -16,33 +16,20 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setGeometry(QDesktopWidget().availableGeometry().width()/2 - this->width()/2,
                       QDesktopWidget().availableGeometry().height()/2 - this->width()/2,
                       this->width(), this->height());
-    //accRequest accData = {};
-
-    //addfriend = new AddFriend;
-    //auth = new authwindow;
-
-    //auth->setStyleSheet("QDialog { background-color: yellow }");
     auth.show();
 
-    /*DataBase::createConnection(accData);
-    DataBase::createTable();
-    ui->ContactsList->addItems(DataBase::getContacts());*/
-
-    //this->show();
-
     connect(&auth, &authwindow::showMainWindow, this, &MainWindow::databaseInit, Qt::UniqueConnection);
-    connect(&auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
+    //connect(&auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
     connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
-    auth.close();
-    addfriend.close();
+    //auth.close();
+    //addfriend.close();
     DataBase::close();
-    //delete auth;
-    //delete addfriend;
+    delete ui;
+    //qApp->closeAllWindows();
 }
 
 void MainWindow::on_SendButton_clicked()
@@ -79,13 +66,17 @@ void MainWindow::on_DeleteContactButton_clicked()
     if(ui->ContactsList->currentRow() == -1)
         return;
     QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
-    DataBase::deleteContact(item->text());
+    FriendReply reply = account.friendRequest(item->text(), "del_contact");
+    if(reply.statusCode == web::http::status_codes::OK){
+        DataBase::deleteContact(item->text());
         delete item;
+    }
 }
 
 void MainWindow::databaseInit(QString inLogin)
 {
     login = inLogin;
+    account.setLogin(login);
     DataBase::createConnection(login);
     DataBase::createTable();
     ui->ContactsList->addItems(DataBase::getContacts());

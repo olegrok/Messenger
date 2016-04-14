@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "ui_authwindow.h"
 #include "client.h"
+#include "profile.h"
 
 namespace Ui {
 class authwindow;
@@ -20,6 +21,7 @@ public:
     ~authwindow();
     QString getLogin();
     int getUid();
+    void setUpProfile(Profile* acc);
 
 public slots:
     void on_EnterButton_clicked();
@@ -31,7 +33,7 @@ private slots:
     void on_RegisterButton_clicked();
 private:
     Ui::authwindow *ui;
-
+    Profile* account;
 };
 
 #endif // AUTHWINDOW_H

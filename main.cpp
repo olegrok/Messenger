@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "database.h"
+#include "profile.h"
 #include <QApplication>
 #include <QStyleFactory>
 
@@ -7,14 +8,9 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    qDebug() << QStyleFactory::keys();
-    QApplication::setStyle(QStyleFactory::create("Windows"));
+    qApp->setStyle(QStyleFactory::create("Windows"));
     //QApplication::setPalette(Qt::transparent);
     MainWindow w;
-    //sndMsg msg = {122, "azaza", "not recived", 1};
-    //DataBase x;
-    //x.sendMessage(msg);
-    //qDebug() << DataBase::getContacts();
     return a.exec();
 }
 

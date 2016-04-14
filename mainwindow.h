@@ -24,8 +24,6 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
     void addContact(contInfo);
-    static Client client;
-    accRequest accData;
     void setLogin(QString);
     void setUid(int);
 

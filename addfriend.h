@@ -3,6 +3,7 @@
 #include <QDialog>
 #include "structsforrequests.h"
 #include "database.h"
+#include "profile.h"
 
 namespace Ui {
 class AddFriend;
@@ -15,6 +16,7 @@ class AddFriend : public QDialog
 public:
     explicit AddFriend(QWidget *parent = 0);
     ~AddFriend();
+    void setUpProfile(Profile* acc);
 signals:
     void sendContact(contInfo);
 private slots:
@@ -23,6 +25,7 @@ private slots:
 private:
     Ui::AddFriend *ui;
     contInfo CheckFriend(QString);
+    Profile* account;
 };
 
 #endif // ADDFRIEND_H
