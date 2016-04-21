@@ -1,15 +1,10 @@
 #include "mainwindow.h"
-#include "database.h"
-#include "profile.h"
 #include <QApplication>
-#include <QStyleFactory>
 
 //using namespace json;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    qApp->setStyle(QStyleFactory::create("Windows"));
-    //QApplication::setPalette(Qt::transparent);
     MainWindow w;
     return a.exec();
 }

@@ -4,7 +4,6 @@
 #include <QString>
 #include <QDateTime>
 #include <cpprest/http_client.h>
-#include "client.h"
 
 
 using namespace web::http;
@@ -17,6 +16,14 @@ struct accountRequest
 } accRequest;
 
 typedef
+struct accountReply
+{
+    web::http::status_code statusCode;
+    QString replyContent;
+} accReply;
+
+
+typedef
 struct argumentsForRequest
 {
     QString login;
@@ -25,21 +32,18 @@ struct argumentsForRequest
     QString sub_reqest;
 } Request;
 
-typedef
-struct argumentsFromReply
-{
-    web::http::status_code statusCode;
-    QString replyContent;
-} argReply;
+
 
 typedef
 struct sendMessage
 {
-    int contactUID;
+    //int contactUID;
+    QString     login;
     //QString time;
-    QString text;
-    QString status;
-    int filed;
+    QString     text;
+    QDateTime   time;
+    //QString status;
+    //int filed;
 
 } sndMsg;
 

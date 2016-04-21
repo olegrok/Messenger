@@ -7,8 +7,8 @@
 QT       += core gui
 QT       += network
 QT       += sql
-CONFIG   += console c++11
-
+CONFIG   += console c++14
+QT       += core
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     addfriend.cpp \
     client.cpp \
     database.cpp \
-    profile.cpp
+    profile.cpp \
+    options.cpp
 
 HEADERS  += mainwindow.h \
     authwindow.h \
@@ -34,8 +35,10 @@ HEADERS  += mainwindow.h \
     client.h \
     structsforrequests.h \
     database.h \
-    profile.h
+    profile.h \
+    options.h
 
 FORMS    += mainwindow.ui \
     authwindow.ui \
-    addfriend.ui
+    addfriend.ui \
+    options.ui

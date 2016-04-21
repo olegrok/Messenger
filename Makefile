@@ -53,20 +53,26 @@ SOURCES       = main.cpp \
 		authwindow.cpp \
 		addfriend.cpp \
 		client.cpp \
-		database.cpp moc_mainwindow.cpp \
+		database.cpp \
+		profile.cpp \
+		options.cpp moc_mainwindow.cpp \
 		moc_authwindow.cpp \
 		moc_addfriend.cpp \
-		moc_client.cpp
+		moc_profile.cpp \
+		moc_options.cpp
 OBJECTS       = main.o \
 		mainwindow.o \
 		authwindow.o \
 		addfriend.o \
 		client.o \
 		database.o \
+		profile.o \
+		options.o \
 		moc_mainwindow.o \
 		moc_authwindow.o \
 		moc_addfriend.o \
-		moc_client.o
+		moc_profile.o \
+		moc_options.o
 DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/shell-unix.conf \
 		/usr/lib/x86_64-linux-gnu/qt5/mkspecs/common/unix.conf \
@@ -150,12 +156,16 @@ DIST          = /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		addfriend.h \
 		client.h \
 		structsforrequests.h \
-		database.h main.cpp \
+		database.h \
+		profile.h \
+		options.h main.cpp \
 		mainwindow.cpp \
 		authwindow.cpp \
 		addfriend.cpp \
 		client.cpp \
-		database.cpp
+		database.cpp \
+		profile.cpp \
+		options.cpp
 QMAKE_TARGET  = Messenger
 DESTDIR       = #avoid trailing-slash linebreak
 TARGET        = Messenger
@@ -183,7 +193,7 @@ first: all
 
 ####### Build rules
 
-$(TARGET): ui_mainwindow.h ui_authwindow.h ui_addfriend.h $(OBJECTS)  
+$(TARGET): ui_mainwindow.h ui_authwindow.h ui_addfriend.h ui_options.h $(OBJECTS)  
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
 Makefile: Messenger.pro /usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64/qmake.conf /usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
@@ -369,9 +379,9 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.h authwindow.h addfriend.h client.h structsforrequests.h database.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp mainwindow.cpp authwindow.cpp addfriend.cpp client.cpp database.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents mainwindow.ui authwindow.ui addfriend.ui $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.h authwindow.h addfriend.h client.h structsforrequests.h database.h profile.h options.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp mainwindow.cpp authwindow.cpp addfriend.cpp client.cpp database.cpp profile.cpp options.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents mainwindow.ui authwindow.ui addfriend.ui options.ui $(DISTDIR)/
 
 
 clean:compiler_clean 
@@ -394,35 +404,47 @@ check: first
 
 compiler_rcc_make_all:
 compiler_rcc_clean:
-compiler_moc_header_make_all: moc_mainwindow.cpp moc_authwindow.cpp moc_addfriend.cpp moc_client.cpp
+compiler_moc_header_make_all: moc_mainwindow.cpp moc_authwindow.cpp moc_addfriend.cpp moc_profile.cpp moc_options.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_mainwindow.cpp moc_authwindow.cpp moc_addfriend.cpp moc_client.cpp
-moc_mainwindow.cpp: client.h \
+	-$(DEL_FILE) moc_mainwindow.cpp moc_authwindow.cpp moc_addfriend.cpp moc_profile.cpp moc_options.cpp
+moc_mainwindow.cpp: profile.h \
+		client.h \
 		structsforrequests.h \
+		authwindow.h \
+		ui_authwindow.h \
+		addfriend.h \
+		database.h \
+		options.h \
 		mainwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I'/home/oleg/Рабочий стол/Track/Project/Messenger' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
 
 moc_authwindow.cpp: ui_authwindow.h \
 		client.h \
 		structsforrequests.h \
+		profile.h \
 		authwindow.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I'/home/oleg/Рабочий стол/Track/Project/Messenger' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include authwindow.h -o moc_authwindow.cpp
 
 moc_addfriend.cpp: structsforrequests.h \
+		database.h \
+		profile.h \
 		client.h \
 		addfriend.h
 	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I'/home/oleg/Рабочий стол/Track/Project/Messenger' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include addfriend.h -o moc_addfriend.cpp
 
-moc_client.cpp: structsforrequests.h \
-		client.h \
-		client.h
-	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I'/home/oleg/Рабочий стол/Track/Project/Messenger' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include client.h -o moc_client.cpp
+moc_profile.cpp: client.h \
+		structsforrequests.h \
+		profile.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I'/home/oleg/Рабочий стол/Track/Project/Messenger' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include profile.h -o moc_profile.cpp
+
+moc_options.cpp: options.h
+	/usr/lib/x86_64-linux-gnu/qt5/bin/moc $(DEFINES) -I/usr/lib/x86_64-linux-gnu/qt5/mkspecs/linux-g++-64 -I'/home/oleg/Рабочий стол/Track/Project/Messenger' -I/usr/include/x86_64-linux-gnu/qt5 -I/usr/include/x86_64-linux-gnu/qt5/QtWidgets -I/usr/include/x86_64-linux-gnu/qt5/QtGui -I/usr/include/x86_64-linux-gnu/qt5/QtNetwork -I/usr/include/x86_64-linux-gnu/qt5/QtSql -I/usr/include/x86_64-linux-gnu/qt5/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include options.h -o moc_options.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_authwindow.h ui_addfriend.h
+compiler_uic_make_all: ui_mainwindow.h ui_authwindow.h ui_addfriend.h ui_options.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_authwindow.h ui_addfriend.h
+	-$(DEL_FILE) ui_mainwindow.h ui_authwindow.h ui_addfriend.h ui_options.h
 ui_mainwindow.h: mainwindow.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic mainwindow.ui -o ui_mainwindow.h
 
@@ -431,6 +453,9 @@ ui_authwindow.h: authwindow.ui
 
 ui_addfriend.h: addfriend.ui
 	/usr/lib/x86_64-linux-gnu/qt5/bin/uic addfriend.ui -o ui_addfriend.h
+
+ui_options.h: options.ui
+	/usr/lib/x86_64-linux-gnu/qt5/bin/uic options.ui -o ui_options.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -443,33 +468,45 @@ compiler_clean: compiler_moc_header_clean compiler_uic_clean
 ####### Compile
 
 main.o: main.cpp mainwindow.h \
+		profile.h \
 		client.h \
 		structsforrequests.h \
-		database.h
+		authwindow.h \
+		ui_authwindow.h \
+		addfriend.h \
+		database.h \
+		options.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
 
 mainwindow.o: mainwindow.cpp mainwindow.h \
+		profile.h \
 		client.h \
 		structsforrequests.h \
-		ui_mainwindow.h \
-		addfriend.h \
 		authwindow.h \
 		ui_authwindow.h \
-		database.h
+		addfriend.h \
+		database.h \
+		options.h \
+		ui_mainwindow.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o mainwindow.cpp
 
 authwindow.o: authwindow.cpp authwindow.h \
 		ui_authwindow.h \
 		client.h \
 		structsforrequests.h \
-		mainwindow.h
+		profile.h \
+		mainwindow.h \
+		addfriend.h \
+		database.h \
+		options.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o authwindow.o authwindow.cpp
 
 addfriend.o: addfriend.cpp addfriend.h \
 		structsforrequests.h \
+		database.h \
+		profile.h \
 		client.h \
-		ui_addfriend.h \
-		database.h
+		ui_addfriend.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o addfriend.o addfriend.cpp
 
 client.o: client.cpp client.h \
@@ -477,9 +514,18 @@ client.o: client.cpp client.h \
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o client.o client.cpp
 
 database.o: database.cpp database.h \
-		structsforrequests.h \
-		client.h
+		structsforrequests.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o database.o database.cpp
+
+profile.o: profile.cpp structsforrequests.h \
+		profile.h \
+		client.h \
+		database.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o profile.o profile.cpp
+
+options.o: options.cpp options.h \
+		ui_options.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o options.o options.cpp
 
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
@@ -490,8 +536,11 @@ moc_authwindow.o: moc_authwindow.cpp
 moc_addfriend.o: moc_addfriend.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_addfriend.o moc_addfriend.cpp
 
-moc_client.o: moc_client.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_client.o moc_client.cpp
+moc_profile.o: moc_profile.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_profile.o moc_profile.cpp
+
+moc_options.o: moc_options.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_options.o moc_options.cpp
 
 ####### Install
 

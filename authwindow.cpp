@@ -6,7 +6,7 @@
 #include "mainwindow.h"
 #include "structsforrequests.h"
 
-extern accountRequest auth;
+//extern accountRequest auth;
 
 authwindow::authwindow(QWidget *parent) :
     QDialog(parent),
@@ -24,10 +24,13 @@ authwindow::~authwindow()
 
 void authwindow::on_EnterButton_clicked()
 {
+    accRequest auth;
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
     accountRequest arg = {auth.login, auth.password};
-    Reply reply = account->accountRequest(arg, "account_authorisation");
+
+
+    accReply reply = account->accountRequest(arg, "account_authorisation");
     switch(reply.statusCode)
     {
         case 200: ui->StatusLine->setText("Successeful autorisation!");
@@ -48,11 +51,12 @@ void authwindow::on_CloseButton_clicked()
 
 void authwindow::on_RegisterButton_clicked()
 {
+    accRequest auth;
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
 
     accountRequest arg = {auth.login, auth.password};
-    Reply reply = account->accountRequest(arg, "account_registration");
+    accReply reply = account->accountRequest(arg, "account_registration");
 
     switch(reply.statusCode)
     {

@@ -1,9 +1,16 @@
 #include <cpprest/json.h>
 #include <cpprest/http_client.h>
 #include <cpprest/http_msg.h>
-#include <cpprest/http_listener.h>
 #include "cpprest/details/basic_types.h"
 #include "cpprest/asyncrt_utils.h"
+
+#include "string.h"
+#include <QString>
+#include <QtCore/QTextCodec>
+#include <QtCore>
+#include <QDebug>
+#include <QtGlobal>
+
 #include "client.h"
 #include "structsforrequests.h"
 
@@ -11,19 +18,12 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-accountRequest auth = {};
-
-QString _login;
-
-
 QString ServerURL = "http://localhost:7777";
-//QString ServerURL = "http://10.55.86.146:7777";
+QString clientLogin;
 
 Client::Client(QObject *parent) :
     QObject(parent)
-{
-
-}
+{ }
 
 /*
 POST:
@@ -35,26 +35,26 @@ POST:
 */
 
 Client::~Client()
-{
+{}
 
-}
-
-Reply Client::accountRequest(accRequest req, QString property)
+accReply Client::accountRequest(accRequest req, QString property)
 {
     json::value json;
     json["request"]      = json::value( U("account") );
     json["sub_request"]  = json::value( U(property.toStdString()) );
-    json["login"]        = json::value( U(req.login.toStdString()) );
-    json["key"]          = json::value( U(req.password.toStdString()) );
-    Reply reply;
+    json["login"]        = json::value( U((req.login).toStdString()) );
+    json["key"]          = json::value( U((req.password).toStdString()) );
+    accReply reply;
+
     qDebug() << req.login << req.password;
-    //std::cout << json;
     //http_client client(U("http://localhost"));
     /*
     http_client cl;
     cl.add_handler(  );
     */
 //    http_client client(U("http://localhost"));
+
+
     http_response response;
     try
         {
@@ -73,24 +73,25 @@ Reply Client::accountRequest(accRequest req, QString property)
               reply.replyContent = e.what();
               return reply;
         }
-    if(reply.statusCode == 200){
-        _login = req.login;
+
+    if(reply.statusCode == web::http::status_codes::OK){
+        clientLogin = req.login;
+        json = response.extract_json().get();
+
         //JsonParser
          //std::cout << json;
-        json = response.extract_json().get();
     }
     qDebug() << reply.statusCode << reply.replyContent;
     return reply;
-
 }
 
-FriendReply Client::friendRequest(QString login, QString property)
+FriendReply Client::friendRequest(QString contact_login, QString property)
 {
     json::value json;
     json["request"]         = json::value( U("account") );
     json["sub_request"]     = json::value( U(property.toStdString()) );
-    json["client_login"]    = json::value( U(_login.toStdString()) );
-    json["contact_login"]   = json::value( U(login.toStdString()) );
+    json["client_login"]    = json::value( U(clientLogin.toStdString()) );
+    json["contact_login"]   = json::value( U(contact_login.toStdString()) );
 
     FriendReply reply;
     http_response response;
@@ -121,7 +122,7 @@ FriendReply Client::friendRequest(QString login, QString property)
             /*auto jcontact = json.at(U("contact") );
             std::cout << jcontact.at(U("login")).as_string();*/
 
-            reply.login = login;
+            reply.login = contact_login;
             //reply.uid = json.at(U("uid")).as_integer();
             reply.uid = qrand();
         }
@@ -129,5 +130,4 @@ FriendReply Client::friendRequest(QString login, QString property)
     return reply;
 
 }
-
 

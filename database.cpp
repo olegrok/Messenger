@@ -7,6 +7,9 @@
 
 extern accountRequest auth;
 
+#define SEND    70001
+#define RECIVE  70002
+
 DataBase::DataBase(QString login){
     createConnection(login);
     createTable();
@@ -34,10 +37,10 @@ bool DataBase::createTable()
 {
     QSqlQuery query;
     QString   str  = "CREATE TABLE contacts ( "
-                         "id INTEGER PRIMARY KEY NOT NULL, "
-                         "login VARCHAR(15) NOT NULL, "
-                         "last_msg_id  VARCHAR(15), "
-                         "unreaded  INTEGER "
+                         "id INTEGER PRIMARY    KEY NOT NULL, "
+                         "login VARCHAR(15)     NOT NULL, "
+                         "last_msg_id           VARCHAR(15), "
+                         "unreaded              INTEGER "
                      ");";
 
     if (!query.exec(str)) {
@@ -45,10 +48,11 @@ bool DataBase::createTable()
         return false;
     }
               str  = "CREATE TABLE messages ( "
-                         "contact_id INTEGER, "
-                         "text   TEXT, "
-                         "status  VARCHAR(15), "
-                         "filed  VARCHAR(15) "
+                         "login     VARCHAR(255), "
+                         "text      TEXT, "
+                         "time      INTEGER, "
+                         "status    INTEGER "
+/*                       "filed     VARCHAR(15) "   */
                      ");";
 
     if (!query.exec(str)) {
@@ -63,13 +67,13 @@ bool DataBase::sendMessage(sndMsg msg)
 {
     QSqlQuery query;
     QString strF =
-          "INSERT INTO  messages (contact_id, text, status, filed) "
-          "VALUES(%1, '%2', '%3', '%4');";
+          "INSERT INTO  messages (login, text, time, status) "
+          "VALUES('%1', '%2', %3, %4);";
 
-    QString str = strF.arg(msg.contactUID)
+    QString str = strF.arg(msg.login)
               .arg(msg.text)
-              .arg(msg.status)
-              .arg(msg.filed);
+              .arg(msg.time.toTime_t())
+              .arg(SEND);
     if (!query.exec(str)) {
         qDebug() << "Unable to make insert opeation" << query.lastError();
         return false;
@@ -97,7 +101,7 @@ bool DataBase::addContact(contInfo info)
 QStringList DataBase::getContacts()
 {
     //qDebug() << "contacts:";
-    QSqlQuery query("SELECT * from contacts");
+    QSqlQuery query("SELECT login FROM contacts");
     QStringList contList;
     QString cont;
     QSqlRecord rec = query.record();
@@ -120,6 +124,30 @@ bool DataBase::deleteContact(QString login)
         return false;
     }
     return true;
+}
+
+QString DataBase::getMessages(QString login){
+    QString strF = "SELECT * FROM messages WHERE login = '%1' ORDER BY time ASC;";
+    QString str = strF.arg(login);
+
+    QSqlQuery query;
+
+    if (!query.exec(str)) {
+        qDebug() << "Unable to make select opeation" << query.lastError();
+    }
+    QSqlRecord rec = query.record();
+    QString text;
+    while(query.next()){
+        if(query.value(rec.indexOf("status")).toInt() == SEND)
+            text.append( "Me: ");
+        else
+            text.append(login + ": ");
+
+        text.append( query.value(rec.indexOf("text")).toString() + "\n");
+
+    }
+    qDebug() << text;
+    return text;
 }
 
 bool DataBase::close(){

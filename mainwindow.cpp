@@ -7,6 +7,7 @@
 #include "authwindow.h"
 #include "database.h"
 #include "profile.h"
+#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,10 +35,19 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_SendButton_clicked()
 {
-    QString msg = ui->MessageWindow->toPlainText();
+    if(ui->ContactsList->currentRow() == -1)
+        return;
+    sndMsg msg;
+    msg.login = ui->ContactsList->currentItem()->text();
+    msg.text = ui->MessageWindow->toPlainText();
+    msg.time = QDateTime::currentDateTimeUtc();
     ui->MessageWindow->clear();
-    if(!msg.isEmpty())
-    ui->ChatWindow->appendPlainText("Me: " + msg);
+    if(msg.text.isEmpty())
+        return;
+    account.sendMessage(msg);
+    ui->ChatWindow->appendPlainText("Me: " + msg.text);
+
+
 }
 
 void MainWindow::on_AddContactButton_clicked()
@@ -55,10 +65,11 @@ void MainWindow::addContact(contInfo info)
 
 void MainWindow::on_ContactsList_itemActivated(QListWidgetItem *item)
 {
-    ui->ChatWindow->clear();
+/*    ui->ChatWindow->clear();
     //QString msgs = getMessage(item);
     //ui->ChatWindow->setPlainText(msgs);
     ui->ChatWindow->setPlainText(item->text()+": Hello");
+    */
 }
 
 void MainWindow::on_DeleteContactButton_clicked()
@@ -84,4 +95,18 @@ void MainWindow::databaseInit(QString _login)
 }
 
 void MainWindow::styleInit(){
+}
+
+void MainWindow::on_pushButton_4_clicked()
+{
+    opt.show();
+}
+
+void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
+{
+    ui->ChatWindow->clear();
+    //QString msgs = getMessage(item);
+    ui->ChatWindow->setPlainText(DataBase::getMessages(item->text()));
+    //ui->ChatWindow->setPlainText(msgs);
+    //ui->ChatWindow->setPlainText(item->text()+": Hello");
 }

@@ -15,6 +15,7 @@ public:
     static QStringList getContacts();
     static bool deleteContact(QString);
     static bool close();
+    static QString getMessages(QString login);
 };
 
 #endif // DATABASE_H
