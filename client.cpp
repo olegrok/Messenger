@@ -19,7 +19,7 @@ using namespace web::http;
 using namespace web::http::client;
 
 QString ServerURL = "http://localhost:7777";
-QString clientLogin;
+//QString clientLogin;
 
 Client::Client(QObject *parent) :
     QObject(parent)
@@ -75,7 +75,7 @@ accReply Client::accountRequest(accRequest req, QString property)
         }
 
     if(reply.statusCode == web::http::status_codes::OK){
-        clientLogin = req.login;
+        this->clientLogin = req.login;
         json = response.extract_json().get();
 
         //JsonParser

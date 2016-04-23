@@ -11,6 +11,7 @@
 
 class AddFriend;
 class authwindow;
+class Profile;
 
 namespace Ui {
 class MainWindow;

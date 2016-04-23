@@ -27,10 +27,8 @@ void authwindow::on_EnterButton_clicked()
     accRequest auth;
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
-    accountRequest arg = {auth.login, auth.password};
 
-
-    accReply reply = account->accountRequest(arg, "account_authorisation");
+    accReply reply = account->accountRequest(auth, "account_authorisation");
     switch(reply.statusCode)
     {
         case 200: ui->StatusLine->setText("Successeful autorisation!");
@@ -55,8 +53,7 @@ void authwindow::on_RegisterButton_clicked()
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
 
-    accountRequest arg = {auth.login, auth.password};
-    accReply reply = account->accountRequest(arg, "account_registration");
+    accReply reply = account->accountRequest(auth, "account_registration");
 
     switch(reply.statusCode)
     {

@@ -20,7 +20,7 @@ public:
     ~Client();
     accReply accountRequest(accRequest req, QString property);
     FriendReply friendRequest(QString contact_login, QString property);
-    void setLogin(QString login);
+    QString clientLogin;
 //private:
 };
 

@@ -17,6 +17,9 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setGeometry(QDesktopWidget().availableGeometry().width()/2 - this->width()/2,
                       QDesktopWidget().availableGeometry().height()/2 - this->width()/2,
                       this->width(), this->height());
+    auth.setUpProfile(&account);
+    addfriend.setUpProfile(&account);
+
     auth.show();
 
     connect(&auth, &authwindow::showMainWindow, this, &MainWindow::databaseInit, Qt::UniqueConnection);
@@ -45,6 +48,7 @@ void MainWindow::on_SendButton_clicked()
     if(msg.text.isEmpty())
         return;
     account.sendMessage(msg);
+    //ui->ChatWindow->appendPlainText(QDateTime::currentDateTime().toString("HH:mm") + " ");
     ui->ChatWindow->appendPlainText("Me: " + msg.text);
 
 
