@@ -2,11 +2,6 @@
 #include <QDebug>
 #include "authwindow.h"
 #include "ui_authwindow.h"
-#include "client.h"
-#include "mainwindow.h"
-#include "structsforrequests.h"
-
-//extern accountRequest auth;
 
 authwindow::authwindow(QWidget *parent) :
     QDialog(parent),

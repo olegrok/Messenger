@@ -4,10 +4,10 @@
 #include <QObject>
 #include <QString>
 #include <QThread>
-#include <qstring.h>
 #include "client.h"
 #include "structsforrequests.h"
 #include <cpprest/json.h>
+#include "database.h"
 
 class Monitor : public QThread{
     Q_OBJECT
@@ -34,7 +34,7 @@ public:
     FriendReply friendRequest(QString contact_login, QString property);
     accReply accountRequest(accRequest req, QString property);
     bool sendMessage(sndMsg msg);
-    QString getLogin();
+    QString& getLogin();
 
 public slots:
     void monitorHandler(web::json::value json);

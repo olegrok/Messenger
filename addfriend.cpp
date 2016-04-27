@@ -1,8 +1,5 @@
-#include "addfriend.h"
 #include "ui_addfriend.h"
-#include "structsforrequests.h"
-#include "database.h"
-
+#include "addfriend.h"
 
 AddFriend::AddFriend(QWidget *parent) :
     QDialog(parent),

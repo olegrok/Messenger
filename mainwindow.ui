@@ -81,7 +81,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton_4">
+        <widget class="QPushButton" name="OptionButton">
          <property name="cursor">
           <cursorShape>PointingHandCursor</cursorShape>
          </property>

@@ -1,6 +1,9 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 #include <QtSql>
+#include <QHostInfo>
+#include <QStringList>
+#include <QSqlRecord>
 #include "structsforrequests.h"
 
 class DataBase

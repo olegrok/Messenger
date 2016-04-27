@@ -8,6 +8,11 @@
 #include "authwindow.h"
 #include "addfriend.h"
 #include "options.h"
+#include <QString>
+#include <QDebug>
+#include <QDesktopWidget>
+#include "database.h"
+#include <QDateTime>
 
 class AddFriend;
 class authwindow;
@@ -24,22 +29,17 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void addContact(contInfo);
-    void setLogin(QString);
-    void setUid(int);
+    void addContact(const contInfo);
+    void setLogin(const QString);
+    void setUid(const int);
 
 
 private slots:
     void on_SendButton_clicked();
     void on_AddContactButton_clicked();
-    void on_ContactsList_itemActivated(QListWidgetItem* item);
     void on_DeleteContactButton_clicked();
-    void databaseInit(QString _login);
-
-    void on_pushButton_4_clicked();
-
-//    void on_ContactsList_clicked(const QModelIndex &index);
-
+    void databaseInit(const QString _login);
+    void on_OptionButton_clicked();
     void on_ContactsList_itemClicked(QListWidgetItem *item);
 
 private:

@@ -1,11 +1,4 @@
-#include <QtSql>
-#include <QHostInfo>
-#include <QStringList>
-#include <QSqlRecord>
 #include "database.h"
-#include "structsforrequests.h"
-
-extern accountRequest auth;
 
 #define SEND    70001
 #define RECIVE  70002

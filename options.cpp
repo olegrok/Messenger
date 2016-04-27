@@ -1,5 +1,3 @@
-#include <QStyleFactory>
-#include <QDebug>
 #include "options.h"
 #include "ui_options.h"
 

@@ -5,8 +5,8 @@
 #include <QLineEdit>
 #include <QDebug>
 #include "ui_authwindow.h"
-#include "client.h"
 #include "profile.h"
+#include "structsforrequests.h"
 
 namespace Ui {
 class authwindow;
@@ -19,7 +19,7 @@ class authwindow : public QDialog
 public:
     explicit authwindow(QWidget *parent = 0);
     ~authwindow();
-    QString getLogin();
+    QString getLogin() const;
     int getUid();
     void setUpProfile(Profile* acc);
 

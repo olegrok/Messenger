@@ -24,7 +24,6 @@ private slots:
 
 private:
     Ui::AddFriend *ui;
-    contInfo CheckFriend(QString);
     Profile* account;
 };
 

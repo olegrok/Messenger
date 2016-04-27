@@ -1,13 +1,5 @@
-#include <QString>
-#include <QDebug>
-#include <QDesktopWidget>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "addfriend.h"
-#include "authwindow.h"
-#include "database.h"
-#include "profile.h"
-#include <QDateTime>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -59,21 +51,12 @@ void MainWindow::on_AddContactButton_clicked()
     addfriend.show();
 }
 
-void MainWindow::addContact(contInfo info)
+void MainWindow::addContact(const contInfo info)
 {
     if(info.uid != -1){
         ui->ContactsList->addItem(info.login);
         addfriend.hide();
     }
-}
-
-void MainWindow::on_ContactsList_itemActivated(QListWidgetItem *item)
-{
-/*    ui->ChatWindow->clear();
-    //QString msgs = getMessage(item);
-    //ui->ChatWindow->setPlainText(msgs);
-    ui->ChatWindow->setPlainText(item->text()+": Hello");
-    */
 }
 
 void MainWindow::on_DeleteContactButton_clicked()
@@ -88,7 +71,7 @@ void MainWindow::on_DeleteContactButton_clicked()
     }
 }
 
-void MainWindow::databaseInit(QString _login)
+void MainWindow::databaseInit(const QString _login)
 {
     login = _login;
     account.setLogin(login);
@@ -101,7 +84,7 @@ void MainWindow::databaseInit(QString _login)
 void MainWindow::styleInit(){
 }
 
-void MainWindow::on_pushButton_4_clicked()
+void MainWindow::on_OptionButton_clicked()
 {
     opt.show();
 }

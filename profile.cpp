@@ -1,16 +1,11 @@
-#include "structsforrequests.h"
 #include "profile.h"
-#include <cpprest/json.h>
-#include <QObject>
-#include "database.h"
-#include <QString>
 
 Profile::Profile(QString _login) :
     login(_login)
 {
-    //connect(&monitor, SIGNAL(task(web::json::value)), this,
-    //        SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);
-    //monitor.start();
+    connect(&monitor, SIGNAL(task(web::json::value)), this,
+            SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);
+    monitor.start();
 }
 
 Profile::~Profile(){
@@ -41,6 +36,6 @@ bool Profile::sendMessage(sndMsg msg){
     return true;
 }
 
-QString Profile::getLogin(){
+QString& Profile::getLogin(){
     return login;
 }

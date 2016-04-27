@@ -2,6 +2,8 @@
 #define OPTIONS_H
 
 #include <QDialog>
+#include <QStyleFactory>
+#include <QDebug>
 
 namespace Ui {
 class Options;
