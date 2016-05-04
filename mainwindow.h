@@ -13,6 +13,7 @@
 #include <QDesktopWidget>
 #include "database.h"
 #include <QDateTime>
+#include "structsforrequests.h"
 
 class AddFriend;
 class authwindow;

@@ -76,8 +76,15 @@ void MainWindow::databaseInit(const QString _login)
     login = _login;
     account.setLogin(login);
     DataBase::createConnection(login);
-    DataBase::createTable();
-    ui->ContactsList->addItems(DataBase::getContacts());
+    try{
+        DataBase::createTable();
+    }
+    catch(const std::exception &e){
+        ui->ContactsList->addItems(DataBase::getContacts());
+    }
+
+    //else first use
+
     this->show();
 }
 

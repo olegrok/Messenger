@@ -45,16 +45,43 @@ bool DataBase::createTable()
                          "text      TEXT, "
                          "time      INTEGER, "
                          "status    INTEGER "
-/*                       "filed     VARCHAR(15) "   */
                      ");";
 
     if (!query.exec(str)) {
         qDebug() << "Unable to create a table" << query.lastError();
         return false;
     }
+
+                str  = "CREATE TABLE log ( "
+                        "type      VARCHAR(255), "
+                        "value     INTEGER, "
+                        "comment   TEXT, "
+                        "time      INTEGER "
+                    ");";
+
+    if (!query.exec(str)) {
+        qDebug() << "Unable to create a table" << query.lastError();
+        return false;
+    }
+
     return true;
 }
 
+bool DataBase::addToLog(QString type, int value, QString comment, int time){
+    QSqlQuery query;
+    QString strF =
+            "INSERT INTO  log (type, value, text, time) "
+            "VALUES('%1', %2, '%3', %4);";
+    QString str = strF.arg(type)
+                      .arg(value)
+                      .arg(comment)
+                      .arg(time);
+    if (!query.exec(str)) {
+        qDebug() << "Unable to make insert opeation" << query.lastError();
+        return false;
+    }
+    return true;
+}
 
 bool DataBase::sendMessage(sndMsg msg)
 {
@@ -93,7 +120,6 @@ bool DataBase::addContact(contInfo info)
 
 QStringList DataBase::getContacts()
 {
-    //qDebug() << "contacts:";
     QSqlQuery query("SELECT login FROM contacts");
     QStringList contList;
     QString cont;
@@ -116,6 +142,18 @@ bool DataBase::deleteContact(QString login)
         qDebug() << "Unable to make delete opeation" << query.lastError();
         return false;
     }
+    return true;
+}
+
+bool DataBase::clearContacts(){
+    QSqlQuery query;
+    QString str =  "DELETE FROM contacts;";
+    if(!query.exec(str)){
+        qDebug() << "Unable to make delete opeation" << query.lastError();
+        return false;
+    }
+    str = "VACUUM;";
+    query.exec(str);
     return true;
 }
 

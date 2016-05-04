@@ -20,8 +20,12 @@ public:
     accReply accountRequest(accRequest req, QString property);
     FriendReply friendRequest(QString contact_login, QString property);
     bool setLogin(QString login);
+    json::value getData();
 private:
     QString clientLogin;
+    QString cookie;
+    int uid;
+
 };
 
 #endif // CLIENT_H

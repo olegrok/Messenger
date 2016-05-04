@@ -20,6 +20,8 @@ struct accountReply
 {
     web::http::status_code statusCode;
     QString replyContent;
+    QString cookie;
+    int uid;
 } accReply;
 
 
@@ -29,7 +31,6 @@ struct argumentsForRequest
     QString login;
     QString key;
     QString request;
-    QString sub_reqest;
 } Request;
 
 

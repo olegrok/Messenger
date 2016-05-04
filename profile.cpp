@@ -12,13 +12,19 @@ Profile::~Profile(){
     monitor.terminate();
 }
 
-bool Profile::setLogin(QString _login){
+void Profile::setLogin(QString _login){
     login = _login;
-    return true;
+}
+
+void Profile::setSessionData(QString _cookie, int _uid){
+    cookie = _cookie;
+    uid = _uid;
 }
 
 accReply Profile::accountRequest(accRequest req, QString property){
-    return client.accountRequest(req, property);
+    accReply reply = client.accountRequest(req, property);
+    setSessionData(reply.cookie, reply.uid);
+    return reply;
 }
 
 FriendReply Profile::friendRequest(QString contact_login, QString property){

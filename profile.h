@@ -26,14 +26,25 @@ signals:
 
 class Profile : public QObject
 {
+    //Add SSL
+    //Сжатие zip
+    //staitless - неск. серверов.
+    //Таблица сессий
+    //cookie храниться после закрытия
+    //один человек одна сессия
+    //База данных - транзакция
+    //offline
+    //Последнее действие - база данных
     Q_OBJECT
 public:
     explicit Profile(QString _login = 0);
     ~Profile();
-    bool setLogin(QString);
     FriendReply friendRequest(QString contact_login, QString property);
     accReply accountRequest(accRequest req, QString property);
     bool sendMessage(sndMsg msg);
+
+    void setSessionData(QString cookie = 0, int uid = 0);
+    void setLogin(QString);
     QString& getLogin();
 
 public slots:
@@ -41,7 +52,8 @@ public slots:
 private:
     Monitor monitor;
     QString login;
-    QString token;
+    QString cookie;
+    int     uid;
     Client client;
 };
 
