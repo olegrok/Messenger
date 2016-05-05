@@ -4,8 +4,8 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-QString ServerURL = "https://localhost:7777";
-
+//QString ServerURL = "https://localhost:7777";
+QString ServerURL = "http://192.168.0.102:7777";
 Client::Client(QObject *parent) :
     QObject(parent)
 { }
@@ -32,13 +32,6 @@ accReply Client::accountRequest(accRequest req, QString property)
 
     qDebug() << req.login << req.password;
     //http_client client(U("http://localhost"));
-    /*
-    http_client cl;
-    cl.add_handler(  );
-    */
-//    http_client client(U("http://localhost"));
-
-
     http_response response;
     try
         {
@@ -48,6 +41,7 @@ accReply Client::accountRequest(accRequest req, QString property)
              {
                  response = task.get();
                  reply.statusCode = response.status_code();
+                 qDebug() << reply.statusCode;
               }).wait();
         }
       catch (const std::exception &e)
@@ -137,7 +131,7 @@ json::value Client::getData(){
       catch (const std::exception &e)
         {
               qDebug() << "Error exception:" << e.what();
-              //return reply;
+              return false;
         }
 
     json = response.extract_json().get();

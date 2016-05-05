@@ -12,9 +12,10 @@
 public:
     JsonProtocol();
 };*/
+using namespace web;
 
 namespace JsonProtocol{
-
+    QVector < QPair<QString, int> > contactListParser(json::value json);
 }
 
 #endif // JSONPROTOCOL_H

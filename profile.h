@@ -9,6 +9,7 @@
 #include "structsforrequests.h"
 #include <cpprest/json.h>
 #include "database.h"
+#include "jsonprotocol.h"
 
 class Monitor : public QThread{
     Q_OBJECT

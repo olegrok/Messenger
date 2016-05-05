@@ -28,9 +28,15 @@ accReply Profile::accountRequest(accRequest req, QString property){
         setLogin(req.login);
         databaseInit();
         DataBase::addToLog("session", uid, cookie, QDateTime::currentDateTimeUtc().toTime_t());
+        auto contactArray = JsonProtocol::contactListParser(client.getData());
+        std::for_each(contactArray.begin(), contactArray.begin(), [&](QPair<QString, int> pair){
+            contInfo info;
+            info.login = pair.first;
+            info.uid   = pair.second;
+            DataBase::addContact(info);
+        });
     }
 
-    client.getData();
 
     return reply;
 }
@@ -44,7 +50,7 @@ void Profile::monitorHandler(json::value json){
 }
 
 bool Profile::sendMessage(sndMsg msg){
-    //client.sendMsg();
+    //client.sendMessage();
     DataBase::sendMessage(msg);
     return true;
 }

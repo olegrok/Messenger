@@ -19,8 +19,10 @@ public:
 
 private slots:
     void on_pushButton_clicked();
-
     void on_CloseButton_clicked();
+    void on_UnloginButton_clicked();
+signals:
+    void unlogin(QString = 0);
 
 private:
     Ui::Options *ui;

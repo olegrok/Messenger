@@ -13,9 +13,9 @@ MainWindow::MainWindow(QWidget *parent) :
     addfriend.setUpProfile(&account);
 
     connect(&auth, &authwindow::showMainWindow, this, &MainWindow::windowInit, Qt::UniqueConnection);
-    //connect(&auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
     connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
     connect(&account, &Profile::unlogin, this, &MainWindow::unlogin, Qt::UniqueConnection);
+    connect(&opt, &Options::unlogin, this, &MainWindow::unlogin, Qt::UniqueConnection);
 
     auth.show();
 }
@@ -101,8 +101,5 @@ void MainWindow::on_OptionButton_clicked()
 void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 {
     ui->ChatWindow->clear();
-    //QString msgs = getMessage(item);
     ui->ChatWindow->setPlainText(DataBase::getMessages(item->text()));
-    //ui->ChatWindow->setPlainText(msgs);
-    //ui->ChatWindow->setPlainText(item->text()+": Hello");
 }

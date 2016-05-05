@@ -26,3 +26,8 @@ void Options::on_CloseButton_clicked()
 {
     qApp->closeAllWindows();
 }
+
+void Options::on_UnloginButton_clicked()
+{
+    emit unlogin("Welcome to Chat!");
+}
