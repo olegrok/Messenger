@@ -61,10 +61,9 @@ accReply Client::accountRequest(accRequest req, QString property)
     if(reply.statusCode == web::http::status_codes::OK){
         setLogin(req.login);
         json = response.extract_json().get();
-        reply.uid = json.at(U("uid")).as_integer();
-        uid = reply.uid;
-        reply.cookie = QString::fromStdString(json.at(U("session_key")).as_string());
-        cookie = reply.cookie;
+        session = json;
+        reply.uid = json.at( U("session")).at(U("uid")).as_integer();
+        reply.cookie = QString::fromStdString(json.at(U("session")).at(U("session_key")).as_string());
     }
     qDebug() << reply.statusCode << reply.replyContent << reply.uid << reply.cookie;
     return reply;
@@ -74,8 +73,8 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
 {
     json::value json;
     json["request"]         = json::value( U(property.toStdString()) );
-    json["client_login"]    = json::value( U(clientLogin.toStdString()) );
-    json["contact_login"]   = json::value( U(contact_login.toStdString()) );
+    json["login"]   = json::value( U(contact_login.toStdString()) );
+    json["session"]         = session;
 
     FriendReply reply;
     http_response response;
@@ -119,12 +118,10 @@ bool Client::setLogin(QString login){
 json::value Client::getData(){
     json::value json;
     json["request"] = json::value( U("get_data") );
-    json::value session;
-    session["uid"] = json::value( U(uid) );
-    session["session_key"] = json::value( U(cookie.toStdString()) );
-    json["session"] = json::value(session);
+    json["session"] = session;
 
     http_response response;
+    web::http::status_code statusCode;
 
     try
         {
@@ -133,7 +130,7 @@ json::value Client::getData(){
                 .then( [&]( pplx::task<web::http::http_response> task )
              {
                  response = task.get();
-                 web::http::status_code statusCode = response.status_code();
+                 statusCode = response.status_code();
                  qDebug() << "status code: " << statusCode;
               }).wait();
         }
@@ -148,6 +145,35 @@ json::value Client::getData(){
     //todo json protocol class
     //to parse json
     //QVector<QPair<QString, int>>
+
+    return true;
+}
+
+bool Client::logout(){
+    json::value json;
+    json["request"] = json::value( U("logout") );
+    json["session"] = session;
+
+    http_response response;
+    web::http::status_code statusCode;
+
+    try
+        {
+            http_client client(U(ServerURL.toStdString()));
+            client.request( web::http::methods::POST ,U("") , json )
+                .then( [&]( pplx::task<web::http::http_response> task )
+             {
+                 response = task.get();
+                 statusCode = response.status_code();
+                 qDebug() << "status code: " << statusCode;
+              });
+        }
+      catch (const std::exception &e)
+        {
+              return false;
+        }
+
+    //if(reply.statusCode == web::http::status_codes::OK){}
 
     return true;
 }

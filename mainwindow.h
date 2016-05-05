@@ -3,7 +3,6 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
-#include "mainwindow.h"
 #include "profile.h"
 #include "authwindow.h"
 #include "addfriend.h"
@@ -14,10 +13,6 @@
 #include "database.h"
 #include <QDateTime>
 #include "structsforrequests.h"
-
-class AddFriend;
-class authwindow;
-class Profile;
 
 namespace Ui {
 class MainWindow;
@@ -42,6 +37,7 @@ private slots:
     void windowInit(QString _login);
     void on_OptionButton_clicked();
     void on_ContactsList_itemClicked(QListWidgetItem *item);
+    void unlogin(QString status = 0);
 
 private:
     QString login;

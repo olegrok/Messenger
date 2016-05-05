@@ -64,3 +64,6 @@ void authwindow::setUpProfile(Profile* acc){
     account = acc;
 }
 
+void authwindow::setStatus(QString status){
+    ui->StatusLine->setText(status);
+}

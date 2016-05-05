@@ -54,3 +54,7 @@ void AddFriend::on_AddButton_clicked()
 void AddFriend::setUpProfile(Profile* acc){
     account = acc;
 }
+
+void AddFriend::setStatus(QString status){
+    ui->AddFriendStatus->setText(status);
+}

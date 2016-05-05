@@ -17,12 +17,18 @@ public:
     ~Monitor() {}
     void run() Q_DECL_OVERRIDE{
         while(true){
-            //auto json = Client::monitor();
+            //auto json = monitor();
             //emit task(json);
         }
     }
+    json::value monitor(){
+        sleep(1e6);
+        return json::value("gap");
+    }
+
 signals:
     void task(web::json::value json);
+
 };
 
 class Profile : public QObject
@@ -46,8 +52,12 @@ public:
     void databaseInit();
 
     void setSessionData(QString cookie = 0, int uid = 0);
-    void setLogin(QString);
+    void setLogin(const QString);
     QString& getLogin();
+    void closeSession(QString status = 0);
+
+signals:
+    void unlogin(QString = 0);
 
 public slots:
     void monitorHandler(web::json::value json);

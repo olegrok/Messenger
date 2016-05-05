@@ -12,7 +12,7 @@ Profile::~Profile(){
     monitor.terminate();
 }
 
-void Profile::setLogin(QString _login){
+void Profile::setLogin(const QString _login){
     login = _login;
 }
 
@@ -36,7 +36,6 @@ accReply Profile::accountRequest(accRequest req, QString property){
 }
 
 FriendReply Profile::friendRequest(QString contact_login, QString property){
-
     return client.friendRequest(contact_login, property);
 }
 
@@ -57,4 +56,10 @@ QString& Profile::getLogin(){
 void Profile::databaseInit(){
     DataBase::createConnection(login);
     DataBase::createTable();
+}
+
+void Profile::closeSession(QString status){
+
+    DataBase::close();
+    emit unlogin(status);
 }

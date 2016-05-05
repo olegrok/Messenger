@@ -17,6 +17,7 @@ public:
     explicit AddFriend(QWidget *parent = 0);
     ~AddFriend();
     void setUpProfile(Profile* acc);
+    void setStatus(QString);
 signals:
     void sendContact(contInfo);
 private slots:

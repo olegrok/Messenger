@@ -22,6 +22,7 @@ public:
     QString getLogin() const;
     int getUid();
     void setUpProfile(Profile* acc);
+    void setStatus(QString status);
 
 public slots:
     void on_EnterButton_clicked();

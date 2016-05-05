@@ -25,11 +25,11 @@ public:
     accReply accountRequest(accRequest req, QString property);
     FriendReply friendRequest(QString contact_login, QString property);
     bool setLogin(QString login);
+    bool logout();
     json::value getData();
 private:
     QString clientLogin;
-    QString cookie;
-    int uid;
+    json::value session;
 
 };
 

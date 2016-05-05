@@ -12,13 +12,12 @@ MainWindow::MainWindow(QWidget *parent) :
     auth.setUpProfile(&account);
     addfriend.setUpProfile(&account);
 
-    auth.show();
-
     connect(&auth, &authwindow::showMainWindow, this, &MainWindow::windowInit, Qt::UniqueConnection);
     //connect(&auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
     connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
+    connect(&account, &Profile::unlogin, this, &MainWindow::unlogin, Qt::UniqueConnection);
 
-
+    auth.show();
 }
 
 MainWindow::~MainWindow()
@@ -78,6 +77,17 @@ void MainWindow::windowInit(QString _login)
     login = _login;
     ui->ContactsList->addItems(DataBase::getContacts());
     this->show();
+}
+
+void MainWindow::unlogin(QString status){
+    if(status.isNull())
+        auth.setStatus("Invalid Session");
+    else
+        auth.setStatus(status);
+    ui->ChatWindow->clear();
+    ui->ContactsList->clear();
+    ui->MessageWindow->clear();
+
 }
 
 void MainWindow::styleInit(){

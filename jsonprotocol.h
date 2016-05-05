@@ -4,6 +4,8 @@
 #include <QVector>
 #include <QPair>
 #include <cpprest/json.h>
+#include <algorithm>
+#include <QString>
 
 /*class JsonProtocol
 {
