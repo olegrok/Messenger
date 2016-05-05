@@ -4,7 +4,7 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-//QString ServerURL = "https://localhost:7777";
+//QString ServerURL = "http://localhost:7777";
 QString ServerURL = "http://192.168.0.102:7777";
 Client::Client(QObject *parent) :
     QObject(parent)
@@ -27,12 +27,15 @@ accReply Client::accountRequest(accRequest req, QString property)
     json::value json;
     json["request"]      = json::value( U(property.toStdString()) );
     json["login"]        = json::value( U((req.login).toStdString()) );
-    json["key"]          = json::value( U((req.password).toStdString()) );
+    json["password"]     = json::value( U((req.password).toStdString()) );
     accReply reply;
 
     qDebug() << req.login << req.password;
-    //http_client client(U("http://localhost"));
+    std::cout << json << std::endl;
+
+
     http_response response;
+    std::cout << json << std::endl;
     try
         {
             http_client client(U(ServerURL.toStdString()));
@@ -54,10 +57,14 @@ accReply Client::accountRequest(accRequest req, QString property)
 
     if(reply.statusCode == web::http::status_codes::OK){
         setLogin(req.login);
-        json = response.extract_json().get();
-        session = json;
-        reply.uid = json.at( U("session")).at(U("uid")).as_integer();
-        reply.cookie = QString::fromStdString(json.at(U("session")).at(U("session_key")).as_string());
+        if(property == "authorisation"){
+            json = response.extract_json().get();
+            std::cout << json << std::endl;
+            session = json.at("session");
+            std::cout << "session json:" << session << std::endl;
+            reply.uid = json.at( U("session")).at(U("uid")).as_integer();
+            reply.cookie = json.at(U("session")).at(U("session_key")).as_integer();
+        }
     }
     qDebug() << reply.statusCode << reply.replyContent << reply.uid << reply.cookie;
     return reply;
@@ -67,8 +74,11 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
 {
     json::value json;
     json["request"]         = json::value( U(property.toStdString()) );
-    json["login"]   = json::value( U(contact_login.toStdString()) );
+    if(property == "add_contact")
+        json["login"]       = json::value( U(contact_login.toStdString()) );
     json["session"]         = session;
+    if(property == "del_contact")
+        json["contact_uid"] = json::value( DataBase::getUid(contact_login) );
 
     FriendReply reply;
     http_response response;
@@ -91,15 +101,17 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
               return reply;
         }
 
+    json = response.extract_json().get();
+    std::cout << json << std::endl;
+
     if(reply.statusCode == web::http::status_codes::OK){
         if(property == "add_contact"){
-            json = response.extract_json().get();
-            std::cout << json << std::endl;
-
             reply.login = contact_login;
-            reply.uid = json.at(U("uid")).as_integer();
+            reply.uid = json.at(U("contact_uid")).as_integer();
         }
     }
+    else
+        reply.login = QString::fromStdString(json.as_string());
     return reply;
 
 }
@@ -114,6 +126,7 @@ json::value Client::getData(){
     json["request"] = json::value( U("get_data") );
     json["session"] = session;
 
+    std::cout << "get data json:" << json << std::endl;
     http_response response;
     web::http::status_code statusCode;
 
@@ -131,7 +144,6 @@ json::value Client::getData(){
       catch (const std::exception &e)
         {
               qDebug() << "Error exception:" << e.what();
-              return false;
         }
 
     json = response.extract_json().get();
@@ -140,7 +152,7 @@ json::value Client::getData(){
     //to parse json
     //QVector<QPair<QString, int>>
 
-    return true;
+    return json;
 }
 
 bool Client::logout(){

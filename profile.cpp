@@ -16,20 +16,23 @@ void Profile::setLogin(const QString _login){
     login = _login;
 }
 
-void Profile::setSessionData(QString _cookie, int _uid){
+void Profile::setSessionData(int _cookie, int _uid){
     cookie = _cookie;
     uid = _uid;
 }
 
 accReply Profile::accountRequest(accRequest req, QString property){
     accReply reply = client.accountRequest(req, property);
+    if(reply.statusCode == web::http::status_codes::OK && property == "registration")
+        reply = client.accountRequest(req, "authorisation");
     if(reply.statusCode == web::http::status_codes::OK){
         setSessionData(reply.cookie, reply.uid);
         setLogin(req.login);
         databaseInit();
-        DataBase::addToLog("session", uid, cookie, QDateTime::currentDateTimeUtc().toTime_t());
+        DataBase::addToLog("session", uid, QString::number(cookie), QDateTime::currentDateTimeUtc().toTime_t());
         auto contactArray = JsonProtocol::contactListParser(client.getData());
-        std::for_each(contactArray.begin(), contactArray.begin(), [&](QPair<QString, int> pair){
+        DataBase::clearContacts();
+        std::for_each(contactArray.begin(), contactArray.end(), [&](QPair<QString, int> pair){
             contInfo info;
             info.login = pair.first;
             info.uid   = pair.second;

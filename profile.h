@@ -52,7 +52,7 @@ public:
     bool sendMessage(sndMsg msg);
     void databaseInit();
 
-    void setSessionData(QString cookie = 0, int uid = 0);
+    void setSessionData(int cookie = 0, int uid = 0);
     void setLogin(const QString);
     QString& getLogin();
     void closeSession(QString status = 0);
@@ -65,7 +65,7 @@ public slots:
 private:
     Monitor monitor;
     QString login;
-    QString cookie;
+    int     cookie;
     int     uid;
     Client client;
 };

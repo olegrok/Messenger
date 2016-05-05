@@ -15,7 +15,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&auth, &authwindow::showMainWindow, this, &MainWindow::windowInit, Qt::UniqueConnection);
     connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
     connect(&account, &Profile::unlogin, this, &MainWindow::unlogin, Qt::UniqueConnection);
-    connect(&opt, &Options::unlogin, this, &MainWindow::unlogin, Qt::UniqueConnection);
+    connect(&opt, &Options::unloginProfile, this, &MainWindow::unloginProfile, Qt::UniqueConnection);
 
     auth.show();
 }
@@ -102,4 +102,8 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 {
     ui->ChatWindow->clear();
     ui->ChatWindow->setPlainText(DataBase::getMessages(item->text()));
+}
+
+void MainWindow::unloginProfile(){
+    account.unlogin("Welcome to Chat");
 }

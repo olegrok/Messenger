@@ -20,7 +20,7 @@ struct accountReply
 {
     web::http::status_code statusCode;
     QString replyContent;
-    QString cookie;
+    int cookie;
     int uid;
 } accReply;
 

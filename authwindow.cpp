@@ -54,7 +54,8 @@ void authwindow::on_RegisterButton_clicked()
     {
         case 200: ui->StatusLine->setText("Successeful registration!");
         emit showMainWindow(auth.login);
-        this->close();break;
+        this->close();
+        break;
         default: ui->StatusLine->setText(reply.replyContent); break;
     }
 

@@ -7,6 +7,7 @@
 #include <cpprest/details/basic_types.h>
 #include "structsforrequests.h"
 
+#include "database.h"
 #include <cpprest/json.h>
 #include <cpprest/http_client.h>
 #include <cpprest/http_msg.h>

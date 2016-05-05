@@ -22,7 +22,7 @@ private slots:
     void on_CloseButton_clicked();
     void on_UnloginButton_clicked();
 signals:
-    void unlogin(QString = 0);
+    void unloginProfile();
 
 private:
     Ui::Options *ui;

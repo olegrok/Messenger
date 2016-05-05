@@ -38,6 +38,7 @@ private slots:
     void on_OptionButton_clicked();
     void on_ContactsList_itemClicked(QListWidgetItem *item);
     void unlogin(QString status = 0);
+    void unloginProfile();
 
 private:
     QString login;

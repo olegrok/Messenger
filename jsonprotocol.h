@@ -6,6 +6,7 @@
 #include <cpprest/json.h>
 #include <algorithm>
 #include <QString>
+#include <QDebug>
 
 /*class JsonProtocol
 {

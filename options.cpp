@@ -29,5 +29,5 @@ void Options::on_CloseButton_clicked()
 
 void Options::on_UnloginButton_clicked()
 {
-    emit unlogin("Welcome to Chat!");
+    emit unloginProfile();
 }

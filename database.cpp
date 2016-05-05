@@ -70,7 +70,7 @@ bool DataBase::createTable()
 bool DataBase::addToLog(QString type, int value, QString comment, int time){
     QSqlQuery query;
     QString strF =
-            "INSERT INTO  log (type, value, text, time) "
+            "INSERT INTO  log (type, value, comment, time) "
             "VALUES('%1', %2, '%3', %4);";
     QString str = strF.arg(type)
                       .arg(value)
@@ -187,3 +187,16 @@ bool DataBase::close(){
     return true;
 }
 
+int DataBase::getUid(QString login){
+    QString strF = "SELECT * FROM contacts WHERE login = '%1';";
+    QString str = strF.arg(login);
+    QSqlQuery query;
+    if(!query.exec(str)){
+        qDebug() << "Unable to find contact" << login <<  query.lastError();
+    }
+    QSqlRecord rec = query.record();
+    query.next();
+    int uid = query.value(rec.indexOf("id")).toInt();
+    qDebug() << uid;
+    return uid;
+}

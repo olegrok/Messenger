@@ -32,14 +32,15 @@ void AddFriend::on_AddButton_clicked()
     }
     else
     {
-        info.uid = -1;
         switch (reply.statusCode) {
-        case 404: info.login = "Not found";
+        case 404: reply.login = "Not found"; break;
+        case 400: break;
+        default: reply.login = "Unknown error";
             break;
-        default: info.login = "Unknown error";
-            break;
-        }
-        ui->AddFriendStatus->setText(info.login);
+        } 
+        ui->AddFriendStatus->setText(reply.login);
+        ui->FriendLogin->clear();
+        return;
     }
     ui->FriendLogin->clear();
     emit sendContact(info);
