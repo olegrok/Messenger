@@ -23,7 +23,15 @@ void Profile::setSessionData(QString _cookie, int _uid){
 
 accReply Profile::accountRequest(accRequest req, QString property){
     accReply reply = client.accountRequest(req, property);
-    setSessionData(reply.cookie, reply.uid);
+    if(reply.statusCode == web::http::status_codes::OK){
+        setSessionData(reply.cookie, reply.uid);
+        setLogin(req.login);
+        databaseInit();
+        DataBase::addToLog("session", uid, cookie, QDateTime::currentDateTimeUtc().toTime_t());
+    }
+
+    client.getData();
+
     return reply;
 }
 
@@ -44,4 +52,9 @@ bool Profile::sendMessage(sndMsg msg){
 
 QString& Profile::getLogin(){
     return login;
+}
+
+void Profile::databaseInit(){
+    DataBase::createConnection(login);
+    DataBase::createTable();
 }

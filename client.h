@@ -7,6 +7,11 @@
 #include <cpprest/details/basic_types.h>
 #include "structsforrequests.h"
 
+#include <cpprest/json.h>
+#include <cpprest/http_client.h>
+#include <cpprest/http_msg.h>
+#include "cpprest/asyncrt_utils.h"
+
 using namespace web;
 using namespace web::http;
 using namespace web::http::client;

@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QString>
 #include <QThread>
+#include <QDateTime>
 #include "client.h"
 #include "structsforrequests.h"
 #include <cpprest/json.h>
@@ -42,6 +43,7 @@ public:
     FriendReply friendRequest(QString contact_login, QString property);
     accReply accountRequest(accRequest req, QString property);
     bool sendMessage(sndMsg msg);
+    void databaseInit();
 
     void setSessionData(QString cookie = 0, int uid = 0);
     void setLogin(QString);

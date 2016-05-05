@@ -28,7 +28,7 @@ void authwindow::on_EnterButton_clicked()
     {
         case 200: ui->StatusLine->setText("Successeful autorisation!");
             emit showMainWindow(auth.login);
-            this->close(); break;
+            this->hide(); break;
         case 404: ui->StatusLine->setText("Not Found!");break;
         default: ui->StatusLine->setText(reply.replyContent); break;
     }

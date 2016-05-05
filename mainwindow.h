@@ -39,7 +39,7 @@ private slots:
     void on_SendButton_clicked();
     void on_AddContactButton_clicked();
     void on_DeleteContactButton_clicked();
-    void databaseInit(const QString _login);
+    void windowInit(QString _login);
     void on_OptionButton_clicked();
     void on_ContactsList_itemClicked(QListWidgetItem *item);
 

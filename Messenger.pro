@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     client.cpp \
     database.cpp \
     profile.cpp \
-    options.cpp
+    options.cpp \
+    jsonprotocol.cpp
 
 HEADERS  += mainwindow.h \
     authwindow.h \
@@ -36,7 +37,8 @@ HEADERS  += mainwindow.h \
     structsforrequests.h \
     database.h \
     profile.h \
-    options.h
+    options.h \
+    jsonprotocol.h
 
 FORMS    += mainwindow.ui \
     authwindow.ui \

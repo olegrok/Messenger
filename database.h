@@ -20,7 +20,7 @@ public:
     static bool close();
     static QString getMessages(QString login);
     static bool addToLog(QString type, int value = 0, QString comment = 0, int time = 0);
-    bool clearContacts();
+    static bool clearContacts();
 };
 
 #endif // DATABASE_H

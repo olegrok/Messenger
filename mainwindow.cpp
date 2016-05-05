@@ -14,9 +14,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     auth.show();
 
-    connect(&auth, &authwindow::showMainWindow, this, &MainWindow::databaseInit, Qt::UniqueConnection);
+    connect(&auth, &authwindow::showMainWindow, this, &MainWindow::windowInit, Qt::UniqueConnection);
     //connect(&auth, &authwindow::closeMainWindow, this, &MainWindow::close, Qt::UniqueConnection);
     connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -71,20 +73,10 @@ void MainWindow::on_DeleteContactButton_clicked()
     }
 }
 
-void MainWindow::databaseInit(const QString _login)
+void MainWindow::windowInit(QString _login)
 {
     login = _login;
-    account.setLogin(login);
-    DataBase::createConnection(login);
-    try{
-        DataBase::createTable();
-    }
-    catch(const std::exception &e){
-        ui->ContactsList->addItems(DataBase::getContacts());
-    }
-
-    //else first use
-
+    ui->ContactsList->addItems(DataBase::getContacts());
     this->show();
 }
 

@@ -1,18 +1,4 @@
-#include <cpprest/json.h>
-#include <cpprest/http_client.h>
-#include <cpprest/http_msg.h>
-#include "cpprest/details/basic_types.h"
-#include "cpprest/asyncrt_utils.h"
-
-#include "string.h"
-#include <QString>
-#include <QtCore/QTextCodec>
-#include <QtCore>
-#include <QDebug>
-#include <QtGlobal>
-
 #include "client.h"
-#include "structsforrequests.h"
 
 using namespace web;
 using namespace web::http;
@@ -113,16 +99,12 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
         }
 
     if(reply.statusCode == web::http::status_codes::OK){
-        //JsonParser
         if(property == "add_contact"){
             json = response.extract_json().get();
             std::cout << json << std::endl;
-            /*auto jcontact = json.at(U("contact") );
-            std::cout << jcontact.at(U("login")).as_string();*/
 
             reply.login = contact_login;
-            //reply.uid = json.at(U("uid")).as_integer();
-            reply.uid = qrand();
+            reply.uid = json.at(U("uid")).as_integer();
         }
     }
     return reply;
@@ -161,6 +143,11 @@ json::value Client::getData(){
               //return reply;
         }
 
+    json = response.extract_json().get();
+    std::cout << json << std::endl;
+    //todo json protocol class
+    //to parse json
+    //QVector<QPair<QString, int>>
 
     return true;
 }

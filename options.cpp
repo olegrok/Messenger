@@ -21,3 +21,8 @@ void Options::on_pushButton_clicked()
     qApp->setStyle(ui->design->currentText());
     qApp->restoreOverrideCursor();
 }
+
+void Options::on_CloseButton_clicked()
+{
+    qApp->closeAllWindows();
+}
