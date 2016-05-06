@@ -21,6 +21,7 @@ public:
     static bool addToLog(QString type, int value = 0, QString comment = 0, int time = 0);
     static bool clearContacts();
     static int getUid(QString);
+    static int lastTime();
 };
 
 #endif // DATABASE_H

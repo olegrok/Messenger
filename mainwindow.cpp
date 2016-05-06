@@ -17,6 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&account, &Profile::unlogin, this, &MainWindow::unlogin, Qt::UniqueConnection);
     connect(&opt, &Options::unloginProfile, this, &MainWindow::unloginProfile, Qt::UniqueConnection);
     connect(&account, &Profile::authorizationError, this, &MainWindow::unlogin, Qt::UniqueConnection);
+    connect(&account, &Profile::updateWindow, this, &MainWindow::updateWindow, Qt::UniqueConnection);
 
     auth.show();
 }
@@ -125,4 +126,13 @@ void MainWindow::unloginProfile(){
     ui->MessageWindow->clear();
     this->hide();
     auth.show();
+}
+
+void MainWindow::updateWindow(){
+    ui->ContactsList->clear();
+    ui->ContactsList->addItems(DataBase::getContacts());
+    if(ui->ContactsList->currentRow() == -1)
+        return;
+    ui->ChatWindow->clear();
+    ui->ChatWindow->setPlainText(DataBase::getMessages(ui->ContactsList->currentItem()->text()));
 }

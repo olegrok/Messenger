@@ -30,8 +30,8 @@ bool DataBase::createTable()
 {
     QSqlQuery query;
     QString   str  = "CREATE TABLE contacts ( "
-                         "id INTEGER PRIMARY    KEY NOT NULL, "
-                         "login VARCHAR(15)     NOT NULL, "
+                         "id INTEGER            NOT NULL, "
+                         "login VARCHAR(15)     PRIMARY KEY NOT NULL, "
                          "last_msg_id           VARCHAR(15), "
                          "unreaded              INTEGER "
                      ");";
@@ -162,7 +162,7 @@ bool DataBase::clearContacts(){
 }
 
 QString DataBase::getMessages(QString login){
-    QString strF = "SELECT * FROM messages WHERE login = '%1' ORDER BY time ASC;";
+    QString strF = "SELECT * FROM messages WHERE login = '%1' ORDER BY time DESC;";
     QString str = strF.arg(login);
 
     QSqlQuery query;
@@ -203,4 +203,18 @@ int DataBase::getUid(QString login){
     int uid = query.value(rec.indexOf("id")).toInt();
     qDebug() << uid;
     return uid;
+}
+
+int DataBase::lastTime(){
+    QString str = "SELECT * FROM log WHERE type = 'update' ORDER BY value ASC;";
+    QSqlQuery query;
+    if(!query.exec(str)){
+        qDebug() << "Unable to find last time" <<  query.lastError();
+        return 0;
+    }
+    QSqlRecord rec = query.record();
+    query.next();
+    int time = query.value(rec.indexOf("value")).toInt();
+    qDebug() << "last time" << time;
+    return time;
 }

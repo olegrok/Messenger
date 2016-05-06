@@ -1,15 +1,17 @@
 #include "profile.h"
 
+using namespace web;
+
 Profile::Profile(QString _login) :
     login(_login)
 {
+    qRegisterMetaType<QVector<msgCont>>("QVector<msgCont>");
+    monitor.setParser(&parser);
     connect(&parser, SIGNAL(messagesPack(QVector<msgCont>)), this,
-            SLOT(distributor(QVector<msgCont>)), Qt::UniqueConnection);
+            SLOT(distributor(QVector<msgCont>)), Qt::BlockingQueuedConnection);
 
-    connect(&monitor, SIGNAL(task(web::json::value)), this,
-            SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);
-
-    monitor.start();
+//    connect(&monitor, SIGNAL(task(web::json::value)), this,
+//            SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);
 }
 
 Profile::~Profile(){
@@ -49,6 +51,9 @@ accReply Profile::accountRequest(accRequest req, QString property){
             info.uid   = pair.second;
             DataBase::addContact(info);
         });
+
+        monitor.setSession(cookie, uid);
+        monitor.start();
     }
 
 
@@ -96,6 +101,11 @@ void Profile::closeSession(QString status){
 void Profile::distributor(QVector<msgCont> vector){
     std::for_each(vector.begin(), vector.end(), [&](msgCont elem){
         DataBase::addMessage(elem, "recive");
+        contInfo info;
+        info.uid = elem.senderUid;
+        info.login = elem.login;
+        DataBase::addContact(info);
+        emit updateWindow();
     });
 
 

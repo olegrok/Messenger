@@ -27,9 +27,16 @@ JsonProtocol::~JsonProtocol(){}
     }
 
 
-    QVector<msgCont> JsonProtocol::eventsParser(json::value json){
-        std::cout << json << std::endl;
+void JsonProtocol::eventsParser(json::value json){
+        std::cout << "EventParser " << json << std::endl;
         QVector<msgCont> mainVector;
+        int time = 0;
+        if(json.has_field(U("server_time"))){
+            time = json.at(U("server_time")).as_integer();
+            DataBase::addToLog("update", time);
+        }
+        else
+            return;
         if(json.has_field("msg_array")){
             auto msgArray = json.at("msg_array").as_array();
             for(auto it = msgArray.begin(); it != msgArray.end(); ++it){
@@ -40,8 +47,9 @@ JsonProtocol::~JsonProtocol(){}
                 data.time = it->at(U("time")).as_integer();
                 mainVector.push_back(data);
             }
+
+
             emit messagesPack(mainVector);
         }
-        return mainVector;
     }
 

@@ -9,6 +9,7 @@
 #include <QDebug>
 #include <QObject>
 #include "structsforrequests.h"
+#include "database.h"
 
 using namespace web;
 
@@ -21,7 +22,7 @@ public:
 
 //namespace JsonProtocol{
     QVector < QPair<QString, int> > contactListParser(json::value json);
-    QVector <msgCont> eventsParser(json::value json);
+   void eventsParser(json::value json);
 signals:
     void messagesPack(QVector <msgCont>);
 };

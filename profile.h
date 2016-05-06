@@ -11,25 +11,67 @@
 #include "database.h"
 #include "jsonprotocol.h"
 #include "structsforrequests.h"
+#include <QMetaType>
+
+Q_DECLARE_METATYPE(QVector<msgCont>)
+
+using namespace web;
 
 class Monitor : public QThread{
     Q_OBJECT
 public:
     Monitor() {}
     ~Monitor() {}
+    void setSession(int cookie, int uid){
+        session["uid"] = json::value(uid);
+        session["session_key"] = json::value(cookie);
+    }
+
+    void setParser(JsonProtocol* _parser){
+        parser = _parser;
+    }
+
     void run() Q_DECL_OVERRIDE{
         while(true){
-            //auto json = monitor();
-            //emit task(json);
+            json::value json = monitor();
+            parser->eventsParser(json);
+            sleep(15);
         }
     }
     json::value monitor(){
-        sleep(1e6);
-        return json::value("gap");
+
+        json::value json;
+        json["request"]      = json::value( U("update_data") );
+        json["session"]      = session;
+        json["last_update"]  = DataBase::lastTime();
+        std::cout << "message json: " << json << std::endl;
+
+        http_response response;
+        web::http::status_code statusCode;
+        try
+            {
+                http_client client(U("http://192.168.0.102:7777"));
+                client.request( web::http::methods::POST ,U("") , json )
+                    .then( [&]( pplx::task<web::http::http_response> task )
+                 {
+                     response = task.get();
+                     statusCode = response.status_code();
+                     qDebug() << "sendMsg status code: " << statusCode;
+                  }).wait();
+            }
+          catch (const std::exception &e){}
+
+        json = response.extract_json().get();
+        std::cout << json << std::endl;
+
+        return json;
     }
 
 signals:
     void task(web::json::value json);
+private:
+    json::value session;
+    JsonProtocol* parser;
 
 };
 
@@ -61,7 +103,7 @@ public:
 signals:
     void unlogin(QString = 0);
     void authorizationError(QString = 0);
-    void update();
+    void updateWindow();
 
 public slots:
     void distributor(QVector<msgCont>);
@@ -75,6 +117,8 @@ private:
     int     uid;
     Client client;
     JsonProtocol parser;
+    //Q_DECLARE_METATYPE(messageContainer);
+    //Q_DECLARE_METATYPE(QVector<msgCont>);
 };
 
 #endif // PROFILE_H
