@@ -3,8 +3,12 @@
 Profile::Profile(QString _login) :
     login(_login)
 {
+    connect(&parser, SIGNAL(messagesPack(QVector<msgCont>)), this,
+            SLOT(distributor(QVector<msgCont>)), Qt::UniqueConnection);
+
     connect(&monitor, SIGNAL(task(web::json::value)), this,
             SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);
+
     monitor.start();
 }
 
@@ -23,14 +27,21 @@ void Profile::setSessionData(int _cookie, int _uid){
 
 accReply Profile::accountRequest(accRequest req, QString property){
     accReply reply = client.accountRequest(req, property);
+    if(reply.statusCode == web::http::status_codes::Unauthorized){
+        emit authorizationError();
+        return reply;
+    }
     if(reply.statusCode == web::http::status_codes::OK && property == "registration")
         reply = client.accountRequest(req, "authorisation");
     if(reply.statusCode == web::http::status_codes::OK){
         setSessionData(reply.cookie, reply.uid);
         setLogin(req.login);
+
+        QCoreApplication::setOrganizationName(req.login);
+
         databaseInit();
         DataBase::addToLog("session", uid, QString::number(cookie), QDateTime::currentDateTimeUtc().toTime_t());
-        auto contactArray = JsonProtocol::contactListParser(client.getData());
+        auto contactArray = parser.contactListParser(client.getData());
         DataBase::clearContacts();
         std::for_each(contactArray.begin(), contactArray.end(), [&](QPair<QString, int> pair){
             contInfo info;
@@ -45,17 +56,26 @@ accReply Profile::accountRequest(accRequest req, QString property){
 }
 
 FriendReply Profile::friendRequest(QString contact_login, QString property){
-    return client.friendRequest(contact_login, property);
+    FriendReply reply = client.friendRequest(contact_login, property);
+    if(reply.statusCode == web::http::status_codes::Unauthorized){
+        emit authorizationError();
+    }
+    return reply;
 }
 
 void Profile::monitorHandler(json::value json){
     //handler
 }
 
-bool Profile::sendMessage(sndMsg msg){
-    //client.sendMessage();
-    DataBase::sendMessage(msg);
-    return true;
+web::http::status_code Profile::sendMessage(msgCont msg){
+    auto statusCode = client.sendMessage(msg);
+    if(statusCode == web::http::status_codes::Unauthorized){
+        emit authorizationError();
+        return statusCode;
+    }
+    if(statusCode == web::http::status_codes::OK)
+        DataBase::addMessage(msg, "send");
+    return statusCode;
 }
 
 QString& Profile::getLogin(){
@@ -68,7 +88,15 @@ void Profile::databaseInit(){
 }
 
 void Profile::closeSession(QString status){
-
+    client.logout();
     DataBase::close();
     emit unlogin(status);
+}
+
+void Profile::distributor(QVector<msgCont> vector){
+    std::for_each(vector.begin(), vector.end(), [&](msgCont elem){
+        DataBase::addMessage(elem, "recive");
+    });
+
+
 }

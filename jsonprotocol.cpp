@@ -7,9 +7,10 @@
 */
 using namespace web;
 
-namespace JsonProtocol{
+JsonProtocol::JsonProtocol(){}
+JsonProtocol::~JsonProtocol(){}
 
-    QVector < QPair<QString, int> > contactListParser(json::value json){
+    QVector < QPair<QString, int> > JsonProtocol::contactListParser(json::value json){
        std::cout << json << " size = " << json.size() << std::endl;
        QVector< QPair<QString, int> > contacts;
 
@@ -25,4 +26,22 @@ namespace JsonProtocol{
         return contacts;
     }
 
-}
+
+    QVector<msgCont> JsonProtocol::eventsParser(json::value json){
+        std::cout << json << std::endl;
+        QVector<msgCont> mainVector;
+        if(json.has_field("msg_array")){
+            auto msgArray = json.at("msg_array").as_array();
+            for(auto it = msgArray.begin(); it != msgArray.end(); ++it){
+                msgCont data;
+                data.login = QString::fromStdString(it->at(U("sender_login")).as_string());
+                data.senderUid   = it->at(U("sender_uid")).as_integer();
+                data.text = QString::fromStdString(it->at(U("text")).as_string());
+                data.time = it->at(U("time")).as_integer();
+                mainVector.push_back(data);
+            }
+            emit messagesPack(mainVector);
+        }
+        return mainVector;
+    }
+

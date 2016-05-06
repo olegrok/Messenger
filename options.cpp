@@ -20,6 +20,9 @@ void Options::on_pushButton_clicked()
 {
     qApp->setStyle(ui->design->currentText());
     qApp->restoreOverrideCursor();
+    QSettings settings;
+    settings.setValue("user_interface/design", ui->design->currentText());
+    qDebug() << settings.value("user_interface/design");
 }
 
 void Options::on_CloseButton_clicked()
@@ -29,5 +32,6 @@ void Options::on_CloseButton_clicked()
 
 void Options::on_UnloginButton_clicked()
 {
+    this->close();
     emit unloginProfile();
 }

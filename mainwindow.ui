@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>595</width>
-    <height>455</height>
+    <height>470</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>595</width>
-    <height>455</height>
+    <height>470</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>595</width>
-    <height>455</height>
+    <height>470</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -108,16 +108,6 @@
       <number>2</number>
      </property>
      <item>
-      <widget class="QPushButton" name="SendButton">
-       <property name="cursor">
-        <cursorShape>PointingHandCursor</cursorShape>
-       </property>
-       <property name="text">
-        <string>Send</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="QTextEdit" name="MessageWindow">
        <property name="html">
         <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
@@ -130,6 +120,27 @@ p, li { white-space: pre-wrap; }
      </item>
     </layout>
    </widget>
+   <widget class="QPushButton" name="SendButton">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>390</y>
+      <width>85</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="text">
+     <string>Send</string>
+    </property>
+   </widget>
+   <zorder>ChatWindow</zorder>
+   <zorder>layoutWidget1</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>SendButton</zorder>
+   <zorder>SendButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

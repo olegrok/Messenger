@@ -16,6 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
     connect(&account, &Profile::unlogin, this, &MainWindow::unlogin, Qt::UniqueConnection);
     connect(&opt, &Options::unloginProfile, this, &MainWindow::unloginProfile, Qt::UniqueConnection);
+    connect(&account, &Profile::authorizationError, this, &MainWindow::unlogin, Qt::UniqueConnection);
 
     auth.show();
 }
@@ -33,16 +34,19 @@ void MainWindow::on_SendButton_clicked()
 {
     if(ui->ContactsList->currentRow() == -1)
         return;
-    sndMsg msg;
+    msgCont msg;
     msg.login = ui->ContactsList->currentItem()->text();
     msg.text = ui->MessageWindow->toPlainText();
-    msg.time = QDateTime::currentDateTimeUtc();
+    msg.time = QDateTime::currentDateTimeUtc().toTime_t();
     ui->MessageWindow->clear();
     if(msg.text.isEmpty())
         return;
-    account.sendMessage(msg);
+    auto statusCode = account.sendMessage(msg);
     //ui->ChatWindow->appendPlainText(QDateTime::currentDateTime().toString("HH:mm") + " ");
-    ui->ChatWindow->appendPlainText("Me: " + msg.text);
+    if(statusCode == web::http::status_codes::OK){
+        ui->ChatWindow->clear();
+        ui->ChatWindow->setPlainText(DataBase::getMessages(msg.login));
+    }
 
 
 }
@@ -76,6 +80,7 @@ void MainWindow::windowInit(QString _login)
 {
     login = _login;
     ui->ContactsList->addItems(DataBase::getContacts());
+    styleInit();
     this->show();
 }
 
@@ -87,10 +92,19 @@ void MainWindow::unlogin(QString status){
     ui->ChatWindow->clear();
     ui->ContactsList->clear();
     ui->MessageWindow->clear();
+    this->hide();
+    addfriend.close();
+    opt.close();
+    auth.show();
 
 }
 
 void MainWindow::styleInit(){
+    QSettings settings;
+    QVariant val = settings.value("user_interface/design");
+    qDebug() << val;
+    if(!val.isNull())
+        qApp->setStyle(val.toString());
 }
 
 void MainWindow::on_OptionButton_clicked()
@@ -105,5 +119,10 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 }
 
 void MainWindow::unloginProfile(){
-    account.unlogin("Welcome to Chat");
+    account.closeSession("Welcome to Chat!");
+    ui->ChatWindow->clear();
+    ui->ContactsList->clear();
+    ui->MessageWindow->clear();
+    this->hide();
+    auth.show();
 }

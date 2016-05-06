@@ -148,10 +148,6 @@ json::value Client::getData(){
 
     json = response.extract_json().get();
     std::cout << json << std::endl;
-    //todo json protocol class
-    //to parse json
-    //QVector<QPair<QString, int>>
-
     return json;
 }
 
@@ -172,7 +168,7 @@ bool Client::logout(){
                  response = task.get();
                  statusCode = response.status_code();
                  qDebug() << "status code: " << statusCode;
-              });
+              }).wait();
         }
       catch (const std::exception &e)
         {
@@ -182,4 +178,35 @@ bool Client::logout(){
     //if(reply.statusCode == web::http::status_codes::OK){}
 
     return true;
+}
+
+web::http::status_code Client::sendMessage(msgCont msg){
+    json::value json;
+    json["request"]      = json::value( U("send_msg") );
+    json["to_uid"]       = json::value( DataBase::getUid(msg.login));
+    json["msg"]          = json::value( U(msg.text.toStdString()) );
+    json["session"]      = session;
+
+    std::cout << "message json: " << json << std::endl;
+
+    http_response response;
+    web::http::status_code statusCode;
+    try
+        {
+            http_client client(U(ServerURL.toStdString()));
+            client.request( web::http::methods::POST ,U("") , json )
+                .then( [&]( pplx::task<web::http::http_response> task )
+             {
+                 response = task.get();
+                 statusCode = response.status_code();
+                 qDebug() << "sendMsg status code: " << statusCode;
+              }).wait();
+        }
+      catch (const std::exception &e){}
+
+    json = response.extract_json().get();
+    std::cout << json << std::endl;
+
+    return statusCode;
+
 }

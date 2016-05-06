@@ -28,6 +28,7 @@ public:
     bool setLogin(QString login);
     bool logout();
     json::value getData();
+    status_code sendMessage(msgCont msg);
 private:
     QString clientLogin;
     json::value session;

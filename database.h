@@ -1,7 +1,6 @@
 #ifndef DATABASE_H
 #define DATABASE_H
 #include <QtSql>
-#include <QHostInfo>
 #include <QStringList>
 #include <QSqlRecord>
 #include "structsforrequests.h"
@@ -12,7 +11,7 @@ public:
     DataBase(QString login);
     ~DataBase();
     static bool createConnection(QString login);
-    static bool sendMessage(sndMsg msg);
+    static bool addMessage(msgCont msg, QString status);
     static bool createTable();
     static bool addContact(contInfo info);
     static QStringList getContacts();

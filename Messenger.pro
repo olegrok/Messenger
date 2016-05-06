@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-QT       += network
+#QT       += network
 QT       += sql
 CONFIG   += console c++14
 QT       += core

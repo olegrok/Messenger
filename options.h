@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QStyleFactory>
 #include <QDebug>
+#include <QSettings>
 
 namespace Ui {
 class Options;

@@ -8,8 +8,6 @@ authwindow::authwindow(QWidget *parent) :
     ui(new Ui::authwindow)
 {
     ui->setupUi(this);
-    //connect(ui->EnterButton, SIGNAL(clicked()), this, SLOT(on_EnterButton_clicked()), Qt::UniqueConnection);
-    //connect(ui->EnterButton, &Client::changeAuthStatus, this, SLOT(changeAuthStatus), Qt::UniqueConnection);
 }
 
 authwindow::~authwindow()
@@ -27,8 +25,10 @@ void authwindow::on_EnterButton_clicked()
     switch(reply.statusCode)
     {
         case 200: ui->StatusLine->setText("Successeful autorisation!");
+            ui->Password->clear();
+            ui->Login->clear();
             emit showMainWindow(auth.login);
-            this->hide(); break;
+            this->close(); break;
         case 404: ui->StatusLine->setText("Not Found!");break;
         default: ui->StatusLine->setText(reply.replyContent); break;
     }

@@ -36,17 +36,17 @@ struct argumentsForRequest
 
 
 typedef
-struct sendMessage
+struct messageContainer
 {
-    //int contactUID;
+    int         senderUid;
     QString     login;
     //QString time;
     QString     text;
-    QDateTime   time;
+    int         time;
     //QString status;
     //int filed;
 
-} sndMsg;
+} msgCont;
 
 typedef
 struct contactInforamtion
@@ -65,5 +65,14 @@ struct FriendReply
     int uid;
 } FriendReply;
 
+/*typedef
+struct jsonContainer{
+    int senderUid;
+    QString senderLogin;
+    QString text;
+    int time;
+
+} jsonContainer;
+*/
 #endif // STRUCTSFORREQUESTS
 

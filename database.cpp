@@ -83,7 +83,7 @@ bool DataBase::addToLog(QString type, int value, QString comment, int time){
     return true;
 }
 
-bool DataBase::sendMessage(sndMsg msg)
+bool DataBase::addMessage(msgCont msg, QString status)
 {
     QSqlQuery query;
     QString strF =
@@ -91,9 +91,13 @@ bool DataBase::sendMessage(sndMsg msg)
           "VALUES('%1', '%2', %3, %4);";
 
     QString str = strF.arg(msg.login)
-              .arg(msg.text)
-              .arg(msg.time.toTime_t())
-              .arg(SEND);
+            .arg(msg.text)
+            .arg(msg.time);
+    if(status == "send")
+        str = str.arg(SEND);
+    if(status == "recive")
+        str = str.arg(RECIVE);
+
     if (!query.exec(str)) {
         qDebug() << "Unable to make insert opeation" << query.lastError();
         return false;
