@@ -138,7 +138,7 @@ void MainWindow::unloginProfile(){
 }
 
 void MainWindow::updateWindow(){
-    ui->ContactsList->clear();
+    //ui->ContactsList->clear();
     QVector<QListWidgetItem> contacts = DataBase::getContacts();
     std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem item){
         ui->ContactsList->addItem(&item);

@@ -9,7 +9,7 @@ Profile::Profile(QString _login) :
     qRegisterMetaType<json::value>("json::value");
 
     connect(&parser, SIGNAL(messagesPack(QVector<msgCont>)), this,
-            SLOT(distributor(QVector<msgCont>)), Qt::BlockingQueuedConnection);
+            SLOT(distributor(QVector<msgCont>)), Qt::UniqueConnection);
 
     connect(&monitor, SIGNAL(task(web::json::value)), this,
             SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);

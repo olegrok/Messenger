@@ -5,7 +5,7 @@ using namespace web::http;
 using namespace web::http::client;
 
 //QString ServerURL = "http://localhost:7777";
-QString ServerURL = "http://192.168.0.107:7777";
+QString ServerURL = "http://192.168.0.104:7777";
 Client::Client(QObject *parent) :
     QObject(parent)
 { }
@@ -54,12 +54,11 @@ accReply Client::accountRequest(accRequest req, QString property)
               reply.replyContent = e.what();
               return reply;
         }
-
+    json = response.extract_json().get();
+    std::cout << json << std::endl;
     if(reply.statusCode == web::http::status_codes::OK){
         setLogin(req.login);
         if(property == "authorisation"){
-            json = response.extract_json().get();
-            std::cout << json << std::endl;
             session = json.at("session");
             std::cout << "session json:" << session << std::endl;
             reply.uid = json.at( U("session")).at(U("uid")).as_integer();

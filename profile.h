@@ -46,7 +46,7 @@ public:
         web::http::status_code statusCode;
         try
             {
-                http_client client(U("http://192.168.0.107:7777"));
+                http_client client(U("http://192.168.0.104:7777"));
                 client.request( web::http::methods::POST ,U("") , json )
                     .then( [&]( pplx::task<web::http::http_response> task )
                  {
