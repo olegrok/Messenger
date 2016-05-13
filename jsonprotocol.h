@@ -8,6 +8,7 @@
 #include <QString>
 #include <QDebug>
 #include <QObject>
+#include <utility>
 #include "structsforrequests.h"
 #include "database.h"
 
@@ -21,7 +22,7 @@ public:
     ~JsonProtocol();
 
 //namespace JsonProtocol{
-    QVector < QPair<QString, int> > contactListParser(json::value json);
+    QVector <contInfo> contactListParser(json::value json);
    void eventsParser(json::value json);
 signals:
     void messagesPack(QVector <msgCont>);

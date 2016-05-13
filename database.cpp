@@ -3,6 +3,10 @@
 #define SEND    70001
 #define RECIVE  70002
 
+#define UNREPLIED 80000
+#define ACCEPTED  80001
+#define DENIED    80002
+
 DataBase::DataBase(QString login){
     createConnection(login);
     createTable();
@@ -33,7 +37,8 @@ bool DataBase::createTable()
                          "id INTEGER            NOT NULL, "
                          "login VARCHAR(15)     PRIMARY KEY NOT NULL, "
                          "last_msg_id           VARCHAR(15), "
-                         "unreaded              INTEGER "
+                         "unreaded              INTEGER, "
+                         "status                INTEGER "
                      ");";
 
     if (!query.exec(str)) {
@@ -107,14 +112,16 @@ bool DataBase::addMessage(msgCont msg, QString status)
 
 bool DataBase::addContact(contInfo info)
 {
+    qDebug() << info.login << info.uid << info.status;
     QSqlQuery query;
     QString strF =
-          "INSERT INTO  contacts (id, login, last_msg_id, unreaded) "
-          "VALUES(%1, '%2', '%3', %4);";
+          "INSERT INTO  contacts (id, login, last_msg_id, unreaded, status) "
+          "VALUES(%1, '%2', '%3', %4, %5);";
     QString str = strF.arg(info.uid)
               .arg(info.login)
               .arg(info.lastMsgId)
-              .arg(info.unreaded);
+              .arg(info.unreaded)
+              .arg(info.status + UNREPLIED);
     if (!query.exec(str)) {
         qDebug() << "Unable to make insert opeation" << query.lastError();
         return false;
@@ -122,15 +129,24 @@ bool DataBase::addContact(contInfo info)
     return true;
 }
 
-QStringList DataBase::getContacts()
+QVector<QListWidgetItem> DataBase::getContacts()
 {
-    QSqlQuery query("SELECT login FROM contacts");
-    QStringList contList;
-    QString cont;
+    QSqlQuery query;
+    if (!query.exec("SELECT login, status FROM contacts")) {
+        qDebug() << "Unable to make select opeation" << query.lastError();
+    }
+    QVector<QListWidgetItem> contList;
     QSqlRecord rec = query.record();
     while(query.next()){
-        cont = query.value(rec.indexOf("login")).toString();
-        contList << cont;
+        QListWidgetItem item;
+
+        item.setText(query.value(rec.indexOf("login")).toString());
+        int status = query.value(rec.indexOf("status")).toInt();
+        switch(status){
+            case UNREPLIED: item.setBackgroundColor(Qt::gray); break;
+            case DENIED: item.setBackgroundColor(Qt::red); break;
+        }
+        contList.push_back(std::move(item));
     }
     return contList;
 }
@@ -170,6 +186,7 @@ QString DataBase::getMessages(QString login){
     if (!query.exec(str)) {
         qDebug() << "Unable to make select opeation" << query.lastError();
     }
+
     QSqlRecord rec = query.record();
     QString text;
     while(query.next()){

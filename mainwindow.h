@@ -12,6 +12,9 @@
 #include <QDesktopWidget>
 #include "database.h"
 #include <QDateTime>
+#include <QVector>
+#include <QMessageBox>
+#include <QListWidgetItem>
 #include "structsforrequests.h"
 
 namespace Ui {
@@ -40,6 +43,7 @@ private slots:
     void unlogin(QString status = 0);
     void unloginProfile();
     void updateWindow();
+    int showNotification(QString);
 
 private:
     QString login;
@@ -49,6 +53,7 @@ private:
     Profile account;
     Options opt;
     void styleInit();
+    QVector<QListWidgetItem> contacts;
 
 };
 

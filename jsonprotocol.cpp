@@ -10,9 +10,9 @@ using namespace web;
 JsonProtocol::JsonProtocol(){}
 JsonProtocol::~JsonProtocol(){}
 
-    QVector < QPair<QString, int> > JsonProtocol::contactListParser(json::value json){
+QVector <contInfo> JsonProtocol::contactListParser(json::value json){
        std::cout << json << " size = " << json.size() << std::endl;
-       QVector< QPair<QString, int> > contacts;
+       QVector <contInfo> contacts;
 
        if(json.at( U("contacts")).is_null())
            return contacts;
@@ -20,9 +20,13 @@ JsonProtocol::~JsonProtocol(){}
        auto contactsArray = json.at(U("contacts")).as_array();
        for(auto it = contactsArray.begin(); it != contactsArray.end(); ++it){
            std::cout << "fr_login " << it->at( U("friend_login")).as_string() << " uid: " << it->at(U("friend_uid")).as_integer()<< std::endl;
-            contacts.push_back(qMakePair(QString::fromStdString(it->at( U("friend_login")).as_string()), it->at(U("friend_uid")).as_integer()));
+           contInfo info;
+           info.login = QString::fromStdString(it->at( U("friend_login")).as_string());
+           info.uid = it->at(U("friend_uid")).as_integer();
+           info.status = it->at( U("status") ).as_integer();
+           contacts.push_back(std::move(info));
         }
-        qDebug() << contacts[0].first << contacts[0].second;
+        qDebug() << contacts[0].login << contacts[0].uid << contacts[0].status;
         return contacts;
     }
 

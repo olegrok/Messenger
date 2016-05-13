@@ -12,10 +12,10 @@
 #include "jsonprotocol.h"
 #include "structsforrequests.h"
 #include <QMetaType>
+using namespace web;
 
 Q_DECLARE_METATYPE(QVector<msgCont>)
-
-using namespace web;
+Q_DECLARE_METATYPE(web::json::value)
 
 class Monitor : public QThread{
     Q_OBJECT
@@ -27,14 +27,10 @@ public:
         session["session_key"] = json::value(cookie);
     }
 
-    void setParser(JsonProtocol* _parser){
-        parser = _parser;
-    }
-
     void run() Q_DECL_OVERRIDE{
         while(true){
             json::value json = monitor();
-            parser->eventsParser(json);
+            emit task(json);
             sleep(15);
         }
     }
@@ -50,7 +46,7 @@ public:
         web::http::status_code statusCode;
         try
             {
-                http_client client(U("http://192.168.0.102:7777"));
+                http_client client(U("http://192.168.0.107:7777"));
                 client.request( web::http::methods::POST ,U("") , json )
                     .then( [&]( pplx::task<web::http::http_response> task )
                  {
@@ -71,7 +67,6 @@ signals:
     void task(web::json::value json);
 private:
     json::value session;
-    JsonProtocol* parser;
 
 };
 

@@ -3,6 +3,8 @@
 #include <QtSql>
 #include <QStringList>
 #include <QSqlRecord>
+#include <QListWidgetItem>
+#include <utility>
 #include "structsforrequests.h"
 
 class DataBase
@@ -14,7 +16,7 @@ public:
     static bool addMessage(msgCont msg, QString status);
     static bool createTable();
     static bool addContact(contInfo info);
-    static QStringList getContacts();
+    static QVector<QListWidgetItem> getContacts();
     static bool deleteContact(QString);
     static bool close();
     static QString getMessages(QString login);

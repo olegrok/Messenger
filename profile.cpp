@@ -6,12 +6,13 @@ Profile::Profile(QString _login) :
     login(_login)
 {
     qRegisterMetaType<QVector<msgCont>>("QVector<msgCont>");
-    monitor.setParser(&parser);
+    qRegisterMetaType<json::value>("json::value");
+
     connect(&parser, SIGNAL(messagesPack(QVector<msgCont>)), this,
             SLOT(distributor(QVector<msgCont>)), Qt::BlockingQueuedConnection);
 
-//    connect(&monitor, SIGNAL(task(web::json::value)), this,
-//            SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);
+    connect(&monitor, SIGNAL(task(web::json::value)), this,
+            SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);
 }
 
 Profile::~Profile(){
@@ -45,15 +46,12 @@ accReply Profile::accountRequest(accRequest req, QString property){
         DataBase::addToLog("session", uid, QString::number(cookie), QDateTime::currentDateTimeUtc().toTime_t());
         auto contactArray = parser.contactListParser(client.getData());
         DataBase::clearContacts();
-        std::for_each(contactArray.begin(), contactArray.end(), [&](QPair<QString, int> pair){
-            contInfo info;
-            info.login = pair.first;
-            info.uid   = pair.second;
+        std::for_each(contactArray.begin(), contactArray.end(), [&](contInfo info){
             DataBase::addContact(info);
         });
 
         monitor.setSession(cookie, uid);
-        monitor.start();
+        monitor.start(QThread::HighPriority);
     }
 
 
@@ -69,7 +67,7 @@ FriendReply Profile::friendRequest(QString contact_login, QString property){
 }
 
 void Profile::monitorHandler(json::value json){
-    //handler
+    parser.eventsParser(json);
 }
 
 web::http::status_code Profile::sendMessage(msgCont msg){

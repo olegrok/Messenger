@@ -20,6 +20,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&account, &Profile::updateWindow, this, &MainWindow::updateWindow, Qt::UniqueConnection);
 
     auth.show();
+//    this->show();
+//    ui->ContactsList->addItem("Green");
+//    ui->ContactsList->findItems("Green", Qt::MatchExactly).first()->setBackgroundColor(Qt::green);
+//    //ui->ContactsList->findItems("Green", Qt::MatchExactly).first()->setBackground(Qt::gray);
+//    qDebug() << showNotification("Olegrok");
+
+
 }
 
 MainWindow::~MainWindow()
@@ -80,7 +87,9 @@ void MainWindow::on_DeleteContactButton_clicked()
 void MainWindow::windowInit(QString _login)
 {
     login = _login;
-    ui->ContactsList->addItems(DataBase::getContacts());
+    contacts = DataBase::getContacts();
+    for(auto it = contacts.begin(); it != contacts.end(); it++)
+        ui->ContactsList->addItem(&(*it));
     styleInit();
     this->show();
 }
@@ -130,9 +139,21 @@ void MainWindow::unloginProfile(){
 
 void MainWindow::updateWindow(){
     ui->ContactsList->clear();
-    ui->ContactsList->addItems(DataBase::getContacts());
+    QVector<QListWidgetItem> contacts = DataBase::getContacts();
+    std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem item){
+        ui->ContactsList->addItem(&item);
+    });
     if(ui->ContactsList->currentRow() == -1)
         return;
     ui->ChatWindow->clear();
     ui->ChatWindow->setPlainText(DataBase::getMessages(ui->ContactsList->currentItem()->text()));
+}
+
+int MainWindow::showNotification(QString login){
+    QMessageBox* note =
+        new QMessageBox(QMessageBox::Information, "New Contact", "Do you want to add new contact: " + login,
+                        QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+    int result = note->exec();
+    delete note;
+    return result;
 }

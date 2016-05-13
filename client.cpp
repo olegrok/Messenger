@@ -5,7 +5,7 @@ using namespace web::http;
 using namespace web::http::client;
 
 //QString ServerURL = "http://localhost:7777";
-QString ServerURL = "http://192.168.0.102:7777";
+QString ServerURL = "http://192.168.0.107:7777";
 Client::Client(QObject *parent) :
     QObject(parent)
 { }

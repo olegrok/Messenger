@@ -7,7 +7,7 @@
 QT       += core gui
 #QT       += network
 QT       += sql
-CONFIG   += console c++14
+CONFIG   += c++14
 QT       += core
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets

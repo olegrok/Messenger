@@ -53,8 +53,9 @@ struct contactInforamtion
 {
   int uid;
   QString login;
-  int lastMsgId;
-  int unreaded;
+  int lastMsgId = 0;
+  int unreaded = 0;
+  int status;
 } contInfo;
 
 typedef
