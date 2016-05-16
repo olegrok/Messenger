@@ -9,10 +9,10 @@ Profile::Profile(QString _login) :
     qRegisterMetaType<json::value>("json::value");
 
     connect(&parser, SIGNAL(messagesPack(QVector<msgCont>)), this,
-            SLOT(distributor(QVector<msgCont>)), Qt::UniqueConnection);
+            SLOT(distributor(QVector<msgCont>)));
 
     connect(&monitor, SIGNAL(task(web::json::value)), this,
-            SLOT(monitorHandler(web::json::value)), Qt::UniqueConnection);
+            SLOT(monitorHandler(web::json::value)));
 }
 
 Profile::~Profile(){
@@ -34,6 +34,8 @@ accReply Profile::accountRequest(accRequest req, QString property){
         emit authorizationError();
         return reply;
     }
+    if(reply.statusCode != web::http::status_codes::OK)
+        return reply;
     if(reply.statusCode == web::http::status_codes::OK && property == "registration")
         reply = client.accountRequest(req, "authorisation");
     if(reply.statusCode == web::http::status_codes::OK){
@@ -50,7 +52,7 @@ accReply Profile::accountRequest(accRequest req, QString property){
             DataBase::addContact(info);
         });
 
-        monitor.setSession(cookie, uid);
+        monitor.setSession(cookie, uid, client.ServerURL);
         monitor.start(QThread::HighPriority);
     }
 

@@ -223,7 +223,7 @@ int DataBase::getUid(QString login){
 }
 
 int DataBase::lastTime(){
-    QString str = "SELECT * FROM log WHERE type = 'update' ORDER BY value ASC;";
+    QString str = "SELECT * FROM log WHERE type = 'update' ORDER BY value DESC;";
     QSqlQuery query;
     if(!query.exec(str)){
         qDebug() << "Unable to find last time" <<  query.lastError();

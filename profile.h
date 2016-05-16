@@ -22,9 +22,15 @@ class Monitor : public QThread{
 public:
     Monitor() {}
     ~Monitor() {}
-    void setSession(int cookie, int uid){
+    void setSession(int cookie, int uid, QString& ServerURL_){
         session["uid"] = json::value(uid);
         session["session_key"] = json::value(cookie);
+        ServerURL = ServerURL_;
+    }
+
+    void setSession(json::value& session_, QString& ServerURL_){
+        session = session_;
+        ServerURL = ServerURL_;
     }
 
     void run() Q_DECL_OVERRIDE{
@@ -46,7 +52,7 @@ public:
         web::http::status_code statusCode;
         try
             {
-                http_client client(U("http://192.168.0.104:7777"));
+                http_client client(U(ServerURL.toStdString()));
                 client.request( web::http::methods::POST ,U("") , json )
                     .then( [&]( pplx::task<web::http::http_response> task )
                  {
@@ -67,6 +73,7 @@ signals:
     void task(web::json::value json);
 private:
     json::value session;
+    QString ServerURL;
 
 };
 

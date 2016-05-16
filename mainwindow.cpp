@@ -68,7 +68,7 @@ void MainWindow::addContact(const contInfo info)
 {
     if(info.uid != -1){
         ui->ContactsList->addItem(info.login);
-        addfriend.hide();
+        addfriend.close();
     }
 }
 

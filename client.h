@@ -21,6 +21,7 @@ class Client : public QObject
 {
 //    Q_OBJECT
 public:
+    QString ServerURL = U("http://localhost:7777");
     explicit Client(QObject *parent = 0);
     ~Client();
     accReply accountRequest(accRequest req, QString property);

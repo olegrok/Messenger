@@ -1,5 +1,3 @@
-#include <QLineEdit>
-#include <QDebug>
 #include "authwindow.h"
 #include "ui_authwindow.h"
 

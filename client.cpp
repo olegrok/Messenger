@@ -4,8 +4,8 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-//QString ServerURL = "http://localhost:7777";
-QString ServerURL = "http://192.168.0.104:7777";
+
+//QString ServerURL = "http://192.168.0.104:7777";
 Client::Client(QObject *parent) :
     QObject(parent)
 { }
@@ -65,6 +65,8 @@ accReply Client::accountRequest(accRequest req, QString property)
             reply.cookie = json.at(U("session")).at(U("session_key")).as_integer();
         }
     }
+    else
+        reply.replyContent = QString::fromStdString(json.as_string());
     qDebug() << reply.statusCode << reply.replyContent << reply.uid << reply.cookie;
     return reply;
 }

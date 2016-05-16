@@ -4,11 +4,9 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-#QT       += network
-QT       += sql
-CONFIG   += c++14
-QT       += core
+QT       += core gui sql testlib
+QT       -= qml network opengl svg multimedia
+CONFIG   += c++1z warn_on
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

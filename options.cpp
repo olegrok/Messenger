@@ -7,6 +7,7 @@ Options::Options(QWidget *parent) :
 {
     ui->setupUi(this);
     //show();
+    qDebug() << QStyleFactory::keys();
     ui->design->addItems(QStyleFactory::keys());
     //ui->palette->addItem("");
 }
@@ -27,7 +28,7 @@ void Options::on_pushButton_clicked()
 
 void Options::on_CloseButton_clicked()
 {
-    qApp->closeAllWindows();
+    this->close();
 }
 
 void Options::on_UnloginButton_clicked()

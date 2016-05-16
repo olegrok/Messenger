@@ -32,7 +32,6 @@ public:
     void setLogin(const QString);
     void setUid(const int);
 
-
 private slots:
     void on_SendButton_clicked();
     void on_AddContactButton_clicked();
