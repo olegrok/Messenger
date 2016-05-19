@@ -17,7 +17,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&opt, &Options::unloginProfile, this, &MainWindow::unloginProfile, Qt::UniqueConnection);
     connect(&account, &Profile::authorizationError, this, &MainWindow::unlogin, Qt::UniqueConnection);
     connect(&account, &Profile::updateWindow, this, &MainWindow::updateWindow, Qt::UniqueConnection);
-    connect(&account, SIGNAL(unlogin()), this, SLOT(unlogin()), Qt::DirectConnection);
+    connect(&account, SIGNAL(unlogin(QString)), this, SLOT(unlogin(QString)), Qt::DirectConnection);
     connect(account.getMonitor_ptr(), SIGNAL(authorizationError()), this, SLOT(unlogin()), Qt::DirectConnection);
 
     auth.show();
@@ -86,26 +86,30 @@ void MainWindow::on_DeleteContactButton_clicked()
 void MainWindow::windowInit(QString _login)
 {
     login = _login;
+    contacts.clear();
     contacts = DataBase::getContacts();
-    for(auto it = contacts.begin(); it != contacts.end(); it++)
+    for(auto it : contacts)
         ui->ContactsList->addItem(&(*it));
     styleInit();
-    ui->ChatWindow->setVerticalScrollBar(&VerticalScroll);
+    if(ui->ChatWindow->verticalScrollBar() != &VerticalScroll)
+        ui->ChatWindow->setVerticalScrollBar(&VerticalScroll);
+
     this->show();
 }
 
 void MainWindow::unlogin(QString status){
+    qDebug() << "status: " << status;
     if(status.isNull())
-        auth.setStatus("Invalid Session");
+        auth.setStatus(tr("Invalid Session"));
     else
         auth.setStatus(status);
     ui->ChatWindow->clear();
     ui->ContactsList->clear();
     ui->MessageWindow->clear();
-    this->hide();
     addfriend.close();
     opt.close();
     auth.show();
+    this->close();
 }
 
 void MainWindow::styleInit(){
@@ -114,6 +118,12 @@ void MainWindow::styleInit(){
     qDebug() << val;
     if(!val.isNull())
         qApp->setStyle(val.toString());
+    val = settings.value("user_interface/language/file");
+    qDebug() << val;
+    if(!val.isNull()){
+        opt.loadLang(val.toString());
+        qApp->installTranslator(opt.getLang());
+    }
 }
 
 void MainWindow::on_OptionButton_clicked()
@@ -129,7 +139,7 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 }
 
 void MainWindow::unloginProfile(){
-    account.closeSession("Welcome to Chat!");
+    account.closeSession(tr("Welcome to Chat!"));
     ui->ChatWindow->clear();
     ui->ContactsList->clear();
     ui->MessageWindow->clear();
@@ -138,10 +148,11 @@ void MainWindow::unloginProfile(){
 }
 
 void MainWindow::updateWindow(){
-    //ui->ContactsList->clear();
-    QVector<QListWidgetItem> contacts = DataBase::getContacts();
-    std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem item){
-        ui->ContactsList->addItem(&item);
+    ui->ContactsList->clear();
+    contacts.clear();
+    contacts = DataBase::getContacts();
+    std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem* item){
+        ui->ContactsList->addItem(item);
     });
     if(ui->ContactsList->currentRow() == -1)
         return;
@@ -152,7 +163,7 @@ void MainWindow::updateWindow(){
 
 int MainWindow::showNotification(QString login){
     QMessageBox* note =
-        new QMessageBox(QMessageBox::Information, "New Contact", "Do you want to add new contact: " + login,
+        new QMessageBox(QMessageBox::Information, tr("New Contact"), tr("Do you want to add new contact: ") + login,
                         QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
     int result = note->exec();
     delete note;
@@ -167,4 +178,10 @@ void MainWindow::on_actionAbout_program_triggered()
 void MainWindow::on_actionAbout_QT_triggered()
 {
     qApp->aboutQt();
+}
+
+void MainWindow::changeEvent(QEvent *event){
+    if(event->type() == QEvent::LanguageChange){
+        ui->retranslateUi(this);
+    }
 }

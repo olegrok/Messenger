@@ -14,12 +14,12 @@
 #include <QDateTime>
 #include <QVector>
 #include <QMessageBox>
-#include <QListWidgetItem>
 #include "structsforrequests.h"
 #include <QScrollBar>
 #include <QAbstractSlider>
 #include <QDesktopServices>
 #include "monitor.h"
+#include <QEvent>
 
 
 namespace Ui {
@@ -48,10 +48,9 @@ private slots:
     void unloginProfile();
     void updateWindow();
     int showNotification(QString);
-
     void on_actionAbout_program_triggered();
-
     void on_actionAbout_QT_triggered();
+    void changeEvent(QEvent* event);
 
 private:
     QString login;
@@ -61,7 +60,7 @@ private:
     Profile account;
     Options opt;
     void styleInit();
-    QVector<QListWidgetItem> contacts;
+    QVector<QListWidgetItem*> contacts;
     QScrollBar VerticalScroll;
 
 };

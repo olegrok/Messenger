@@ -9,7 +9,6 @@ Options::Options(QWidget *parent) :
     //show();
     qDebug() << QStyleFactory::keys();
     ui->design->addItems(QStyleFactory::keys());
-    //ui->palette->addItem("");
 }
 
 Options::~Options()
@@ -33,6 +32,41 @@ void Options::on_CloseButton_clicked()
 
 void Options::on_UnloginButton_clicked()
 {
-    this->close();
     emit unloginProfile();
+    this->close();
+}
+
+void Options::on_setLang_clicked()
+{
+    QSettings settings;
+    if(ui->langList->currentText() == "Russian"){
+        translator.load("ru.qm");
+        settings.setValue("user_interface/language/file", "ru.qm");
+    }
+    if(ui->langList->currentText() == "English"){
+        QVariant var = settings.value("user_interface/language/file");
+        if(!var.isNull()){
+            translator.load(var.toString());
+            qApp->removeTranslator(&translator);
+            settings.setValue("user_interface/language/file", 0);
+            settings.setValue("user_interface/language/title", ui->langList->currentText());
+            return;
+        }
+    }
+        qApp->installTranslator(&translator);
+    settings.setValue("user_interface/language/title", ui->langList->currentText());
+}
+
+void Options::changeEvent(QEvent *event){
+    if(event->type() == QEvent::LanguageChange){
+        ui->retranslateUi(this);
+    }
+}
+
+void Options::loadLang(QString file){
+    translator.load(file);
+}
+
+QTranslator* Options::getLang(){
+    return &translator;
 }

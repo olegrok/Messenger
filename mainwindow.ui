@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>595</width>
-    <height>470</height>
+    <height>460</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>595</width>
-    <height>470</height>
+    <height>460</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>595</width>
-    <height>470</height>
+    <height>460</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -78,7 +78,7 @@
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="text">
-          <string>Добавить контакт</string>
+          <string>Add contact</string>
          </property>
         </widget>
        </item>
@@ -88,7 +88,7 @@
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="text">
-          <string>Удалить контакт</string>
+          <string>Delete contact</string>
          </property>
         </widget>
        </item>
@@ -98,7 +98,7 @@
           <cursorShape>PointingHandCursor</cursorShape>
          </property>
          <property name="text">
-          <string>Настройки</string>
+          <string>Options</string>
          </property>
         </widget>
        </item>
@@ -190,7 +190,6 @@ p, li { white-space: pre-wrap; }
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
   <action name="action_Exit">
    <property name="text">
     <string>&amp;Exit</string>

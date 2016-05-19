@@ -45,6 +45,9 @@ FORMS    += mainwindow.ui \
     addfriend.ui \
     options.ui
 
+TRANSLATIONS    += ../lang/ru.qm
+
+
 # Include Squish/Qt if a Squish installation prefix was provided to qmake
 !isEmpty(SQUISH_PREFIX) {
     message("Including Squish/Qt files")

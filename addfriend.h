@@ -4,6 +4,7 @@
 #include "structsforrequests.h"
 #include "database.h"
 #include "profile.h"
+#include <QObject>
 
 namespace Ui {
 class AddFriend;
@@ -22,6 +23,7 @@ signals:
     void sendContact(contInfo);
 private slots:
     void on_AddButton_clicked();
+    void changeEvent(QEvent* event);
 
 private:
     Ui::AddFriend *ui;

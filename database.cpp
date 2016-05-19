@@ -129,24 +129,24 @@ bool DataBase::addContact(contInfo info)
     return true;
 }
 
-QVector<QListWidgetItem> DataBase::getContacts()
+QVector<QListWidgetItem*> DataBase::getContacts()
 {
     QSqlQuery query;
     if (!query.exec("SELECT login, status FROM contacts")) {
         qDebug() << "Unable to make select opeation" << query.lastError();
     }
-    QVector<QListWidgetItem> contList;
+    QVector<QListWidgetItem*> contList;
     QSqlRecord rec = query.record();
     while(query.next()){
-        QListWidgetItem item;
+        QListWidgetItem* item = new QListWidgetItem;
 
-        item.setText(query.value(rec.indexOf("login")).toString());
+        item->setText(query.value(rec.indexOf("login")).toString());
         int status = query.value(rec.indexOf("status")).toInt();
         switch(status){
-            case UNREPLIED: item.setBackgroundColor(Qt::gray); break;
-            case DENIED: item.setBackgroundColor(Qt::red); break;
+            case UNREPLIED: item->setBackgroundColor(Qt::gray); break;
+            case DENIED: item->setBackgroundColor(Qt::red); break;
         }
-        contList.push_back(std::move(item));
+        contList.push_back(item);
     }
     return contList;
 }

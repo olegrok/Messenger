@@ -26,16 +26,16 @@ void AddFriend::on_AddButton_clicked()
         info.lastMsgId = 0;
         info.unreaded = 0;
         if(!DataBase::addContact(info)){
-            ui->AddFriendStatus->setText("Just your friend");
+            ui->AddFriendStatus->setText(tr("Just your friend"));
             return;
         }
     }
     else
     {
         switch (reply.statusCode) {
-        case 404: reply.login = "Not found"; break;
+        case 404: reply.login = tr("Not found"); break;
         case 400: break;
-        default: reply.login = "Unknown error";
+        default: reply.login = tr("Unknown error");
             break;
         } 
         ui->AddFriendStatus->setText(reply.login);
@@ -58,4 +58,10 @@ void AddFriend::setUpProfile(Profile* acc){
 
 void AddFriend::setStatus(QString status){
     ui->AddFriendStatus->setText(status);
+}
+
+void AddFriend::changeEvent(QEvent *event){
+    if(event->type() == QEvent::LanguageChange){
+        ui->retranslateUi(this);
+    }
 }

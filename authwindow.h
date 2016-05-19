@@ -32,6 +32,7 @@ signals:
 private slots:
     void on_CloseButton_clicked();
     void on_RegisterButton_clicked();
+    void changeEvent(QEvent* event);
 private:
     Ui::authwindow *ui;
     Profile* account;

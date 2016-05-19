@@ -22,12 +22,12 @@ void authwindow::on_EnterButton_clicked()
     accReply reply = account->accountRequest(auth, "authorisation");
     switch(reply.statusCode)
     {
-        case 200: ui->StatusLine->setText("Successeful autorisation!");
+        case 200: ui->StatusLine->setText(tr("Successeful autorisation!"));
             ui->Password->clear();
             ui->Login->clear();
             emit showMainWindow(auth.login);
             this->close(); break;
-        case 404: ui->StatusLine->setText("Not Found!");break;
+        case 404: ui->StatusLine->setText(tr("Not Found!"));break;
         default: ui->StatusLine->setText(reply.replyContent); break;
     }
     //Profile::
@@ -50,7 +50,7 @@ void authwindow::on_RegisterButton_clicked()
 
     switch(reply.statusCode)
     {
-        case 200: ui->StatusLine->setText("Successeful registration!");
+        case 200: ui->StatusLine->setText(tr("Successeful registration!"));
         emit showMainWindow(auth.login);
         this->close();
         break;
@@ -65,4 +65,10 @@ void authwindow::setUpProfile(Profile* acc){
 
 void authwindow::setStatus(QString status){
     ui->StatusLine->setText(status);
+}
+
+void authwindow::changeEvent(QEvent *event){
+    if(event->type() == QEvent::LanguageChange){
+        ui->retranslateUi(this);
+    }
 }

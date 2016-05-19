@@ -16,7 +16,7 @@ public:
     static bool addMessage(msgCont msg, QString status);
     static bool createTable();
     static bool addContact(contInfo info);
-    static QVector<QListWidgetItem> getContacts();
+    static QVector<QListWidgetItem*> getContacts();
     static bool deleteContact(QString);
     static bool close();
     static QString getMessages(QString login);
