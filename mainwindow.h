@@ -16,7 +16,10 @@
 #include <QMessageBox>
 #include <QListWidgetItem>
 #include "structsforrequests.h"
-#include <QTextDocument>
+#include <QScrollBar>
+#include <QAbstractSlider>
+#include <QDesktopServices>
+
 
 namespace Ui {
 class MainWindow;
@@ -45,6 +48,10 @@ private slots:
     void updateWindow();
     int showNotification(QString);
 
+    void on_actionAbout_program_triggered();
+
+    void on_actionAbout_QT_triggered();
+
 private:
     QString login;
     Ui::MainWindow *ui;
@@ -54,7 +61,7 @@ private:
     Options opt;
     void styleInit();
     QVector<QListWidgetItem> contacts;
-    QTextDocument ChatDoc;
+    QScrollBar VerticalScroll;
 
 };
 

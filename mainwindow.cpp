@@ -51,8 +51,7 @@ void MainWindow::on_SendButton_clicked()
     auto statusCode = account.sendMessage(msg);
     //ui->ChatWindow->appendPlainText(QDateTime::currentDateTime().toString("HH:mm") + " ");
     if(statusCode == web::http::status_codes::OK){
-        ui->ChatWindow->clear();
-        ui->ChatWindow->setHtml(DataBase::getMessages(msg.login));
+        updateWindow();
     }
 
 
@@ -90,6 +89,7 @@ void MainWindow::windowInit(QString _login)
     for(auto it = contacts.begin(); it != contacts.end(); it++)
         ui->ContactsList->addItem(&(*it));
     styleInit();
+    ui->ChatWindow->setVerticalScrollBar(&VerticalScroll);
     this->show();
 }
 
@@ -125,6 +125,7 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 {
     ui->ChatWindow->clear();
     ui->ChatWindow->setHtml(DataBase::getMessages(item->text()));
+    VerticalScroll.setSliderPosition(VerticalScroll.maximumHeight());
 }
 
 void MainWindow::unloginProfile(){
@@ -146,6 +147,7 @@ void MainWindow::updateWindow(){
         return;
     ui->ChatWindow->clear();
     ui->ChatWindow->setHtml(DataBase::getMessages(ui->ContactsList->currentItem()->text()));
+    VerticalScroll.setSliderPosition(VerticalScroll.maximumHeight());
 }
 
 int MainWindow::showNotification(QString login){
@@ -155,4 +157,14 @@ int MainWindow::showNotification(QString login){
     int result = note->exec();
     delete note;
     return result;
+}
+
+void MainWindow::on_actionAbout_program_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://docs.google.com/presentation/d/1xNTiiM7eFB2DkNB128jgf6KS8MUhTnBzGdxkrtk1Rkc/"));
+}
+
+void MainWindow::on_actionAbout_QT_triggered()
+{
+    qApp->aboutQt();
 }
