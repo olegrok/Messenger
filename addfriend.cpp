@@ -16,7 +16,7 @@ AddFriend::~AddFriend()
 void AddFriend::on_AddButton_clicked()
 {
     //contInfo info = CheckFriend(ui->FriendLogin->text());
-    FriendReply reply = account->friendRequest((ui->FriendLogin->text()), "add_contact");
+    FriendReply reply = account->friendRequest((ui->FriendLogin->text()), "add_contact_request");
     contInfo info;
 
     if(reply.statusCode == 200)

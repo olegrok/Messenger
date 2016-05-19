@@ -109,6 +109,8 @@ void Profile::distributor(QVector<msgCont> vector){
         DataBase::addContact(info);
         emit updateWindow();
     });
+}
 
-
+Monitor* Profile::getMonitor_ptr(){
+    return &monitor;
 }

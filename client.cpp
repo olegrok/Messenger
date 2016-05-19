@@ -75,7 +75,7 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
 {
     json::value json;
     json["request"]         = json::value( U(property.toStdString()) );
-    if(property == "add_contact")
+    if(property == "add_contact_request")
         json["login"]       = json::value( U(contact_login.toStdString()) );
     json["session"]         = session;
     if(property == "del_contact")
@@ -106,7 +106,7 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
     std::cout << json << std::endl;
 
     if(reply.statusCode == web::http::status_codes::OK){
-        if(property == "add_contact"){
+        if(property == "add_contact_request"){
             reply.login = contact_login;
             reply.uid = json.at(U("contact_uid")).as_integer();
         }

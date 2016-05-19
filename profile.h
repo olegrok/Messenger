@@ -19,7 +19,7 @@ class Profile : public QObject
 {
     //Add SSL
     //Сжатие zip
-    //staitless - неск. серверов.
+    //stateless - неск. серверов.
     //Таблица сессий
     //cookie храниться после закрытия
     //один человек одна сессия
@@ -39,6 +39,7 @@ public:
     void setLogin(const QString);
     QString& getLogin();
     void closeSession(QString status = 0);
+    Monitor* getMonitor_ptr();
 
 signals:
     void unlogin(QString = 0);

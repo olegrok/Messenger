@@ -14,10 +14,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&auth, &authwindow::showMainWindow, this, &MainWindow::windowInit, Qt::UniqueConnection);
     connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
-    connect(&account, &Profile::unlogin, this, &MainWindow::unlogin, Qt::UniqueConnection);
     connect(&opt, &Options::unloginProfile, this, &MainWindow::unloginProfile, Qt::UniqueConnection);
     connect(&account, &Profile::authorizationError, this, &MainWindow::unlogin, Qt::UniqueConnection);
     connect(&account, &Profile::updateWindow, this, &MainWindow::updateWindow, Qt::UniqueConnection);
+    connect(&account, SIGNAL(unlogin()), this, SLOT(unlogin()), Qt::DirectConnection);
+    connect(account.getMonitor_ptr(), SIGNAL(authorizationError()), this, SLOT(unlogin()), Qt::DirectConnection);
 
     auth.show();
 //    this->show();
@@ -105,7 +106,6 @@ void MainWindow::unlogin(QString status){
     addfriend.close();
     opt.close();
     auth.show();
-
 }
 
 void MainWindow::styleInit(){

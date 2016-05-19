@@ -41,6 +41,10 @@ json::value Monitor::monitor() {
             {
                 response = task.get();
                 statusCode = response.status_code();
+                if(statusCode == web::http::status_codes::Unauthorized){
+                    emit authorizationError("Unauthorized");
+                    exit(-1);
+                }
                 qDebug() << "sendMsg status code: " << statusCode;
             }).wait();
         if(statusCode != web::http::status_codes::OK)

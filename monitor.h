@@ -25,6 +25,7 @@ public:
     json::value monitor();
 signals:
     void task(web::json::value json);
+    void authorizationError(QString status = 0);
 public slots:
     void quit(){ qDebug() << "end";}
 private:

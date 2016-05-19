@@ -19,6 +19,7 @@
 #include <QScrollBar>
 #include <QAbstractSlider>
 #include <QDesktopServices>
+#include "monitor.h"
 
 
 namespace Ui {
