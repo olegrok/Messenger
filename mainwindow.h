@@ -16,6 +16,7 @@
 #include <QMessageBox>
 #include <QListWidgetItem>
 #include "structsforrequests.h"
+#include <QTextDocument>
 
 namespace Ui {
 class MainWindow;
@@ -53,6 +54,7 @@ private:
     Options opt;
     void styleInit();
     QVector<QListWidgetItem> contacts;
+    QTextDocument ChatDoc;
 
 };
 

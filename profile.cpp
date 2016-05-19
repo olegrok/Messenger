@@ -1,7 +1,5 @@
 #include "profile.h"
 
-using namespace web;
-
 Profile::Profile(QString _login) :
     login(_login)
 {
@@ -16,7 +14,11 @@ Profile::Profile(QString _login) :
 }
 
 Profile::~Profile(){
-    monitor.terminate();
+    try{
+        monitor.terminate();
+        monitor.wait();
+    }
+    catch(const std::exception &e){}
 }
 
 void Profile::setLogin(const QString _login){

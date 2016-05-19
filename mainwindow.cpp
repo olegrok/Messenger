@@ -26,7 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
 //    //ui->ContactsList->findItems("Green", Qt::MatchExactly).first()->setBackground(Qt::gray);
 //    qDebug() << showNotification("Olegrok");
 
-
 }
 
 MainWindow::~MainWindow()
@@ -53,7 +52,7 @@ void MainWindow::on_SendButton_clicked()
     //ui->ChatWindow->appendPlainText(QDateTime::currentDateTime().toString("HH:mm") + " ");
     if(statusCode == web::http::status_codes::OK){
         ui->ChatWindow->clear();
-        ui->ChatWindow->setPlainText(DataBase::getMessages(msg.login));
+        ui->ChatWindow->setHtml(DataBase::getMessages(msg.login));
     }
 
 
@@ -125,7 +124,7 @@ void MainWindow::on_OptionButton_clicked()
 void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 {
     ui->ChatWindow->clear();
-    ui->ChatWindow->setPlainText(DataBase::getMessages(item->text()));
+    ui->ChatWindow->setHtml(DataBase::getMessages(item->text()));
 }
 
 void MainWindow::unloginProfile(){
@@ -146,7 +145,7 @@ void MainWindow::updateWindow(){
     if(ui->ContactsList->currentRow() == -1)
         return;
     ui->ChatWindow->clear();
-    ui->ChatWindow->setPlainText(DataBase::getMessages(ui->ContactsList->currentItem()->text()));
+    ui->ChatWindow->setHtml(DataBase::getMessages(ui->ContactsList->currentItem()->text()));
 }
 
 int MainWindow::showNotification(QString login){

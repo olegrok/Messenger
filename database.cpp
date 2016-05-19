@@ -178,7 +178,7 @@ bool DataBase::clearContacts(){
 }
 
 QString DataBase::getMessages(QString login){
-    QString strF = "SELECT * FROM messages WHERE login = '%1' ORDER BY time DESC;";
+    QString strF = "SELECT * FROM messages WHERE login = '%1' ORDER BY time ASC;";
     QString str = strF.arg(login);
 
     QSqlQuery query;
@@ -191,13 +191,17 @@ QString DataBase::getMessages(QString login){
     QString text;
     while(query.next()){
         QDateTime time = QDateTime::fromTime_t(query.value(rec.indexOf("time")).toInt(), Qt::LocalTime);
-        text.append(time.toString("HH:mm") + " ");
-        if(query.value(rec.indexOf("status")).toInt() == SEND)
-            text.append( "Me: ");
-        else
-            text.append(login + ": ");
-
-        text.append( query.value(rec.indexOf("text")).toString() + "\n");
+        text.append("<i>" + time.toString("HH:mm") + "</i>");
+        if(query.value(rec.indexOf("status")).toInt() == SEND){
+            text.append("<p align=\"right\">"
+                        "<b>Me: </b>");
+        }
+        else{
+            text.append("<p align=\"left\">"
+                        "<b>" + login + ": </b>");
+        }
+        text.append( query.value(rec.indexOf("text")).toString().toHtmlEscaped()
+                     .replace("\n", "<BR>") + "</p>");
     }
     qDebug() << text;
     return text;
