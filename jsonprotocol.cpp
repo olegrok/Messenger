@@ -54,7 +54,6 @@ void JsonProtocol::eventsParser(json::value json){
                 mainVector.push_back(data);
             }
 
-
             emit messagesPack(mainVector);
         }
     }

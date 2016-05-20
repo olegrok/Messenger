@@ -21,6 +21,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->lineFindLogin, SIGNAL(textChanged(const QString&)), this, SLOT(findContact(const QString&)));
     connect(ui->lineFindMsg, SIGNAL(textChanged(const QString&)), this, SLOT(changeMsgLineEvent(const QString&)));
     auth.show();
+
+    qDebug() << "Single Step" << VerticalScroll.singleStep();
+    qDebug() << "max" << VerticalScroll.maximum();
 //    this->show();
 //    ui->ContactsList->addItem("Green");
 //    ui->ContactsList->findItems("Green", Qt::MatchExactly).first()->setBackgroundColor(Qt::green);
@@ -52,7 +55,9 @@ void MainWindow::on_SendButton_clicked()
     auto statusCode = account.sendMessage(msg);
     //ui->ChatWindow->appendPlainText(QDateTime::currentDateTime().toString("HH:mm") + " ");
     if(statusCode == web::http::status_codes::OK){
-        updateWindow();
+        loadMsg(ui->findMsgButton->text() == tr("Clear") ?
+                ui->lineFindMsg->text() : 0);
+        VerticalScroll.setValue(VerticalScroll.maximum());
     }
 
 
@@ -135,7 +140,9 @@ void MainWindow::on_OptionButton_clicked()
 }
 
 void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
-{
+{\
+    if(item == NULL)
+        return;
     ui->ChatWindow->clear();
     ui->ChatWindow->setHtml(DataBase::getMessages(item->text()));
     VerticalScroll.setValue(VerticalScroll.maximum());
@@ -146,6 +153,7 @@ void MainWindow::unloginProfile(){
 }
 
 void MainWindow::updateWindow(){
+    qDebug() << "Update MainWindow";
     loadContacts(ui->lineFindLogin->text());
     loadMsg(ui->findMsgButton->text() == tr("Clear") ? ui->lineFindMsg->text() : 0);
 }
@@ -181,20 +189,33 @@ void MainWindow::findContact(const QString& text){
 }
 
 void MainWindow::loadContacts(QString text){
+    QString current;
+    QListWidgetItem *curr_item = 0;
+    if(ui->ContactsList->currentRow() != -1){
+        current = ui->ContactsList->selectedItems().first()->text();
+        qDebug() << current;
+    }
     ui->ContactsList->clear();
     contacts.clear();
     contacts = DataBase::getContacts(text);
     std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem* item){
+        qDebug() << item->text();
         ui->ContactsList->addItem(item);
+        if(item->text() == current){
+            curr_item = item;
+        }
+        ui->ContactsList->setCurrentItem(curr_item,
+                          QItemSelectionModel::Current | QItemSelectionModel::Select);
     });
 }
 
 bool MainWindow::loadMsg(QString text){
     if(ui->ContactsList->currentRow() == -1)
         return false;
+    int pos = VerticalScroll.value();
     ui->ChatWindow->clear();
     ui->ChatWindow->setHtml(DataBase::getMessages(ui->ContactsList->currentItem()->text(), text));
-    VerticalScroll.setValue(VerticalScroll.value());
+    VerticalScroll.setValue(pos + 5 * VerticalScroll.singleStep());
     return true;
 }
 
