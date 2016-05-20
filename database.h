@@ -16,10 +16,10 @@ public:
     static bool addMessage(msgCont msg, QString status);
     static bool createTable();
     static bool addContact(contInfo info);
-    static QVector<QListWidgetItem*> getContacts();
+    static QVector<QListWidgetItem*> getContacts(QString login = 0);
     static bool deleteContact(QString);
     static bool close();
-    static QString getMessages(QString login);
+    static QString getMessages(QString login, QString strToFind = 0);
     static bool addToLog(QString type, int value = 0, QString comment = 0, int time = 0);
     static bool clearContacts();
     static int getUid(QString);

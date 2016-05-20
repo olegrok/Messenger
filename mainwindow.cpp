@@ -19,7 +19,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&account, &Profile::updateWindow, this, &MainWindow::updateWindow, Qt::UniqueConnection);
     connect(&account, SIGNAL(unlogin(QString)), this, SLOT(unlogin(QString)), Qt::DirectConnection);
     connect(account.getMonitor_ptr(), SIGNAL(authorizationError()), this, SLOT(unlogin()), Qt::DirectConnection);
-
+    connect(ui->lineFindLogin, SIGNAL(textChanged(const QString&)), this, SLOT(findContact(const QString&)));
+    connect(ui->lineFindMsg, SIGNAL(textChanged(const QString&)), this, SLOT(changeMsgLineEvent(const QString&)));
     auth.show();
 //    this->show();
 //    ui->ContactsList->addItem("Green");
@@ -86,10 +87,7 @@ void MainWindow::on_DeleteContactButton_clicked()
 void MainWindow::windowInit(QString _login)
 {
     login = _login;
-    contacts.clear();
-    contacts = DataBase::getContacts();
-    for(auto it : contacts)
-        ui->ContactsList->addItem(&(*it));
+    loadContacts();
     styleInit();
     if(ui->ChatWindow->verticalScrollBar() != &VerticalScroll)
         ui->ChatWindow->setVerticalScrollBar(&VerticalScroll);
@@ -135,7 +133,7 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 {
     ui->ChatWindow->clear();
     ui->ChatWindow->setHtml(DataBase::getMessages(item->text()));
-    VerticalScroll.setSliderPosition(VerticalScroll.maximumHeight());
+    VerticalScroll.setValue(VerticalScroll.maximum());
 }
 
 void MainWindow::unloginProfile(){
@@ -148,17 +146,8 @@ void MainWindow::unloginProfile(){
 }
 
 void MainWindow::updateWindow(){
-    ui->ContactsList->clear();
-    contacts.clear();
-    contacts = DataBase::getContacts();
-    std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem* item){
-        ui->ContactsList->addItem(item);
-    });
-    if(ui->ContactsList->currentRow() == -1)
-        return;
-    ui->ChatWindow->clear();
-    ui->ChatWindow->setHtml(DataBase::getMessages(ui->ContactsList->currentItem()->text()));
-    VerticalScroll.setSliderPosition(VerticalScroll.maximumHeight());
+    loadContacts(ui->lineFindLogin->text());
+    loadMsg(ui->findMsgButton->text() == tr("Clear") ? ui->lineFindMsg->text() : 0);
 }
 
 int MainWindow::showNotification(QString login){
@@ -184,4 +173,46 @@ void MainWindow::changeEvent(QEvent *event){
     if(event->type() == QEvent::LanguageChange){
         ui->retranslateUi(this);
     }
+}
+
+void MainWindow::findContact(const QString& text){
+    qDebug() << text;
+    loadContacts(text);
+}
+
+void MainWindow::loadContacts(QString text){
+    ui->ContactsList->clear();
+    contacts.clear();
+    contacts = DataBase::getContacts(text);
+    std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem* item){
+        ui->ContactsList->addItem(item);
+    });
+}
+
+bool MainWindow::loadMsg(QString text){
+    if(ui->ContactsList->currentRow() == -1)
+        return false;
+    ui->ChatWindow->clear();
+    ui->ChatWindow->setHtml(DataBase::getMessages(ui->ContactsList->currentItem()->text(), text));
+    VerticalScroll.setValue(VerticalScroll.value());
+    return true;
+}
+
+void MainWindow::on_findMsgButton_clicked()
+{
+
+    if(ui->findMsgButton->text() == tr("Find")){
+        if(ui->lineFindMsg->text().isEmpty())
+            return;
+        if(loadMsg(ui->lineFindMsg->text()))
+            ui->findMsgButton->setText(tr("Clear"));
+    }
+    else{
+        ui->findMsgButton->setText(tr("Find"));
+        loadMsg();
+        ui->lineFindMsg->clear();
+    }
+}
+
+void MainWindow::changeMsgLineEvent(const QString &text){
 }

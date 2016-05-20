@@ -129,10 +129,13 @@ bool DataBase::addContact(contInfo info)
     return true;
 }
 
-QVector<QListWidgetItem*> DataBase::getContacts()
+QVector<QListWidgetItem*> DataBase::getContacts(QString login)
 {
     QSqlQuery query;
-    if (!query.exec("SELECT login, status FROM contacts")) {
+    QString strF = "SELECT login, status FROM contacts WHERE login LIKE '%1%';";
+    QString str = strF.arg(login);
+    qDebug() << "SQLrequest:" << str;
+    if (!query.exec(str)) {
         qDebug() << "Unable to make select opeation" << query.lastError();
     }
     QVector<QListWidgetItem*> contList;
@@ -177,9 +180,11 @@ bool DataBase::clearContacts(){
     return true;
 }
 
-QString DataBase::getMessages(QString login){
-    QString strF = "SELECT * FROM messages WHERE login = '%1' ORDER BY time ASC;";
-    QString str = strF.arg(login);
+QString DataBase::getMessages(QString login, QString strToFind){
+    QString strF = "SELECT * FROM messages WHERE login = '%1' "
+                   "AND text LIKE '%%2%' ORDER BY time ASC;";
+    QString str = strF.arg(login)
+                      .arg(strToFind);
 
     QSqlQuery query;
 

@@ -15,7 +15,7 @@ TEMPLATE = app
 LIBS += -lcpprest -lboost_system -rdynamic
 #LIBS += -L/usr/local/lib/x86_64-linux-gnu -lcpprest
 #LIBS += -L/home/oleg/Рабочий\ стол/Track/Project/Casablanca/casablanca/Release/build.release/Binaries -lcpprest
-#INCLUDEPATH += -I//home/oleg/Рабочий стол/Track/Project/Casablanca/casablanca/Release/include
+INCLUDEPATH += -I/home/oleg/Рабочий\ стол/Track/Project/Squish/squish-6.0.3-qt56x-linux64/include
 
 
 SOURCES += main.cpp\

@@ -2,9 +2,13 @@
 #include <QApplication>
 
 //using namespace json;
+
+#include "/home/oleg/Рабочий стол/Track/Project/Squish/squish-6.0.3-qt56x-linux64/include/qtbuiltinhook.h"
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    Squish::installBuiltinHook();
     MainWindow w;
     return a.exec();
 }

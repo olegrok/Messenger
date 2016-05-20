@@ -43,7 +43,8 @@ void Options::on_setLang_clicked()
         translator.load("ru.qm");
         settings.setValue("user_interface/language/file", "ru.qm");
     }
-    if(ui->langList->currentText() == "English"){
+    if(ui->langList->currentText() == "English" ||
+            ui->langList->currentText() == "Английский"){
         QVariant var = settings.value("user_interface/language/file");
         if(!var.isNull()){
             translator.load(var.toString());

@@ -51,15 +51,21 @@ private slots:
     void on_actionAbout_program_triggered();
     void on_actionAbout_QT_triggered();
     void changeEvent(QEvent* event);
+    void findContact(const QString &);
+    void changeMsgLineEvent(const QString&);
+    void on_findMsgButton_clicked();
 
 private:
+    void styleInit();
+    void loadContacts(QString text = 0);
+    bool loadMsg(QString text = 0);
+
     QString login;
     Ui::MainWindow *ui;
     AddFriend addfriend;
     authwindow auth;
     Profile account;
     Options opt;
-    void styleInit();
     QVector<QListWidgetItem*> contacts;
     QScrollBar VerticalScroll;
 

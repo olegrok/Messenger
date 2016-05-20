@@ -46,7 +46,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>Unlogin</string>
+    <string>LogOut</string>
    </property>
   </widget>
   <widget class="QPushButton" name="CloseButton">
