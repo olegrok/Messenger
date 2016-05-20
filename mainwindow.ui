@@ -195,6 +195,9 @@ p, li { white-space: pre-wrap; }
       <height>27</height>
      </rect>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="text">
      <string>Find</string>
     </property>
