@@ -15,8 +15,8 @@ Profile::Profile(QString _login) :
 
 Profile::~Profile(){
     try{
-        monitor.terminate();
-        monitor.wait();
+//        monitor.terminate();
+        monitor.quit();
     }
     catch(const std::exception &e){}
 }

@@ -6,6 +6,7 @@
 #include "structsforrequests.h"
 #include "database.h"
 #include <cpprest/http_client.h>
+#include <atomic>
 
 using namespace web;
 using namespace web::http;
@@ -17,7 +18,9 @@ Q_DECLARE_METATYPE(web::json::value)
 class Monitor : public QThread{
     Q_OBJECT
 public:
-    Monitor() {}
+    Monitor() {
+        isBreak = false;
+    }
     ~Monitor() {}
     void setSession(int cookie, int uid, QString& ServerURL_);
     void setSession(json::value& session_, QString& ServerURL_);
@@ -27,10 +30,11 @@ signals:
     void task(web::json::value json);
     void authorizationError(QString status = 0);
 public slots:
-    void quit(){ qDebug() << "end";}
+    void quit(){ isBreak = true; }
 private:
     json::value session;
     QString ServerURL;
+    std::atomic_bool isBreak;
 
 };
 

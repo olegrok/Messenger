@@ -16,8 +16,11 @@ void Monitor::setSession(json::value& session_, QString& ServerURL_){
 }
 
 void Monitor::run(){
+    isBreak = false;
     while(true){
         json::value json = monitor();
+        if(isBreak)
+            break;
         if(json != 0)
             emit task(json);
         sleep(15);
@@ -41,12 +44,15 @@ json::value Monitor::monitor() {
             {
                 response = task.get();
                 statusCode = response.status_code();
-                if(statusCode == web::http::status_codes::Unauthorized){
-                    emit authorizationError("Unauthorized");
-                    exit(-1);
-                }
-                qDebug() << "sendMsg status code: " << statusCode;
             }).wait();
+        qDebug() << "sendMsg status code: " << statusCode \
+                 << (statusCode == web::http::status_codes::Unauthorized);
+        if(statusCode == web::http::status_codes::Unauthorized){
+            emit authorizationError("Unauthorized");
+            isBreak = true;
+            return -1;
+        }
+
         if(statusCode != web::http::status_codes::OK)
             return 0;
        }

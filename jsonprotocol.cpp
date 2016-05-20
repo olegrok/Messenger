@@ -14,6 +14,8 @@ QVector <contInfo> JsonProtocol::contactListParser(json::value json){
        std::cout << json << " size = " << json.size() << std::endl;
        QVector <contInfo> contacts;
 
+       if(!json.has_field(U("contacts")))
+           throw std::invalid_argument("Bad json was replied");
        if(json.at( U("contacts")).is_null())
            return contacts;
 

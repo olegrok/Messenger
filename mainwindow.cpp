@@ -18,7 +18,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&account, &Profile::authorizationError, this, &MainWindow::unlogin, Qt::UniqueConnection);
     connect(&account, &Profile::updateWindow, this, &MainWindow::updateWindow, Qt::UniqueConnection);
     connect(&account, SIGNAL(unlogin(QString)), this, SLOT(unlogin(QString)), Qt::DirectConnection);
-    connect(account.getMonitor_ptr(), SIGNAL(authorizationError()), this, SLOT(unlogin()), Qt::DirectConnection);
     connect(ui->lineFindLogin, SIGNAL(textChanged(const QString&)), this, SLOT(findContact(const QString&)));
     connect(ui->lineFindMsg, SIGNAL(textChanged(const QString&)), this, SLOT(changeMsgLineEvent(const QString&)));
     auth.show();
@@ -91,11 +90,14 @@ void MainWindow::windowInit(QString _login)
     styleInit();
     if(ui->ChatWindow->verticalScrollBar() != &VerticalScroll)
         ui->ChatWindow->setVerticalScrollBar(&VerticalScroll);
-
+    connect(account.getMonitor_ptr(), SIGNAL(authorizationError()),
+            this, SLOT(unlogin()), Qt::DirectConnection);
     this->show();
 }
 
 void MainWindow::unlogin(QString status){
+    if(login.isEmpty())
+        return;
     qDebug() << "status: " << status;
     if(status.isNull())
         auth.setStatus(tr("Invalid Session"));
@@ -104,8 +106,11 @@ void MainWindow::unlogin(QString status){
     ui->ChatWindow->clear();
     ui->ContactsList->clear();
     ui->MessageWindow->clear();
+    login.clear();
     addfriend.close();
     opt.close();
+    disconnect(account.getMonitor_ptr(), SIGNAL(authorizationError()),
+                this, SLOT(unlogin()));
     auth.show();
     this->close();
 }
@@ -138,11 +143,6 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 
 void MainWindow::unloginProfile(){
     account.closeSession(tr("Welcome to Chat!"));
-    ui->ChatWindow->clear();
-    ui->ContactsList->clear();
-    ui->MessageWindow->clear();
-    this->hide();
-    auth.show();
 }
 
 void MainWindow::updateWindow(){
@@ -210,7 +210,6 @@ void MainWindow::on_findMsgButton_clicked()
     else{
         ui->findMsgButton->setText(tr("Find"));
         loadMsg();
-        ui->lineFindMsg->clear();
     }
 }
 
