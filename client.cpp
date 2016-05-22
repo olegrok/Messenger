@@ -8,7 +8,9 @@ using namespace web::http::client;
 //QString ServerURL = "http://192.168.0.104:7777";
 Client::Client(QObject *parent) :
     QObject(parent)
-{ }
+{
+    //client_(ServerURL);
+}
 
 /*
 POST:
@@ -38,7 +40,7 @@ accReply Client::accountRequest(accRequest req, QString property)
     std::cout << json << std::endl;
     try
         {
-            http_client client(U(ServerURL.toStdString()));
+//            http_client client(U(ServerURL.toStdString()));
             client.request( web::http::methods::POST ,U("") , json )
                 .then( [&]( pplx::task<web::http::http_response> task )
              {
@@ -85,7 +87,7 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
     http_response response;
     try
         {
-            http_client client(U(ServerURL.toStdString()));
+//            http_client client(U(ServerURL.toStdString()));
             client.request( web::http::methods::POST ,U("") , json )
                 .then( [&]( pplx::task<web::http::http_response> task )
              {
@@ -133,7 +135,7 @@ json::value Client::getData(){
 
     try
         {
-            http_client client(U(ServerURL.toStdString()));
+//            http_client client(U(ServerURL.toStdString()));
             client.request( web::http::methods::POST ,U("") , json )
                 .then( [&]( pplx::task<web::http::http_response> task )
              {
@@ -162,7 +164,7 @@ bool Client::logout(){
 
     try
         {
-            http_client client(U(ServerURL.toStdString()));
+//            http_client client(U(ServerURL.toStdString()));
             client.request( web::http::methods::POST ,U("") , json )
                 .then( [&]( pplx::task<web::http::http_response> task )
              {
@@ -194,7 +196,7 @@ web::http::status_code Client::sendMessage(msgCont msg){
     web::http::status_code statusCode;
     try
         {
-            http_client client(U(ServerURL.toStdString()));
+ //           http_client client(U(ServerURL.toStdString()));
             client.request( web::http::methods::POST ,U("") , json )
                 .then( [&]( pplx::task<web::http::http_response> task )
              {

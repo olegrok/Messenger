@@ -13,6 +13,7 @@ void Monitor::setSession(int cookie, int uid, QString& ServerURL_){
 void Monitor::setSession(json::value& session_, QString& ServerURL_){
     session = session_;
     ServerURL = ServerURL_;
+    client = http_client(U(ServerURL.toStdString()));
 }
 
 void Monitor::run(){
@@ -41,14 +42,16 @@ json::value Monitor::monitor() {
 
     http_response response;
     web::http::status_code statusCode;
+
     try{
-        http_client client(U(ServerURL.toStdString()));
+//        http_client client(U(ServerURL.toStdString()));
         client.request( web::http::methods::POST ,U("") , json )
             .then( [&]( pplx::task<web::http::http_response> task )
             {
                 response = task.get();
                 statusCode = response.status_code();
-            }).wait();
+            })
+        .wait();
         qDebug() << "sendMsg status code: " << statusCode \
                  << (statusCode == web::http::status_codes::Unauthorized);
         if(statusCode == web::http::status_codes::Unauthorized){

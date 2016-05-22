@@ -25,7 +25,6 @@ public:
     void setSession(int cookie, int uid, QString& ServerURL_);
     void setSession(json::value& session_, QString& ServerURL_);
     void run() Q_DECL_OVERRIDE;
-    json::value monitor();
 signals:
     void task(web::json::value json);
     void authorizationError(QString status = 0);
@@ -35,6 +34,8 @@ private:
     json::value session;
     QString ServerURL;
     std::atomic_bool isBreak;
+    json::value monitor();
+    http_client client = http_client(U("http://localhost:7777"));
 
 };
 

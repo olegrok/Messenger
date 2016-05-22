@@ -42,5 +42,6 @@ FORMS    += mainwindow.ui \
     addfriend.ui \
     options.ui
 
-TRANSLATIONS    += ./langs/ru.qm ./langs/ua.qm
+TRANSLATIONS    += ./langs/ru.ts \
+                   ./langs/ua.qm
 

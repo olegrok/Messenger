@@ -24,8 +24,6 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(account.getMonitor_ptr(), SIGNAL(authorizationError()), this, SLOT(unlogin()));
     auth.show();
 
-    qDebug() << "Single Step" << VerticalScroll.singleStep();
-    qDebug() << "max" << VerticalScroll.maximum();
 //    this->show();
 //    ui->ContactsList->addItem("Green");
 //    ui->ContactsList->findItems("Green", Qt::MatchExactly).first()->setBackgroundColor(Qt::green);

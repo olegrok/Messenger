@@ -33,6 +33,7 @@ public:
 private:
     QString clientLogin;
     json::value session;
+    http_client client = http_client(U(ServerURL.toStdString()));
 
 };
 
