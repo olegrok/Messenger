@@ -103,6 +103,11 @@
    </item>
    <item>
     <property name="text">
+     <string>Ukrainian</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
      <string>English</string>
     </property>
    </item>

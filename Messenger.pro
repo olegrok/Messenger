@@ -4,9 +4,8 @@
 #
 #-------------------------------------------------
 
-QT       += core gui sql testlib
-QT       -= qml network opengl svg multimedia
-CONFIG   += c++1z warn_on
+QT       += core gui sql
+CONFIG   += c++1z warn_on rpath rpath-link rdynamic
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -15,8 +14,6 @@ TEMPLATE = app
 LIBS += -lcpprest -lboost_system -rdynamic
 #LIBS += -L/usr/local/lib/x86_64-linux-gnu -lcpprest
 #LIBS += -L/home/oleg/Рабочий\ стол/Track/Project/Casablanca/casablanca/Release/build.release/Binaries -lcpprest
-INCLUDEPATH += -I/home/oleg/Рабочий\ стол/Track/Project/Squish/squish-6.0.3-qt56x-linux64/include
-
 
 SOURCES += main.cpp\
         mainwindow.cpp \
@@ -45,19 +42,5 @@ FORMS    += mainwindow.ui \
     addfriend.ui \
     options.ui
 
-TRANSLATIONS    += ../lang/ru.qm
+TRANSLATIONS    += ./langs/ru.qm ./langs/ua.qm
 
-
-# Include Squish/Qt if a Squish installation prefix was provided to qmake
-!isEmpty(SQUISH_PREFIX) {
-    message("Including Squish/Qt files")
-    android {
-        SQUISH_ATTACH_PORT=4711
-    }
-    include($$SQUISH_PREFIX/qtbuiltinhook.pri)
-}
-
-boot2qt {
-    target.path = /data/user/qt/$$TARGET
-    INSTALLS += target
-}

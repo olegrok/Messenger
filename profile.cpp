@@ -8,7 +8,7 @@ Profile::Profile(QString _login) :
 
     connect(&parser, SIGNAL(messagesPack(QVector<msgCont>)), this,
             SLOT(distributor(QVector<msgCont>)));
-
+    monitor.moveToThread(&monitor);
     connect(&monitor, SIGNAL(task(web::json::value)), this,
             SLOT(monitorHandler(web::json::value)));
 }
@@ -71,6 +71,7 @@ FriendReply Profile::friendRequest(QString contact_login, QString property){
 }
 
 void Profile::monitorHandler(json::value json){
+    qDebug() << *(int*)QThread::currentThreadId();
     parser.eventsParser(json);
 }
 

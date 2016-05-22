@@ -5,6 +5,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    qDebug() << *(int*)QThread::currentThreadId();
     ui->setupUi(this);
     this->setGeometry(QDesktopWidget().availableGeometry().width()/2 - this->width()/2,
                       QDesktopWidget().availableGeometry().height()/2 - this->width()/2,
@@ -20,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(&account, SIGNAL(unlogin(QString)), this, SLOT(unlogin(QString)), Qt::DirectConnection);
     connect(ui->lineFindLogin, SIGNAL(textChanged(const QString&)), this, SLOT(findContact(const QString&)));
     connect(ui->lineFindMsg, SIGNAL(textChanged(const QString&)), this, SLOT(changeMsgLineEvent(const QString&)));
+    connect(account.getMonitor_ptr(), SIGNAL(authorizationError()), this, SLOT(unlogin()));
     auth.show();
 
     qDebug() << "Single Step" << VerticalScroll.singleStep();
@@ -95,8 +97,6 @@ void MainWindow::windowInit(QString _login)
     styleInit();
     if(ui->ChatWindow->verticalScrollBar() != &VerticalScroll)
         ui->ChatWindow->setVerticalScrollBar(&VerticalScroll);
-    connect(account.getMonitor_ptr(), SIGNAL(authorizationError()),
-            this, SLOT(unlogin()), Qt::DirectConnection);
     this->show();
 }
 
@@ -114,9 +114,8 @@ void MainWindow::unlogin(QString status){
     login.clear();
     addfriend.close();
     opt.close();
-    disconnect(account.getMonitor_ptr(), SIGNAL(authorizationError()),
-                this, SLOT(unlogin()));
     auth.show();
+    //auth.ui->Login->setEnabled(true);
     this->close();
 }
 
@@ -130,7 +129,7 @@ void MainWindow::styleInit(){
     qDebug() << val;
     if(!val.isNull()){
         opt.loadLang(val.toString());
-        qApp->installTranslator(opt.getLang());
+        qDebug() << qApp->installTranslator(opt.getLang());
     }
 }
 

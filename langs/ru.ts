@@ -1,47 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="uk_UA" sourcelanguage="en">
+<TS version="2.1" language="ru_RU">
 <context>
     <name>AddFriend</name>
     <message>
         <location filename="addfriend.ui" line="26"/>
         <source>Add new friends</source>
-        <translation>Додати нового друга</translation>
+        <translation>Добавить нового друга</translation>
     </message>
     <message>
         <location filename="addfriend.ui" line="41"/>
         <source>Login</source>
-        <translation>Логін</translation>
+        <translation>Логин</translation>
     </message>
     <message>
         <location filename="addfriend.ui" line="60"/>
         <source>Add</source>
-        <translation>Додати</translation>
+        <translation>Добавить</translation>
     </message>
     <message>
         <location filename="addfriend.ui" line="70"/>
         <source>Close</source>
-        <translation>Закрити</translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <location filename="addfriend.ui" line="89"/>
         <source>Enter your friend&apos;s nickname</source>
-        <translation>Введіть логін контакту</translation>
+        <translation>Введите логин контакта</translation>
     </message>
     <message>
         <location filename="addfriend.cpp" line="29"/>
         <source>Just your friend</source>
-        <translation>Вже ваш друг</translation>
+        <translation>Уже ваш друг</translation>
     </message>
     <message>
         <location filename="addfriend.cpp" line="36"/>
         <source>Not found</source>
-        <translation>Не знайдено</translation>
+        <translation>Не найдено</translation>
     </message>
     <message>
         <location filename="addfriend.cpp" line="38"/>
         <source>Unknown error</source>
-        <translation>Невідома помилка</translation>
+        <translation>Неизвестная ошибка</translation>
     </message>
 </context>
 <context>
@@ -63,61 +63,61 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="mainwindow.ui" line="151"/>
         <source>Send</source>
-        <translation>Відправити</translation>
+        <translation>Отправить</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="101"/>
         <location filename="mainwindow.ui" line="217"/>
         <source>Options</source>
-        <translation>Налаштування</translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="91"/>
         <source>Delete contact</source>
-        <translation>Видалити контакт</translation>
+        <translation>Удалить контакт</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="173"/>
         <source>Find login</source>
-        <translation>Пошук логіну</translation>
+        <translation>Поиск логина</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="186"/>
         <source>Find in messages</source>
-        <translation>Пошук серед повідомлень</translation>
+        <translation>Поиск среди сообщений</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="202"/>
         <location filename="mainwindow.cpp" line="225"/>
         <location filename="mainwindow.cpp" line="232"/>
         <source>Find</source>
-        <translation>Знайти</translation>
+        <translation>Найти</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="225"/>
         <source>About</source>
-        <translation>Довідка</translation>
+        <translation>Справка</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="235"/>
         <source>&amp;Exit</source>
-        <translation>&amp;Вихід</translation>
+        <translation>&amp;Выход</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="240"/>
         <source>&amp;Options</source>
-        <translation>&amp;Налаштування</translation>
+        <translation>&amp;Настройки</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="81"/>
         <location filename="mainwindow.ui" line="245"/>
         <source>Add contact</source>
-        <translation>Додати контакт</translation>
+        <translation>Добавить контакт</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="250"/>
         <source>About program</source>
-        <translation>Про программу</translation>
+        <translation>О программе</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="255"/>
@@ -127,29 +127,29 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="mainwindow.cpp" line="108"/>
         <source>Invalid Session</source>
-        <translation>Помилка сессії</translation>
+        <translation>Ошибка сессии</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="152"/>
         <source>Welcome to Chat!</source>
-        <translation>Ласкаво просимо в чат!</translation>
+        <translation>Добро пожаловать в чат!</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="58"/>
         <location filename="mainwindow.cpp" line="158"/>
         <location filename="mainwindow.cpp" line="229"/>
         <source>Clear</source>
-        <translation>Очистити</translation>
+        <translation>Очистить</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="163"/>
         <source>New Contact</source>
-        <translation>Новий контакт</translation>
+        <translation>Новый контакт</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="163"/>
         <source>Do you want to add new contact: </source>
-        <translation>Ви хочете додати новий контакт:</translation>
+        <translation>Вы хотите добавить новый котакт:</translation>
     </message>
 </context>
 <context>
@@ -157,45 +157,45 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="options.ui" line="14"/>
         <source>Options</source>
-        <translation>Налаштування</translation>
+        <translation>Настройки</translation>
     </message>
     <message>
         <location filename="options.ui" line="29"/>
         <source>Set design</source>
-        <translation>Встановити дизайн</translation>
+        <translation>Установить дизайн</translation>
     </message>
     <message>
         <location filename="options.ui" line="55"/>
         <source>LogOut</source>
         <oldsource>Unlogin</oldsource>
-        <translation>Вийти з аккаунту</translation>
+        <translation>Выти из аккаунта</translation>
     </message>
     <message>
         <location filename="options.ui" line="71"/>
         <source>Close</source>
-        <translation>Закрити</translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <location filename="options.ui" line="87"/>
         <source>Set laguage</source>
-        <translation>Встановити мову</translation>
+        <translation>Установить язык</translation>
     </message>
     <message>
         <location filename="options.ui" line="101"/>
         <location filename="options.cpp" line="42"/>
         <source>Russian</source>
-        <translation>Російська</translation>
-    </message>
-    <message>
-        <location filename="options.cpp" line="46"/>
-        <source>Ukrainian</source>
-        <translation>Українська</translation>
+        <translation>Русский</translation>
     </message>
     <message>
         <location filename="options.ui" line="106"/>
         <location filename="options.cpp" line="50"/>
         <source>English</source>
-        <translation>Англійска</translation>
+        <translation>Английский</translation>
+    </message>
+    <message>
+        <location filename="options.cpp" line="46"/>
+        <source>Ukrainian</source>
+        <translation>Украинский</translation>
     </message>
 </context>
 <context>
@@ -203,12 +203,12 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="authwindow.ui" line="26"/>
         <source> Authorization</source>
-        <translation>Авторизація</translation>
+        <translation>Авторизация</translation>
     </message>
     <message>
         <location filename="authwindow.ui" line="53"/>
         <source>Login</source>
-        <translation>Логін</translation>
+        <translation>Логин</translation>
     </message>
     <message>
         <location filename="authwindow.ui" line="63"/>
@@ -218,37 +218,37 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="authwindow.ui" line="85"/>
         <source>Enter</source>
-        <translation>Увійти</translation>
+        <translation>Войти</translation>
     </message>
     <message>
         <location filename="authwindow.ui" line="95"/>
         <source>Close</source>
-        <translation>Закрити</translation>
+        <translation>Закрыть</translation>
     </message>
     <message>
         <location filename="authwindow.ui" line="105"/>
         <source>Register</source>
-        <translation>Реєстрація</translation>
+        <translation>Регистрация</translation>
     </message>
     <message>
         <location filename="authwindow.ui" line="121"/>
         <source>Welcome to Chat!</source>
-        <translation>Ласкаво просимо в чат!</translation>
+        <translation>Добро пожаловать в чат!</translation>
     </message>
     <message>
         <location filename="authwindow.cpp" line="25"/>
         <source>Successeful autorisation!</source>
-        <translation>Успішна авторизація!</translation>
+        <translation>Успешная авторизация!</translation>
     </message>
     <message>
         <location filename="authwindow.cpp" line="30"/>
         <source>Not Found!</source>
-        <translation>Не знайдено!</translation>
+        <translation>Не найдено!</translation>
     </message>
     <message>
         <location filename="authwindow.cpp" line="53"/>
         <source>Successeful registration!</source>
-        <translation>Успішна авторизація!</translation>
+        <translation>Успешная регистрация!</translation>
     </message>
 </context>
 </TS>

@@ -16,14 +16,18 @@ void Monitor::setSession(json::value& session_, QString& ServerURL_){
 }
 
 void Monitor::run(){
+    qDebug() << *(int*)QThread::currentThreadId();
     isBreak = false;
     while(true){
         json::value json = monitor();
         if(isBreak)
             break;
-        if(json != 0)
+        if(json != 0){
             emit task(json);
-        sleep(15);
+            sleep(2);
+        }
+        else
+            sleep(15);
     }
 }
 

@@ -39,18 +39,20 @@ void Options::on_UnloginButton_clicked()
 void Options::on_setLang_clicked()
 {
     QSettings settings;
-    if(ui->langList->currentText() == "Russian"){
-        translator.load("ru.qm");
-        settings.setValue("user_interface/language/file", "ru.qm");
+    if(ui->langList->currentText() == tr("Russian")){
+        translator.load("./langs/ru.qm");
+        settings.setValue("user_interface/language/file", "./langs/ru.qm");
     }
-    if(ui->langList->currentText() == "English" ||
-            ui->langList->currentText() == "Английский"){
+    if(ui->langList->currentText() == tr("Ukrainian")){
+        translator.load("./langs/ua.qm");
+        settings.setValue("user_interface/language/file", "./langs/ua.qm");
+    }
+    if(ui->langList->currentText() == tr("English")){
         QVariant var = settings.value("user_interface/language/file");
         if(!var.isNull()){
             translator.load(var.toString());
             qApp->removeTranslator(&translator);
             settings.setValue("user_interface/language/file", 0);
-            settings.setValue("user_interface/language/title", ui->langList->currentText());
             return;
         }
     }
@@ -65,7 +67,7 @@ void Options::changeEvent(QEvent *event){
 }
 
 void Options::loadLang(QString file){
-    translator.load(file);
+    qDebug() << translator.load(file);
 }
 
 QTranslator* Options::getLang(){
