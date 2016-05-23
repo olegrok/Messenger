@@ -15,34 +15,35 @@ authwindow::~authwindow()
 
 void authwindow::on_EnterButton_clicked()
 {
-    accRequest auth;
+    buttonMenu("authorisation");
+    /*accRequest auth;
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
 
     accReply reply = account->accountRequest(auth, "authorisation");
     switch(reply.statusCode)
     {
-        case 200: ui->StatusLine->setText(tr("Successeful autorisation!"));
+        case status_codes::OK:
             ui->Password->clear();
             ui->Login->clear();
+            ui->Login->setFocus();
             emit showMainWindow(auth.login);
             this->close(); break;
-        case 404: ui->StatusLine->setText(tr("Not Found!"));break;
+        case status_codes::NotFound: ui->StatusLine->setText(tr("Not Found!"));break;
         default: ui->StatusLine->setText(reply.content); break;
     }
-    //Profile::
+    //Profile::*/
 }
 
 void authwindow::on_CloseButton_clicked()
 {
     qApp->closeAllWindows();
-    //emit closeMainWindow();
-    //this->close();
 }
 
 void authwindow::on_RegisterButton_clicked()
 {
-    accRequest auth;
+    buttonMenu("registration");
+    /*accRequest auth;
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
 
@@ -50,12 +51,16 @@ void authwindow::on_RegisterButton_clicked()
 
     switch(reply.statusCode)
     {
-        case 200: ui->StatusLine->setText(tr("Successeful registration!"));
+        case status_codes::OK:
+        ui->Password->clear();
+        ui->Login->clear();
+        ui->Login->setFocus();
         emit showMainWindow(auth.login);
         this->close();
         break;
         default: ui->StatusLine->setText(reply.content); break;
     }
+    */
 
 }
 
@@ -73,3 +78,23 @@ void authwindow::changeEvent(QEvent *event){
     }
 }
 
+void authwindow::buttonMenu(QString property){
+    accRequest auth;
+    auth.login = ui->Login->text();
+    auth.password = ui->Password->text();
+
+    accReply reply = account->accountRequest(auth, property);
+
+    switch(reply.statusCode)
+    {
+        case status_codes::OK:
+        ui->Password->clear();
+        ui->Login->clear();
+        ui->Login->setFocus();
+        emit showMainWindow(auth.login);
+        this->close();
+        break;
+        case status_codes::NotFound: ui->StatusLine->setText(tr("Not Found!"));break;
+        default: ui->StatusLine->setText(reply.content); break;
+    }
+}

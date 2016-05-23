@@ -2,6 +2,16 @@
 
 #define SEND    70001
 #define RECIVE  70002
+enum class msg_status : int {
+    send    = 1,
+    recive  = 2
+};
+
+enum class contact_status : int {
+    unreplied = 0,
+    accepted  = 1,
+    denied    = 2
+};
 
 #define UNREPLIED 80000
 #define ACCEPTED  80001
@@ -207,12 +217,12 @@ QString DataBase::getMessages(QString login, QString strToFind){
                        time.toString("dd.MM HH:mm"))
                     + "</p></i>");
         if(query.value(rec.indexOf("status")).toInt() == SEND){
-            text.append("<p align=\"right\">"
-                        "<b>Me: </b><BR>");
+                text.append("<p align=\"right\">"
+                            "<b>Me: </b><BR>");
         }
         else{
-            text.append("<p align=\"left\">"
-                        "<b>" + login + ": </b><BR>");
+                text.append("<p align=\"left\">"
+                            "<b>" + login + ": </b><BR>");
         }
         text.append( query.value(rec.indexOf("text")).toString().toHtmlEscaped()
                      .replace("\n", "<BR>") + "</p>");

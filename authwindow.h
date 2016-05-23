@@ -38,6 +38,7 @@ private slots:
 private:
     Ui::authwindow *ui;
     Profile* account;
+    void buttonMenu(QString property);
 };
 
 #endif // AUTHWINDOW_H

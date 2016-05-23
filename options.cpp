@@ -40,12 +40,12 @@ void Options::on_setLang_clicked()
 {
     QSettings settings;
     if(ui->langList->currentText() == tr("Russian")){
-        translator.load("./langs/ru.qm");
-        settings.setValue("user_interface/language/file", "://langs/ru.qm");
+        translator.load(":/langs/ru");
+        settings.setValue("user_interface/language/file", ":/langs/ru");
     }
     if(ui->langList->currentText() == tr("Ukrainian")){
-        translator.load("./langs/ua.qm");
-        settings.setValue("user_interface/language/file", "://langs/ua.qm");
+        translator.load(":/langs/ua");
+        settings.setValue("user_interface/language/file", ":/langs/ua");
     }
     if(ui->langList->currentText() == tr("English")){
         QVariant var = settings.value("user_interface/language/file");
@@ -56,7 +56,8 @@ void Options::on_setLang_clicked()
             return;
         }
     }
-        qApp->installTranslator(&translator);
+
+    qApp->installTranslator(&translator);
     settings.setValue("user_interface/language/title", ui->langList->currentText());
 }
 
@@ -67,7 +68,7 @@ void Options::changeEvent(QEvent *event){
 }
 
 void Options::loadLang(QString file){
-    qDebug() << translator.load(file);
+    translator.load(file);
 }
 
 QTranslator* Options::getLang(){
