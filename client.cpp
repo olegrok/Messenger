@@ -4,8 +4,6 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-
-//QString ServerURL = "http://192.168.0.104:7777";
 Client::Client(QObject *parent) :
     QObject(parent)
 {}
@@ -48,9 +46,9 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
     json["request"]         = json::value( U(property.toStdString()) );
     if(property == "add_contact_request")
         json["login"]       = json::value( U(contact_login.toStdString()) );
-    json["session"]         = session;
     if(property == "del_contact")
         json["contact_uid"] = json::value( DataBase::getUid(contact_login) );
+    json["session"]         = session;
 
     FriendReply reply;
     makeRequest(methods::POST, json, reply.statusCode);
@@ -58,29 +56,7 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
         reply.login = QString::fromStdString(json.as_string());
         return reply;
     }
-/*    http_response response;
-      try
-        {
-//            http_client client(U(ServerURL.toStdString()));
-            client.request( web::http::methods::POST ,U("") , json )
-                .then( [&]( pplx::task<web::http::http_response> task )
-             {
-                 response = task.get();
-                 reply.statusCode = response.status_code();
-                 qDebug() << "status code: " << reply.statusCode;
-              }).wait();
-        }
-      catch (const std::exception &e)
-        {
-              qDebug() << "Error exception:" << e.what();
-              reply.statusCode = 600;
-              reply.login = e.what();
-              return reply;
-        }
 
-    json = response.extract_json().get();
-    std::cout << json << std::endl;
-*/
     if(property == "add_contact_request"){
         reply.login = contact_login;
         reply.uid = json.at(U("contact_uid")).as_integer();
@@ -94,35 +70,12 @@ bool Client::setLogin(QString login){
     return true;
 }
 
-json::value Client::getData(){
+json::value Client::getData(status_code& statusCode){
     json::value json;
     json["request"] = json::value( U("get_data") );
     json["session"] = session;
 
-    web::http::status_code statusCode;
     makeRequest(methods::POST, json, statusCode);
-    if(statusCode != status_codes::OK)
-        json = 0;
-/*    http_response response;
-    try
-        {
-//            http_client client(U(ServerURL.toStdString()));
-            client.request( web::http::methods::POST ,U("") , json )
-                .then( [&]( pplx::task<web::http::http_response> task )
-             {
-                 response = task.get();
-                 statusCode = response.status_code();
-                 qDebug() << "status code: " << statusCode;
-              }).wait();
-        }
-      catch (const std::exception &e)
-        {
-              qDebug() << "Error exception:" << e.what();
-        }
-
-    json = response.extract_json().get();
-    std::cout << json << std::endl;
-*/
     return json;
 }
 
@@ -134,24 +87,6 @@ bool Client::logout(){
     makeRequest(methods::POST, json, statusCode);
     if(statusCode != status_codes::OK)
         return false;
-/*
-    http_response response;
-    try
-        {
-//            http_client client(U(ServerURL.toStdString()));
-            client.request( web::http::methods::POST ,U("") , json )
-                .then( [&]( pplx::task<web::http::http_response> task )
-             {
-                 response = task.get();
-                 statusCode = response.status_code();
-                 qDebug() << "status code: " << statusCode;
-              }).wait();
-        }
-      catch (const std::exception &e)
-        {
-              return false;
-        }
-*/
     return true;
 }
 
@@ -164,22 +99,6 @@ web::http::status_code Client::sendMessage(msgCont msg){
 
     status_code statusCode;
     makeRequest(methods::POST, json, statusCode);
-/*    http_response response;
-    try
-        {
-            client.request( web::http::methods::POST ,U("") , json )
-                .then( [&]( pplx::task<web::http::http_response> task )
-             {
-                 response = task.get();
-                 statusCode = response.status_code();
-                 qDebug() << "sendMsg status code: " << statusCode;
-              }).wait();
-        }
-      catch (const std::exception &e){}
-
-    json = response.extract_json().get();
-    std::cout << json << std::endl;
-*/
     return statusCode;
 
 }

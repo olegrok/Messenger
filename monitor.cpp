@@ -70,7 +70,6 @@ json::value Monitor::monitor() {
         //NOTE may be bug.
         //Failed to read HTTP status line
         qDebug() << "Exception motior: " << e.what();
-        isBreak = true;
         return 0;
     }
 

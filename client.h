@@ -28,7 +28,7 @@ public:
     FriendReply friendRequest(QString contact_login, QString property);
     bool setLogin(QString login);
     bool logout();
-    json::value getData();
+    json::value getData(status_code &statusCode);
     status_code sendMessage(msgCont msg);
 
     QString ServerURL = U("http://localhost:7777");

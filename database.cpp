@@ -97,16 +97,21 @@ bool DataBase::addMessage(msgCont msg, QString status)
 
     QString str = strF.arg(msg.login)
             .arg(msg.text)
-            .arg(msg.time);
-    if(status == "send")
-        str = str.arg(SEND);
-    if(status == "recive")
-        str = str.arg(RECIVE);
+            .arg(msg.time)
+            .arg((status == "send") ? SEND : RECIVE);
 
     if (!query.exec(str)) {
         qDebug() << "Unable to make insert opeation" << query.lastError();
         return false;
     }
+
+    strF = "UPDATE contacts SET unreaded = %1 WHERE login = '%2';";
+    str = strF.arg(DataBase::hasUnreaded(msg.login) + 1)
+              .arg(msg.login);
+    if(!query.exec(str)){
+        qDebug() << "Unable to make update operation" <<  query.lastError();
+    }
+
     return true;
 }
 
@@ -196,14 +201,18 @@ QString DataBase::getMessages(QString login, QString strToFind){
     QString text;
     while(query.next()){
         QDateTime time = QDateTime::fromTime_t(query.value(rec.indexOf("time")).toInt(), Qt::LocalTime);
-        text.append("<i>" + time.toString("HH:mm") + "</i>");
+        text.append("<i><p align=\"center\">" +
+                    ((time.date() == QDate::currentDate()) ?
+                        ((time.secsTo(QDateTime::currentDateTime()) > 60) ? time.toString("HH:mm") : QString("")) :
+                       time.toString("dd.MM HH:mm"))
+                    + "</p></i>");
         if(query.value(rec.indexOf("status")).toInt() == SEND){
             text.append("<p align=\"right\">"
-                        "<b>Me: </b>");
+                        "<b>Me: </b><BR>");
         }
         else{
             text.append("<p align=\"left\">"
-                        "<b>" + login + ": </b>");
+                        "<b>" + login + ": </b><BR>");
         }
         text.append( query.value(rec.indexOf("text")).toString().toHtmlEscaped()
                      .replace("\n", "<BR>") + "</p>");
@@ -238,9 +247,30 @@ int DataBase::lastTime(){
         qDebug() << "Unable to find last time" <<  query.lastError();
         return 0;
     }
-    QSqlRecord rec = query.record();
+
     query.next();
-    int time = query.value(rec.indexOf("value")).toInt();
+    int time = query.value(query.record().indexOf("value")).toInt();
     qDebug() << "last time" << time;
     return time;
+}
+
+int DataBase::hasUnreaded(QString& login){
+    QString strF = "SELECT unreaded FROM contacts WHERE login = '%1';";
+    QString str = strF.arg(login);
+    QSqlQuery query;
+    if(!query.exec(str)){
+        qDebug() << "Unable to find contact" << login <<  query.lastError();
+        return -1;
+    }
+    query.next();
+    return query.value(query.record().indexOf("unreaded")).toInt();
+}
+
+void DataBase::makeViewed(QString& login){
+    QString strF = "UPDATE contacts SET unreaded = 0 WHERE login = '%1';";
+    QString str = strF.arg(login);
+    QSqlQuery query;
+    if(!query.exec(str)){
+        qDebug() << "Unable to make update operation" <<  query.lastError();
+    }
 }

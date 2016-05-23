@@ -35,11 +35,11 @@ accReply Profile::accountRequest(accRequest req, QString property){
         emit authorizationError();
         return reply;
     }
-    if(reply.statusCode != web::http::status_codes::OK)
+    if(reply.statusCode != http::status_codes::OK)
         return reply;
-    if(reply.statusCode == web::http::status_codes::OK && property == "registration")
+    if(reply.statusCode == http::status_codes::OK && property == "registration")
         reply = client.accountRequest(req, "authorisation");
-    if(reply.statusCode == web::http::status_codes::OK){
+    if(reply.statusCode == http::status_codes::OK){
         setSessionData(reply.session);
         setLogin(req.login);
 
@@ -48,7 +48,16 @@ accReply Profile::accountRequest(accRequest req, QString property){
         databaseInit();
         DataBase::addToLog("session", reply.uid, QString::number(reply.cookie),
                            QDateTime::currentDateTimeUtc().toTime_t());
-        auto contactArray = parser.contactListParser(client.getData());
+
+        json::value json = client.getData(reply.statusCode);
+        if(reply.statusCode !=  http::status_codes::OK){
+            if(json.is_string()){
+                reply.content = QString::fromStdString(json.as_string());
+            }
+            return reply;
+        }
+
+        auto contactArray = parser.contactListParser(json);
         DataBase::clearContacts();
         std::for_each(contactArray.begin(), contactArray.end(), [&](contInfo info){
             DataBase::addContact(info);
