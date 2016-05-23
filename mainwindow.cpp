@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+//=============FUNCTIONS=============
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -41,52 +43,56 @@ MainWindow::~MainWindow()
     qApp->closeAllWindows();
 }
 
-void MainWindow::on_SendButton_clicked()
-{
+void MainWindow::loadContacts(QString text){
+    QString current;
+    QListWidgetItem *curr_item = 0;
+    if(ui->ContactsList->currentRow() != -1){
+        current = ui->ContactsList->selectedItems().first()->text();
+        qDebug() << current;
+    }
+    ui->ContactsList->clear();
+    contacts.clear();
+    contacts = DataBase::getContacts(text);
+    std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem* item){
+        qDebug() << item->text();
+        if(DataBase::hasUnreaded(item->text())){
+            item->setIcon(QIcon("://images/bell.png"));
+        }
+        ui->ContactsList->addItem(item);
+        if(item->text() == current){
+            curr_item = item;
+            item->setIcon(QIcon());
+        }
+        ui->ContactsList->setCurrentItem(curr_item,
+                          QItemSelectionModel::Current | QItemSelectionModel::Select);
+    });
+}
+
+void MainWindow::styleInit(){
+    QSettings settings;
+    QVariant val = settings.value("user_interface/design");
+    qDebug() << val;
+    if(!val.isNull())
+        qApp->setStyle(val.toString());
+    val = settings.value("user_interface/language/file");
+    qDebug() << val;
+    if(!val.isNull()){
+        opt.loadLang(val.toString());
+        qDebug() << qApp->installTranslator(opt.getLang());
+    }
+}
+
+bool MainWindow::loadMsg(QString text){
     if(ui->ContactsList->currentRow() == -1)
-        return;
-    msgCont msg;
-    msg.login = ui->ContactsList->currentItem()->text();
-    msg.text = ui->MessageWindow->toPlainText();
-    msg.time = QDateTime::currentDateTimeUtc().toTime_t();
-    ui->MessageWindow->clear();
-    if(msg.text.isEmpty())
-        return;
-    auto statusCode = account.sendMessage(msg);
-    //ui->ChatWindow->appendPlainText(QDateTime::currentDateTime().toString("HH:mm") + " ");
-    if(statusCode == web::http::status_codes::OK){
-        loadMsg(ui->findMsgButton->text() == tr("Clear") ?
-                ui->lineFindMsg->text() : 0);
-        VerticalScroll.setValue(VerticalScroll.maximum());
-    }
-
-
+        return false;
+    int pos = VerticalScroll.value();
+    ui->ChatWindow->clear();
+    ui->ChatWindow->setHtml(DataBase::getMessages(ui->ContactsList->currentItem()->text(), text));
+    VerticalScroll.setValue(pos + 5 * VerticalScroll.singleStep());
+    return true;
 }
 
-void MainWindow::on_AddContactButton_clicked()
-{
-    addfriend.show();
-}
-
-void MainWindow::addContact(const contInfo info)
-{
-    if(info.uid != -1){
-        ui->ContactsList->addItem(info.login);
-        addfriend.close();
-    }
-}
-
-void MainWindow::on_DeleteContactButton_clicked()
-{
-    if(ui->ContactsList->currentRow() == -1)
-        return;
-    QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
-    FriendReply reply = account.friendRequest(item->text(), "del_contact");
-    if(reply.statusCode == web::http::status_codes::OK){
-        DataBase::deleteContact(item->text());
-        delete item;
-    }
-}
+//=============SLOTS=============
 
 void MainWindow::windowInit(QString _login)
 {
@@ -96,6 +102,20 @@ void MainWindow::windowInit(QString _login)
     if(ui->ChatWindow->verticalScrollBar() != &VerticalScroll)
         ui->ChatWindow->setVerticalScrollBar(&VerticalScroll);
     this->show();
+}
+
+void MainWindow::on_AddContactButton_clicked()
+{
+    addfriend.show();
+}
+
+//NOTE old function
+void MainWindow::addContact(const contInfo info)
+{
+    if(info.uid != -1){
+        ui->ContactsList->addItem(info.login);
+        addfriend.close();
+    }
 }
 
 void MainWindow::unlogin(QString status){
@@ -117,25 +137,6 @@ void MainWindow::unlogin(QString status){
     this->close();
 }
 
-void MainWindow::styleInit(){
-    QSettings settings;
-    QVariant val = settings.value("user_interface/design");
-    qDebug() << val;
-    if(!val.isNull())
-        qApp->setStyle(val.toString());
-    val = settings.value("user_interface/language/file");
-    qDebug() << val;
-    if(!val.isNull()){
-        opt.loadLang(val.toString());
-        qDebug() << qApp->installTranslator(opt.getLang());
-    }
-}
-
-void MainWindow::on_OptionButton_clicked()
-{
-    opt.show();
-}
-
 void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 {\
     if(item == NULL)
@@ -143,6 +144,7 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
     ui->ChatWindow->clear();
     ui->ChatWindow->setHtml(DataBase::getMessages(item->text()));
     VerticalScroll.setValue(VerticalScroll.maximum());
+    item->setIcon(QIcon());
 }
 
 void MainWindow::unloginProfile(){
@@ -158,20 +160,10 @@ void MainWindow::updateWindow(){
 int MainWindow::showNotification(QString login){
     QMessageBox* note =
         new QMessageBox(QMessageBox::Information, tr("New Contact"), tr("Do you want to add new contact: ") + login,
-                        QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
+                        QMessageBox::Yes|QMessageBox::No/*|QMessageBox::Cancel*/);
     int result = note->exec();
     delete note;
     return result;
-}
-
-void MainWindow::on_actionAbout_program_triggered()
-{
-    QDesktopServices::openUrl(QUrl("https://docs.google.com/presentation/d/1xNTiiM7eFB2DkNB128jgf6KS8MUhTnBzGdxkrtk1Rkc/"));
-}
-
-void MainWindow::on_actionAbout_QT_triggered()
-{
-    qApp->aboutQt();
 }
 
 void MainWindow::changeEvent(QEvent *event){
@@ -185,35 +177,46 @@ void MainWindow::findContact(const QString& text){
     loadContacts(text);
 }
 
-void MainWindow::loadContacts(QString text){
-    QString current;
-    QListWidgetItem *curr_item = 0;
-    if(ui->ContactsList->currentRow() != -1){
-        current = ui->ContactsList->selectedItems().first()->text();
-        qDebug() << current;
-    }
-    ui->ContactsList->clear();
-    contacts.clear();
-    contacts = DataBase::getContacts(text);
-    std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem* item){
-        qDebug() << item->text();
-        ui->ContactsList->addItem(item);
-        if(item->text() == current){
-            curr_item = item;
-        }
-        ui->ContactsList->setCurrentItem(curr_item,
-                          QItemSelectionModel::Current | QItemSelectionModel::Select);
-    });
+void MainWindow::changeMsgLineEvent(const QString &text){
 }
 
-bool MainWindow::loadMsg(QString text){
+//=============BUTTONS=============
+
+void MainWindow::on_SendButton_clicked()
+{
     if(ui->ContactsList->currentRow() == -1)
-        return false;
-    int pos = VerticalScroll.value();
-    ui->ChatWindow->clear();
-    ui->ChatWindow->setHtml(DataBase::getMessages(ui->ContactsList->currentItem()->text(), text));
-    VerticalScroll.setValue(pos + 5 * VerticalScroll.singleStep());
-    return true;
+        return;
+    msgCont msg;
+    msg.login = ui->ContactsList->currentItem()->text();
+    msg.text = ui->MessageWindow->toPlainText();
+    msg.time = QDateTime::currentDateTimeUtc().toTime_t();
+    ui->MessageWindow->clear();
+    if(msg.text.isEmpty())
+        return;
+    auto statusCode = account.sendMessage(msg);
+    //ui->ChatWindow->appendPlainText(QDateTime::currentDateTime().toString("HH:mm") + " ");
+    if(statusCode == web::http::status_codes::OK){
+        loadMsg(ui->findMsgButton->text() == tr("Clear") ?
+                ui->lineFindMsg->text() : 0);
+        VerticalScroll.setValue(VerticalScroll.maximum());
+    }
+}
+
+void MainWindow::on_DeleteContactButton_clicked()
+{
+    if(ui->ContactsList->currentRow() == -1)
+        return;
+    QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
+    FriendReply reply = account.friendRequest(item->text(), "del_contact");
+    if(reply.statusCode == web::http::status_codes::OK){
+        DataBase::deleteContact(item->text());
+        delete item;
+    }
+}
+
+void MainWindow::on_OptionButton_clicked()
+{
+    opt.show();
 }
 
 void MainWindow::on_findMsgButton_clicked()
@@ -231,5 +234,14 @@ void MainWindow::on_findMsgButton_clicked()
     }
 }
 
-void MainWindow::changeMsgLineEvent(const QString &text){
+//=============ACTIONS=============
+
+void MainWindow::on_actionAbout_program_triggered()
+{
+    QDesktopServices::openUrl(QUrl("https://docs.google.com/presentation/d/1xNTiiM7eFB2DkNB128jgf6KS8MUhTnBzGdxkrtk1Rkc/"));
+}
+
+void MainWindow::on_actionAbout_QT_triggered()
+{
+    qApp->aboutQt();
 }

@@ -254,7 +254,7 @@ int DataBase::lastTime(){
     return time;
 }
 
-int DataBase::hasUnreaded(QString& login){
+int DataBase::hasUnreaded(QString login){
     QString strF = "SELECT unreaded FROM contacts WHERE login = '%1';";
     QString str = strF.arg(login);
     QSqlQuery query;

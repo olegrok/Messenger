@@ -113,12 +113,12 @@ void Profile::closeSession(QString status){
 void Profile::distributor(QVector<msgCont> vector){
     std::for_each(vector.begin(), vector.end(), [&](msgCont elem){
         DataBase::addMessage(elem, "recive");
-        contInfo info;
-        info.uid = elem.senderUid;
-        info.login = elem.login;
-        DataBase::addContact(info);
-        emit updateWindow();
+//        contInfo info;
+//        info.uid = elem.senderUid;
+//        info.login = elem.login;
+//        DataBase::addContact(info);
     });
+    emit updateWindow();
 }
 
 Monitor* Profile::getMonitor_ptr(){

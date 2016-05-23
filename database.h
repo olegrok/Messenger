@@ -24,7 +24,7 @@ public:
     static bool clearContacts();
     static int getUid(QString);
     static int lastTime();
-    static int hasUnreaded(QString& login);
+    static int hasUnreaded(QString login);
     static void makeViewed(QString& login);
 };
 

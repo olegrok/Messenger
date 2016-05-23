@@ -45,3 +45,6 @@ FORMS    += mainwindow.ui \
 TRANSLATIONS    += ./langs/ru.ts \
                    ./langs/ua.qm
 
+RESOURCES += \
+    resources.qrc
+

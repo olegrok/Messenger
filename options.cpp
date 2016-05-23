@@ -41,11 +41,11 @@ void Options::on_setLang_clicked()
     QSettings settings;
     if(ui->langList->currentText() == tr("Russian")){
         translator.load("./langs/ru.qm");
-        settings.setValue("user_interface/language/file", "ru");
+        settings.setValue("user_interface/language/file", "://langs/ru.qm");
     }
     if(ui->langList->currentText() == tr("Ukrainian")){
         translator.load("./langs/ua.qm");
-        settings.setValue("user_interface/language/file", "ua");
+        settings.setValue("user_interface/language/file", "://langs/ua.qm");
     }
     if(ui->langList->currentText() == tr("English")){
         QVariant var = settings.value("user_interface/language/file");
