@@ -4,6 +4,11 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
+Monitor::Monitor():
+    client("http://localhost:7777"),
+    isBreak(false)
+{}
+
 void Monitor::setSession(int cookie, int uid, QString& ServerURL_){
     session["uid"] = json::value(uid);
     session["session_key"] = json::value(cookie);
@@ -40,34 +45,45 @@ json::value Monitor::monitor() {
     json["last_update"]  = DataBase::lastTime();
     std::cout << "message json: " << json << std::endl;
 
-    http_response response;
-    web::http::status_code statusCode;
-
+    http::status_code statusCode;
     try{
-//        http_client client(U(ServerURL.toStdString()));
-        client.request( web::http::methods::POST ,U("") , json )
-            .then( [&]( pplx::task<web::http::http_response> task )
-            {
+        client.request( http::methods::POST ,U("") , json, cts.get_token())
+        .then( [&]( pplx::task<http_response> task )
+        {
+            http_response response;
+            if(task.is_done()){
                 response = task.get();
                 statusCode = response.status_code();
-            })
-        .wait();
-        qDebug() << "sendMsg status code: " << statusCode \
-                 << (statusCode == web::http::status_codes::Unauthorized);
-        if(statusCode == web::http::status_codes::Unauthorized){
-            emit authorizationError("Unauthorized");
-            isBreak = true;
-            return -1;
-        }
-
-        if(statusCode != web::http::status_codes::OK)
-            return 0;
-       }
-     catch (const std::exception &e){
+            }
+            qDebug() << "Monitor status code: " << statusCode;
+            if(statusCode == status_codes::OK){
+                json = response.extract_json().get();
+            }
+            else{
+                json = response.extract_json().get();
+                std::cout << json << std::endl;
+                json = 0;
+            }
+        }, cts.get_token()).wait();
+    }
+    catch(const std::exception& e){
+        //NOTE may be bug.
+        //Failed to read HTTP status line
+        qDebug() << "Exception motior: " << e.what();
+        isBreak = true;
         return 0;
     }
-    json = response.extract_json().get();
-    std::cout << json << std::endl;
 
-    return json;
+     if(statusCode == status_codes::Unauthorized){
+         emit authorizationError("Unauthorized");
+         isBreak = true;
+         return 0;
+     }
+
+     return json;
+}
+
+void Monitor::cancel(){
+    isBreak = true;
+    cts.cancel();
 }

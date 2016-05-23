@@ -4,8 +4,10 @@
 #include <QString>
 #include <QDateTime>
 #include <cpprest/http_client.h>
+#include <cpprest/json.h>
 
 
+using namespace web;
 using namespace web::http;
 
 typedef
@@ -18,10 +20,11 @@ struct accountRequest
 typedef
 struct accountReply
 {
-    web::http::status_code statusCode;
-    QString replyContent;
+    status_code statusCode;
+    QString content;
     int cookie;
     int uid;
+    json::value session;
 } accReply;
 
 
@@ -61,7 +64,7 @@ struct contactInforamtion
 typedef
 struct FriendReply
 {
-    web::http::status_code statusCode;
+    status_code statusCode;
     QString login;
     int uid;
 } FriendReply;

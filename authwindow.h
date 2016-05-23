@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QLineEdit>
 #include <QDebug>
+#include <QInputDialog>
 #include "ui_authwindow.h"
 #include "profile.h"
 #include "structsforrequests.h"
@@ -33,6 +34,7 @@ private slots:
     void on_CloseButton_clicked();
     void on_RegisterButton_clicked();
     void changeEvent(QEvent* event);
+
 private:
     Ui::authwindow *ui;
     Profile* account;

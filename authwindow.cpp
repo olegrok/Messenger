@@ -28,7 +28,7 @@ void authwindow::on_EnterButton_clicked()
             emit showMainWindow(auth.login);
             this->close(); break;
         case 404: ui->StatusLine->setText(tr("Not Found!"));break;
-        default: ui->StatusLine->setText(reply.replyContent); break;
+        default: ui->StatusLine->setText(reply.content); break;
     }
     //Profile::
 }
@@ -54,7 +54,7 @@ void authwindow::on_RegisterButton_clicked()
         emit showMainWindow(auth.login);
         this->close();
         break;
-        default: ui->StatusLine->setText(reply.replyContent); break;
+        default: ui->StatusLine->setText(reply.content); break;
     }
 
 }
@@ -72,3 +72,4 @@ void authwindow::changeEvent(QEvent *event){
         ui->retranslateUi(this);
     }
 }
+

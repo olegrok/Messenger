@@ -15,8 +15,8 @@ Profile::Profile(QString _login) :
 
 Profile::~Profile(){
     try{
-//        monitor.terminate();
-        monitor.quit();
+        monitor.cancel();
+        monitor.wait();
     }
     catch(const std::exception &e){}
 }
@@ -25,9 +25,8 @@ void Profile::setLogin(const QString _login){
     login = _login;
 }
 
-void Profile::setSessionData(int _cookie, int _uid){
-    cookie = _cookie;
-    uid = _uid;
+void Profile::setSessionData(json::value session_){
+    session = session_;
 }
 
 accReply Profile::accountRequest(accRequest req, QString property){
@@ -41,20 +40,21 @@ accReply Profile::accountRequest(accRequest req, QString property){
     if(reply.statusCode == web::http::status_codes::OK && property == "registration")
         reply = client.accountRequest(req, "authorisation");
     if(reply.statusCode == web::http::status_codes::OK){
-        setSessionData(reply.cookie, reply.uid);
+        setSessionData(reply.session);
         setLogin(req.login);
 
         QCoreApplication::setOrganizationName(req.login);
 
         databaseInit();
-        DataBase::addToLog("session", uid, QString::number(cookie), QDateTime::currentDateTimeUtc().toTime_t());
+        DataBase::addToLog("session", reply.uid, QString::number(reply.cookie),
+                           QDateTime::currentDateTimeUtc().toTime_t());
         auto contactArray = parser.contactListParser(client.getData());
         DataBase::clearContacts();
         std::for_each(contactArray.begin(), contactArray.end(), [&](contInfo info){
             DataBase::addContact(info);
         });
 
-        monitor.setSession(cookie, uid, client.ServerURL);
+        monitor.setSession(session, client.ServerURL);
         monitor.start(QThread::HighPriority);
     }
 

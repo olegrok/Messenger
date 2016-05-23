@@ -18,24 +18,24 @@ Q_DECLARE_METATYPE(web::json::value)
 class Monitor : public QThread{
     Q_OBJECT
 public:
-    Monitor() {
-        isBreak = false;
-    }
+    Monitor();
     ~Monitor() {}
     void setSession(int cookie, int uid, QString& ServerURL_);
     void setSession(json::value& session_, QString& ServerURL_);
     void run() Q_DECL_OVERRIDE;
+private:
+    json::value monitor();
+    pplx::cancellation_token_source cts;
+    json::value session;
+    QString ServerURL;
+    http_client client;
+    std::atomic<bool> isBreak;
+
 signals:
     void task(web::json::value json);
     void authorizationError(QString status = 0);
 public slots:
-    void quit(){ isBreak = true; }
-private:
-    json::value session;
-    QString ServerURL;
-    std::atomic_bool isBreak;
-    json::value monitor();
-    http_client client = http_client(U("http://localhost:7777"));
+    void cancel();
 
 };
 

@@ -35,7 +35,7 @@ public:
     web::http::status_code sendMessage(msgCont msg);
     void databaseInit();
 
-    void setSessionData(int cookie = 0, int uid = 0);
+    void setSessionData(json::value json = 0);
     void setLogin(const QString);
     QString& getLogin();
     void closeSession(QString status = 0);
@@ -53,8 +53,7 @@ public slots:
 private:
     Monitor monitor;
     QString login;
-    int     cookie;
-    int     uid;
+    json::value session;
     Client client;
     JsonProtocol parser;
 };
