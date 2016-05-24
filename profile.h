@@ -35,6 +35,7 @@ public:
     web::http::status_code sendMessage(msgCont msg);
     void databaseInit();
 
+    void setUrl(QString Url);
     void setSessionData(json::value json = 0);
     void setLogin(const QString);
     QString& getLogin();

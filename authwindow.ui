@@ -115,6 +115,13 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QToolButton" name="httpEnterButton">
+      <property name="text">
+       <string>...</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QLabel" name="StatusLine">

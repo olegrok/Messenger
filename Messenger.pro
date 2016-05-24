@@ -24,7 +24,8 @@ SOURCES += main.cpp\
     profile.cpp \
     options.cpp \
     jsonprotocol.cpp \
-    monitor.cpp
+    monitor.cpp \
+    httpsettings.cpp
 
 HEADERS  += mainwindow.h \
     authwindow.h \
@@ -35,12 +36,14 @@ HEADERS  += mainwindow.h \
     profile.h \
     options.h \
     jsonprotocol.h \
-    monitor.h
+    monitor.h \
+    httpsettings.h
 
 FORMS    += mainwindow.ui \
     authwindow.ui \
     addfriend.ui \
-    options.ui
+    options.ui \
+    httpsettings.ui
 
 TRANSLATIONS    += ./langs/ru.ts \
                    ./langs/ua.qm

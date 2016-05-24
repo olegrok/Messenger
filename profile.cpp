@@ -124,3 +124,9 @@ void Profile::distributor(QVector<msgCont> vector){
 Monitor* Profile::getMonitor_ptr(){
     return &monitor;
 }
+
+void Profile::setUrl(QString URL){
+    if(URL.isEmpty())
+        return;
+    client.setUrl(URL);
+}

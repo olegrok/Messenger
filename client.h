@@ -30,6 +30,7 @@ public:
     bool logout();
     json::value getData(status_code &statusCode);
     status_code sendMessage(msgCont msg);
+    void setUrl(QString Url);
 
     QString ServerURL = U("http://localhost:7777");
 private:

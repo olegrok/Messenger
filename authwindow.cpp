@@ -16,23 +16,6 @@ authwindow::~authwindow()
 void authwindow::on_EnterButton_clicked()
 {
     buttonMenu("authorisation");
-    /*accRequest auth;
-    auth.login = ui->Login->text();
-    auth.password = ui->Password->text();
-
-    accReply reply = account->accountRequest(auth, "authorisation");
-    switch(reply.statusCode)
-    {
-        case status_codes::OK:
-            ui->Password->clear();
-            ui->Login->clear();
-            ui->Login->setFocus();
-            emit showMainWindow(auth.login);
-            this->close(); break;
-        case status_codes::NotFound: ui->StatusLine->setText(tr("Not Found!"));break;
-        default: ui->StatusLine->setText(reply.content); break;
-    }
-    //Profile::*/
 }
 
 void authwindow::on_CloseButton_clicked()
@@ -43,25 +26,6 @@ void authwindow::on_CloseButton_clicked()
 void authwindow::on_RegisterButton_clicked()
 {
     buttonMenu("registration");
-    /*accRequest auth;
-    auth.login = ui->Login->text();
-    auth.password = ui->Password->text();
-
-    accReply reply = account->accountRequest(auth, "registration");
-
-    switch(reply.statusCode)
-    {
-        case status_codes::OK:
-        ui->Password->clear();
-        ui->Login->clear();
-        ui->Login->setFocus();
-        emit showMainWindow(auth.login);
-        this->close();
-        break;
-        default: ui->StatusLine->setText(reply.content); break;
-    }
-    */
-
 }
 
 void authwindow::setUpProfile(Profile* acc){
@@ -82,12 +46,13 @@ void authwindow::buttonMenu(QString property){
     accRequest auth;
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();
-
+    account->setUrl(Url);
     accReply reply = account->accountRequest(auth, property);
 
     switch(reply.statusCode)
     {
         case status_codes::OK:
+        case status_codes::Created:
         ui->Password->clear();
         ui->Login->clear();
         ui->Login->setFocus();
@@ -97,4 +62,14 @@ void authwindow::buttonMenu(QString property){
         case status_codes::NotFound: ui->StatusLine->setText(tr("Not Found!"));break;
         default: ui->StatusLine->setText(reply.content); break;
     }
+}
+
+void authwindow::on_httpEnterButton_clicked()
+{
+    httpSettings win(Url);
+    win.setModal(true);
+    qDebug() << win.exec();
+    qDebug() << win.getURL();
+    if(win.result())
+        Url = win.getURL();
 }

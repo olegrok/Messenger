@@ -136,3 +136,7 @@ void Client::makeRequest(method mtd, json::value& json, status_code & stcode){
     }
 }
 
+void Client::setUrl(QString Url){
+    ServerURL = Url;
+    client = http_client(U(Url.toStdString()));
+}
