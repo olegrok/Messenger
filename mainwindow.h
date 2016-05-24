@@ -3,24 +3,22 @@
 
 #include <QMainWindow>
 #include <QListWidgetItem>
+#include <QString>
+#include <QDebug>
+#include <QDesktopWidget>
+#include <QDateTime>
+#include <QVector>
+#include <QMessageBox>
+#include <QScrollBar>
+#include <QDesktopServices>
+#include <QEvent>
 #include "profile.h"
 #include "authwindow.h"
 #include "addfriend.h"
 #include "options.h"
-#include <QString>
-#include <QDebug>
-#include <QDesktopWidget>
-#include "database.h"
-#include <QDateTime>
-#include <QVector>
-#include <QMessageBox>
 #include "structsforrequests.h"
-#include <QScrollBar>
-#include <QAbstractSlider>
-#include <QDesktopServices>
+#include "database.h"
 #include "monitor.h"
-#include <QEvent>
-
 
 namespace Ui {
 class MainWindow;
@@ -54,6 +52,8 @@ private slots:
     void findContact(const QString &);
     void changeMsgLineEvent(const QString&);
     void on_findMsgButton_clicked();
+
+    void on_sortContacts_clicked();
 
 private:
     void styleInit();

@@ -211,10 +211,12 @@ QString DataBase::getMessages(QString login, QString strToFind){
     QString text;
     while(query.next()){
         QDateTime time = QDateTime::fromTime_t(query.value(rec.indexOf("time")).toInt(), Qt::LocalTime);
+        qDebug() << time.secsTo(QDateTime::currentDateTime()) <<
+                    time.time() << QDateTime::currentDateTime().time();
         text.append("<i><p align=\"center\">" +
                     ((time.date() == QDate::currentDate()) ?
                         ((time.secsTo(QDateTime::currentDateTime()) > 60) ? time.toString("HH:mm") : QString("")) :
-                       time.toString("dd.MM HH:mm"))
+                       time.toString("dd.MM HH:mm"))    //NOTE
                     + "</p></i>");
         if(query.value(rec.indexOf("status")).toInt() == SEND){
                 text.append("<p align=\"right\">"

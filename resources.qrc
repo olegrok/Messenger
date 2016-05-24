@@ -5,5 +5,10 @@
         <file>langs/ru.ts</file>
         <file>langs/ua.qm</file>
         <file>langs/ua.ts</file>
+        <file>images/down.png</file>
+        <file>images/up.png</file>
+        <file>images/en.png</file>
+        <file>images/ru.png</file>
+        <file>images/ua.png</file>
     </qresource>
 </RCC>

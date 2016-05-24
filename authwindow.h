@@ -33,7 +33,7 @@ private slots:
     void on_CloseButton_clicked();
     void on_RegisterButton_clicked();
     void changeEvent(QEvent* event);
-    void on_httpEnterButton_clicked();
+    void on_connectionSettingsButton_clicked();
 
 private:
     Ui::authwindow *ui;

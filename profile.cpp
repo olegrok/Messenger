@@ -86,11 +86,11 @@ void Profile::monitorHandler(json::value json){
 
 web::http::status_code Profile::sendMessage(msgCont msg){
     auto statusCode = client.sendMessage(msg);
-    if(statusCode == web::http::status_codes::Unauthorized){
+    if(statusCode == status_codes::Unauthorized){
         emit authorizationError();
         return statusCode;
     }
-    if(statusCode == web::http::status_codes::OK)
+    if(statusCode == status_codes::OK)
         DataBase::addMessage(msg, "send");
     return statusCode;
 }

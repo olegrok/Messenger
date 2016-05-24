@@ -43,6 +43,7 @@ MainWindow::~MainWindow()
     qApp->closeAllWindows();
 }
 
+//NOTE does it show bell?
 void MainWindow::loadContacts(QString text){
     QString current;
     QListWidgetItem *curr_item = 0;
@@ -54,18 +55,22 @@ void MainWindow::loadContacts(QString text){
     contacts.clear();
     contacts = DataBase::getContacts(text);
     std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem* item){
-        qDebug() << item->text();
+        qDebug() << item->text() << "has unreaded:" << DataBase::hasUnreaded(item->text());
         if(DataBase::hasUnreaded(item->text())){
-            item->setIcon(QIcon("://images/bell.png"));
+            item->setIcon(QIcon(":/images/bell.png"));
         }
         ui->ContactsList->addItem(item);
         if(item->text() == current){
             curr_item = item;
             item->setIcon(QIcon());
         }
-        ui->ContactsList->setCurrentItem(curr_item,
+        if(curr_item)
+            ui->ContactsList->setCurrentItem(curr_item,
                           QItemSelectionModel::Current | QItemSelectionModel::Select);
     });
+    ui->ContactsList->sortItems(Qt::AscendingOrder);
+    ui->sortContacts->setIcon(QIcon(":/images/up.png"));
+    ui->sortContacts->setWindowTitle("UP");
 }
 
 void MainWindow::styleInit(){
@@ -96,6 +101,9 @@ bool MainWindow::loadMsg(QString text){
 
 void MainWindow::windowInit(QString _login)
 {
+    ui->sortContacts->setIcon(QIcon(":/images/up.png"));
+    ui->sortContacts->setWindowTitle("UP");
+    qDebug() << ui->sortContacts->windowTitle();
     login = _login;
     loadContacts();
     styleInit();
@@ -184,6 +192,7 @@ void MainWindow::changeMsgLineEvent(const QString &text){
 
 void MainWindow::on_SendButton_clicked()
 {
+    qDebug() << ui->ContactsList->currentRow();
     if(ui->ContactsList->currentRow() == -1)
         return;
     msgCont msg;
@@ -194,7 +203,6 @@ void MainWindow::on_SendButton_clicked()
     if(msg.text.isEmpty())
         return;
     auto statusCode = account.sendMessage(msg);
-    //ui->ChatWindow->appendPlainText(QDateTime::currentDateTime().toString("HH:mm") + " ");
     if(statusCode == web::http::status_codes::OK){
         loadMsg(ui->findMsgButton->text() == tr("Clear") ?
                 ui->lineFindMsg->text() : 0);
@@ -234,6 +242,21 @@ void MainWindow::on_findMsgButton_clicked()
     }
 }
 
+void MainWindow::on_sortContacts_clicked()
+{
+    if(ui->sortContacts->windowTitle() == "UP"){
+        ui->sortContacts->setIcon(QIcon(":/images/down.png"));
+        ui->sortContacts->setWindowTitle("DOWN");
+        ui->ContactsList->sortItems(Qt::DescendingOrder);
+    }
+    else{
+        ui->sortContacts->setIcon(QIcon(":/images/up.png"));
+        ui->sortContacts->setWindowTitle("UP");
+        ui->ContactsList->sortItems(Qt::AscendingOrder);
+    }
+
+}
+
 //=============ACTIONS=============
 
 void MainWindow::on_actionAbout_program_triggered()
@@ -245,3 +268,5 @@ void MainWindow::on_actionAbout_QT_triggered()
 {
     qApp->aboutQt();
 }
+
+

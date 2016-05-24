@@ -64,7 +64,7 @@ void authwindow::buttonMenu(QString property){
     }
 }
 
-void authwindow::on_httpEnterButton_clicked()
+void authwindow::on_connectionSettingsButton_clicked()
 {
     httpSettings win(Url);
     win.setModal(true);

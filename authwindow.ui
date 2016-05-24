@@ -116,7 +116,13 @@
      </widget>
     </item>
     <item>
-     <widget class="QToolButton" name="httpEnterButton">
+     <widget class="QToolButton" name="connectionSettingsButton">
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="toolTip">
+       <string>Server URL settings</string>
+      </property>
       <property name="text">
        <string>...</string>
       </property>
