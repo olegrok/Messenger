@@ -46,7 +46,7 @@ FORMS    += mainwindow.ui \
     httpsettings.ui
 
 TRANSLATIONS    += ./langs/ru.ts \
-                   ./langs/ua.qm
+                   ./langs/ua.ts
 
 RESOURCES += \
     resources.qrc

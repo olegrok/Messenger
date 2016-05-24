@@ -17,6 +17,12 @@ enum class contact_status : int {
 #define ACCEPTED  80001
 #define DENIED    80002
 
+int timesDiff(QDateTime& first, QDateTime& second) {
+    return qAbs(first.time().hour() * 60 + first.time().minute()
+            -second.time().hour() * 60 - second.time().minute());
+}
+
+
 DataBase::DataBase(QString login){
     createConnection(login);
     createTable();
@@ -207,27 +213,38 @@ QString DataBase::getMessages(QString login, QString strToFind){
         qDebug() << "Unable to make select opeation" << query.lastError();
     }
 
+    QString myLogin = "Me";
+
     QSqlRecord rec = query.record();
     QString text;
+    QDateTime prev;
+    int lastSender = -1;
     while(query.next()){
         QDateTime time = QDateTime::fromTime_t(query.value(rec.indexOf("time")).toInt(), Qt::LocalTime);
-        qDebug() << time.secsTo(QDateTime::currentDateTime()) <<
-                    time.time() << QDateTime::currentDateTime().time();
+        int diff = timesDiff(prev, time);
+        qDebug() << diff;
         text.append("<i><p align=\"center\">" +
-                    ((time.date() == QDate::currentDate()) ?
-                        ((time.secsTo(QDateTime::currentDateTime()) > 60) ? time.toString("HH:mm") : QString("")) :
-                       time.toString("dd.MM HH:mm"))    //NOTE
+                    ((time.date() != QDate::currentDate() && diff) ?
+                         time.date().toString("dd.MM ") : QString())
+                    + (diff ? time.time().toString("HH:mm") : QString())
                     + "</p></i>");
         if(query.value(rec.indexOf("status")).toInt() == SEND){
-                text.append("<p align=\"right\">"
-                            "<b>Me: </b><BR>");
+                text.append("<p align=\"right\">" +
+                            (lastSender != 0 || diff ?
+                            ("<b>" + myLogin + ": </b><BR>") : QString()));
+                lastSender = 0;
         }
+
         else{
-                text.append("<p align=\"left\">"
-                            "<b>" + login + ": </b><BR>");
+            int senderUid = DataBase::getUid(login);
+                text.append("<p align=\"left\">" +
+                            (lastSender != senderUid || diff ?
+                            ("<b>" + login + ": </b><BR>") : QString()));
+                lastSender = senderUid;
         }
         text.append( query.value(rec.indexOf("text")).toString().toHtmlEscaped()
                      .replace("\n", "<BR>") + "</p>");
+        prev = time;
     }
     qDebug() << text;
     return text;

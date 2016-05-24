@@ -28,4 +28,6 @@ public:
     static void makeViewed(QString& login);
 };
 
+
+
 #endif // DATABASE_H

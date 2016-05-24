@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QTranslator>
+#include <QStyle>
 
 namespace Ui {
 class Options;
