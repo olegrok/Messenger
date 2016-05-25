@@ -2,16 +2,6 @@
 
 #define SEND    70001
 #define RECIVE  70002
-enum class msg_status : int {
-    send    = 1,
-    recive  = 2
-};
-
-enum class contact_status : int {
-    unreplied = 0,
-    accepted  = 1,
-    denied    = 2
-};
 
 #define UNREPLIED 80000
 #define ACCEPTED  80001
@@ -104,7 +94,7 @@ bool DataBase::addToLog(QString type, int value, QString comment, int time){
     return true;
 }
 
-bool DataBase::addMessage(msgCont msg, QString status)
+bool DataBase::addMessage(msgCont msg, msg_status status)
 {
     QSqlQuery query;
     QString strF =
@@ -114,7 +104,7 @@ bool DataBase::addMessage(msgCont msg, QString status)
     QString str = strF.arg(msg.login)
             .arg(msg.text)
             .arg(msg.time)
-            .arg((status == "send") ? SEND : RECIVE);
+            .arg((status == msg_status::sended) ? SEND : RECIVE);
 
     if (!query.exec(str)) {
         qDebug() << "Unable to make insert opeation" << query.lastError();
@@ -262,9 +252,8 @@ int DataBase::getUid(QString login){
     if(!query.exec(str)){
         qDebug() << "Unable to find contact" << login <<  query.lastError();
     }
-    QSqlRecord rec = query.record();
     query.next();
-    int uid = query.value(rec.indexOf("id")).toInt();
+    int uid = query.value(query.record().indexOf("id")).toInt();
     qDebug() << uid;
     return uid;
 }

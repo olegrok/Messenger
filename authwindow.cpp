@@ -15,7 +15,7 @@ authwindow::~authwindow()
 
 void authwindow::on_EnterButton_clicked()
 {
-    buttonMenu("authorisation");
+    buttonMenu(account_action::authorization);
 }
 
 void authwindow::on_CloseButton_clicked()
@@ -25,7 +25,7 @@ void authwindow::on_CloseButton_clicked()
 
 void authwindow::on_RegisterButton_clicked()
 {
-    buttonMenu("registration");
+    buttonMenu(account_action::registration);
 }
 
 void authwindow::setUpProfile(Profile* acc){
@@ -42,7 +42,7 @@ void authwindow::changeEvent(QEvent *event){
     }
 }
 
-void authwindow::buttonMenu(QString property){
+void authwindow::buttonMenu(account_action property){
     accRequest auth;
     auth.login = ui->Login->text();
     auth.password = ui->Password->text();

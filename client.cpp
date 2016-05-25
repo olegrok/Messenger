@@ -1,9 +1,5 @@
 #include "client.h"
 
-using namespace web;
-using namespace web::http;
-using namespace web::http::client;
-
 Client::Client(QObject *parent) :
     QObject(parent)
 {}
@@ -11,10 +7,14 @@ Client::Client(QObject *parent) :
 Client::~Client()
 {}
 
-accReply Client::accountRequest(accRequest req, QString property)
+accReply Client::accountRequest(accRequest req, account_action property)
 {
     json::value json;
-    json["request"]      = json::value( U(property.toStdString()) );
+    switch(property){
+        case account_action::authorization: json["request"] = json::value(U("authorisation")); break;
+        case account_action::registration:  json["request"] = json::value(U("registration")); break;
+    }
+
     json["login"]        = json::value( U((req.login).toStdString()) );
     json["password"]     = json::value( U((req.password).toStdString()) );
     accReply reply;
@@ -29,9 +29,8 @@ accReply Client::accountRequest(accRequest req, QString property)
     }
 
     setLogin(req.login);
-    if(property == "authorisation"){
+    if(property == account_action::authorization){
         session = json.at("session");
-        std::cout << "session json:" << session << std::endl;
         reply.session = session;
         reply.uid = json.at( U("session")).at(U("uid")).as_integer();
         reply.cookie = json.at(U("session")).at(U("session_key")).as_integer();
@@ -40,14 +39,20 @@ accReply Client::accountRequest(accRequest req, QString property)
     return reply;
 }
 
-FriendReply Client::friendRequest(QString contact_login, QString property)
+FriendReply Client::friendRequest(QString contact_login, contact_action property)
 {
     json::value json;
-    json["request"]         = json::value( U(property.toStdString()) );
-    if(property == "add_contact_request")
-        json["login"]       = json::value( U(contact_login.toStdString()) );
-    if(property == "del_contact")
-        json["contact_uid"] = json::value( DataBase::getUid(contact_login) );
+    switch(property){
+        case contact_action::add :
+            json["request"] = json::value( U("add_contact_request") );
+            json["login"]   = json::value( U(contact_login.toStdString()) );
+                break;
+        case contact_action::del :
+            json["request"] = json::value( U("del_contact") );
+            json["login"]   = json::value( DataBase::getUid(contact_login) );
+                break;
+    }
+
     json["session"]         = session;
 
     FriendReply reply;
@@ -57,7 +62,7 @@ FriendReply Client::friendRequest(QString contact_login, QString property)
         return reply;
     }
 
-    if(property == "add_contact_request"){
+    if(property == contact_action::add){
         reply.login = contact_login;
         reply.uid = json.at(U("contact_uid")).as_integer();
      }
@@ -90,7 +95,7 @@ bool Client::logout(){
     return true;
 }
 
-web::http::status_code Client::sendMessage(msgCont msg){
+http::status_code Client::sendMessage(msgCont msg){
     json::value json;
     json["request"]      = json::value( U("send_msg") );
     json["to_uid"]       = json::value( DataBase::getUid(msg.login));

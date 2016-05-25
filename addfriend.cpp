@@ -16,7 +16,7 @@ AddFriend::~AddFriend()
 void AddFriend::on_AddButton_clicked()
 {
     //contInfo info = CheckFriend(ui->FriendLogin->text());
-    FriendReply reply = account->friendRequest((ui->FriendLogin->text()), "add_contact_request");
+    FriendReply reply = account->friendRequest((ui->FriendLogin->text()), contact_action::add);
     contInfo info;
 
     if(reply.statusCode == 200)
@@ -44,12 +44,6 @@ void AddFriend::on_AddButton_clicked()
     }
     ui->FriendLogin->clear();
     emit sendContact(info);
- /*   if(info.uid != -1)
-    {
-        ui->FriendLogin->clear();
-        emit sendContact(info);
-    }
-*/
 }
 
 void AddFriend::setUpProfile(Profile* acc){

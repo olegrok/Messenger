@@ -30,8 +30,8 @@ class Profile : public QObject
 public:
     explicit Profile(QString _login = 0);
     ~Profile();
-    FriendReply friendRequest(QString contact_login, QString property);
-    accReply accountRequest(accRequest req, QString property);
+    FriendReply friendRequest(QString contact_login, contact_action property);
+    accReply accountRequest(accRequest req, account_action property);
     web::http::status_code sendMessage(msgCont msg);
     void databaseInit();
 

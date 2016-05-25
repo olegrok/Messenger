@@ -20,8 +20,6 @@ class JsonProtocol : public QObject
 public:
     explicit JsonProtocol();
     ~JsonProtocol();
-
-//namespace JsonProtocol{
     QVector <contInfo> contactListParser(json::value json);
    void eventsParser(json::value json);
 signals:

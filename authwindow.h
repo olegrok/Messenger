@@ -38,7 +38,7 @@ private slots:
 private:
     Ui::authwindow *ui;
     Profile* account;
-    void buttonMenu(QString property);
+    void buttonMenu(account_action property);
     QString Url = 0;
 };
 

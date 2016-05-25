@@ -43,7 +43,6 @@ MainWindow::~MainWindow()
     qApp->closeAllWindows();
 }
 
-//NOTE does it show bell?
 void MainWindow::loadContacts(QString text){
     QString current;
     QListWidgetItem *curr_item = 0;
@@ -54,20 +53,20 @@ void MainWindow::loadContacts(QString text){
     ui->ContactsList->clear();
     contacts.clear();
     contacts = DataBase::getContacts(text);
-    std::for_each(contacts.begin(), contacts.end(), [&](QListWidgetItem* item){
-        qDebug() << item->text() << "has unreaded:" << DataBase::hasUnreaded(item->text());
-        if(DataBase::hasUnreaded(item->text())){
-            item->setIcon(QIcon(":/images/bell.png"));
+    for(auto it : contacts){
+        qDebug() << it->text() << "has unreaded:" << DataBase::hasUnreaded(it->text());
+        if(DataBase::hasUnreaded(it->text())){
+            it->setIcon(QIcon(":/images/bell.png"));
         }
-        ui->ContactsList->addItem(item);
-        if(item->text() == current){
-            curr_item = item;
-            item->setIcon(QIcon());
+        ui->ContactsList->addItem(it);
+        if(it->text() == current){
+            curr_item = it;
+            it->setIcon(QIcon());
         }
         if(curr_item)
             ui->ContactsList->setCurrentItem(curr_item,
                           QItemSelectionModel::Current | QItemSelectionModel::Select);
-    });
+    }
     ui->ContactsList->sortItems(Qt::AscendingOrder);
     ui->sortContacts->setIcon(QIcon(":/images/up.png"));
     ui->sortContacts->setWindowTitle("UP");
@@ -141,7 +140,6 @@ void MainWindow::unlogin(QString status){
     addfriend.close();
     opt.close();
     auth.show();
-    //auth.ui->Login->setEnabled(true);
     this->close();
 }
 
@@ -215,7 +213,7 @@ void MainWindow::on_DeleteContactButton_clicked()
     if(ui->ContactsList->currentRow() == -1)
         return;
     QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
-    FriendReply reply = account.friendRequest(item->text(), "del_contact");
+    FriendReply reply = account.friendRequest(item->text(), contact_action::del);
     if(reply.statusCode == web::http::status_codes::OK){
         DataBase::deleteContact(item->text());
         delete item;

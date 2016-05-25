@@ -12,8 +12,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = Messenger
 TEMPLATE = app
 LIBS += -lcpprest -lboost_system -rdynamic
-#LIBS += -L/usr/local/lib/x86_64-linux-gnu -lcpprest
-#LIBS += -L/home/oleg/Рабочий\ стол/Track/Project/Casablanca/casablanca/Release/build.release/Binaries -lcpprest
+#CONFIG += -I..Boost/boost_1_61_0 -lboost_system
+#CONFIG += -I../Casablanca/casablanca -lcpprest
 
 SOURCES += main.cpp\
         mainwindow.cpp \

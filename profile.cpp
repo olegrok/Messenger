@@ -29,16 +29,16 @@ void Profile::setSessionData(json::value session_){
     session = session_;
 }
 
-accReply Profile::accountRequest(accRequest req, QString property){
+accReply Profile::accountRequest(accRequest req, account_action property){
     accReply reply = client.accountRequest(req, property);
-    if(reply.statusCode == web::http::status_codes::Unauthorized){
+    if(reply.statusCode == http::status_codes::Unauthorized){
         emit authorizationError();
         return reply;
     }
     if(reply.statusCode != http::status_codes::OK)
         return reply;
-    if(reply.statusCode == http::status_codes::OK && property == "registration")
-        reply = client.accountRequest(req, "authorisation");
+    if(reply.statusCode == http::status_codes::OK && property == account_action::registration)
+        reply = client.accountRequest(req, account_action::authorization);
     if(reply.statusCode == http::status_codes::OK){
         setSessionData(reply.session);
         setLogin(req.login);
@@ -46,7 +46,7 @@ accReply Profile::accountRequest(accRequest req, QString property){
         QCoreApplication::setOrganizationName(req.login);
 
         databaseInit();
-        DataBase::addToLog("session", reply.uid, QString::number(reply.cookie),
+        DataBase::addToLog("session", reply.statusCode, QString::fromStdString(reply.session.serialize()),
                            QDateTime::currentDateTimeUtc().toTime_t());
 
         json::value json = client.getData(reply.statusCode);
@@ -71,9 +71,9 @@ accReply Profile::accountRequest(accRequest req, QString property){
     return reply;
 }
 
-FriendReply Profile::friendRequest(QString contact_login, QString property){
+FriendReply Profile::friendRequest(QString contact_login, contact_action property){
     FriendReply reply = client.friendRequest(contact_login, property);
-    if(reply.statusCode == web::http::status_codes::Unauthorized){
+    if(reply.statusCode == http::status_codes::Unauthorized){
         emit authorizationError();
     }
     return reply;
@@ -84,14 +84,14 @@ void Profile::monitorHandler(json::value json){
     parser.eventsParser(json);
 }
 
-web::http::status_code Profile::sendMessage(msgCont msg){
+http::status_code Profile::sendMessage(msgCont msg){
     auto statusCode = client.sendMessage(msg);
     if(statusCode == status_codes::Unauthorized){
         emit authorizationError();
         return statusCode;
     }
     if(statusCode == status_codes::OK)
-        DataBase::addMessage(msg, "send");
+        DataBase::addMessage(msg, msg_status::sended);
     return statusCode;
 }
 
@@ -111,13 +111,9 @@ void Profile::closeSession(QString status){
 }
 
 void Profile::distributor(QVector<msgCont> vector){
-    std::for_each(vector.begin(), vector.end(), [&](msgCont elem){
-        DataBase::addMessage(elem, "recive");
-//        contInfo info;
-//        info.uid = elem.senderUid;
-//        info.login = elem.login;
-//        DataBase::addContact(info);
-    });
+    for(auto it : vector){
+        DataBase::addMessage(it, msg_status::recived);
+    }
     emit updateWindow();
 }
 
