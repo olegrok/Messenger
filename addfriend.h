@@ -20,7 +20,7 @@ public:
     void setUpProfile(Profile* acc);
     void setStatus(QString);
 signals:
-    void sendContact(contInfo);
+    void sendContact();
 private slots:
     void on_AddButton_clicked();
     void changeEvent(QEvent* event);

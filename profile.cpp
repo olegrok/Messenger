@@ -79,6 +79,11 @@ FriendReply Profile::friendRequest(QString contact_login, contact_action propert
     return reply;
 }
 
+status_code Profile::friendReply(QString contact_login, contact_reply property)
+{
+    return client.friendReply(DataBase::getUid(contact_login), property);
+}
+
 void Profile::monitorHandler(json::value json){
     qDebug() << *(int*)QThread::currentThreadId();
     parser.eventsParser(json);
@@ -107,7 +112,7 @@ void Profile::databaseInit(){
 void Profile::closeSession(QString status){
     client.logout();
     DataBase::close();
-    emit unlogin(status);
+    emit logout(status);
 }
 
 void Profile::distributor(QVector<msgCont> vector){

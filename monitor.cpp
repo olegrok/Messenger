@@ -48,13 +48,9 @@ json::value Monitor::monitor() {
     http::status_code statusCode;
     try{
         client.request( http::methods::POST ,U("") , json, cts.get_token())
-        .then( [&]( pplx::task<http_response> task )
+        .then( [&]( http_response response )
         {
-            http_response response;
-            if(task.is_done()){
-                response = task.get();
-                statusCode = response.status_code();
-            }
+            statusCode = response.status_code();
             qDebug() << "Monitor status code: " << statusCode;
             if(statusCode == status_codes::OK){
                 json = response.extract_json().get();

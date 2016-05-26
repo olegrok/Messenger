@@ -3,10 +3,6 @@
 #define SEND    70001
 #define RECIVE  70002
 
-#define UNREPLIED 80000
-#define ACCEPTED  80001
-#define DENIED    80002
-
 int timesDiff(QDateTime& first, QDateTime& second) {
     return qAbs(first.time().hour() * 60 + first.time().minute()
             -second.time().hour() * 60 - second.time().minute());
@@ -128,11 +124,12 @@ bool DataBase::addContact(contInfo info)
     QString strF =
           "INSERT INTO  contacts (id, login, last_msg_id, unreaded, status) "
           "VALUES(%1, '%2', '%3', %4, %5);";
-    QString str = strF.arg(info.uid)
+    QString str = strF
+              .arg(info.uid)
               .arg(info.login)
               .arg(info.lastMsgId)
               .arg(info.unreaded)
-              .arg(info.status + UNREPLIED);
+              .arg(info.status);
     if (!query.exec(str)) {
         qDebug() << "Unable to make insert opeation" << query.lastError();
         return false;
@@ -156,9 +153,15 @@ QVector<QListWidgetItem*> DataBase::getContacts(QString login)
 
         item->setText(query.value(rec.indexOf("login")).toString());
         int status = query.value(rec.indexOf("status")).toInt();
+        QFont font;
+        font.setBold(true);
         switch(status){
-            case UNREPLIED: item->setBackgroundColor(Qt::gray); break;
-            case DENIED: item->setBackgroundColor(Qt::red); break;
+            case static_cast<int>(contact_status::requested_to):
+                item->setFont(font);
+            case static_cast<int>(contact_status::requested_from):
+                item->setBackgroundColor(Qt::gray); break;
+            case static_cast<int>(contact_status::denied):
+                item->setBackgroundColor(Qt::red); break;
         }
         contList.push_back(item);
     }
@@ -212,7 +215,6 @@ QString DataBase::getMessages(QString login, QString strToFind){
     while(query.next()){
         QDateTime time = QDateTime::fromTime_t(query.value(rec.indexOf("time")).toInt(), Qt::LocalTime);
         int diff = timesDiff(prev, time);
-        qDebug() << diff;
         text.append("<i><p align=\"center\">" +
                     ((time.date() != QDate::currentDate() && diff) ?
                          time.date().toString("dd.MM ") : QString())
@@ -291,4 +293,27 @@ void DataBase::makeViewed(QString& login){
     if(!query.exec(str)){
         qDebug() << "Unable to make update operation" <<  query.lastError();
     }
+}
+
+bool DataBase::changeContactStatus(QString login, contact_status newStatus){
+    QString strF = "UPDATE contacts SET status = %1 WHERE login = '%2';";
+    QString str = strF.arg(static_cast<int>(newStatus))
+                      .arg(login);
+    QSqlQuery query;
+    if(!query.exec(str)){
+        qDebug() << "Unable to make update operation" <<  query.lastError();
+        return false;
+    }
+    return true;
+}
+
+int DataBase::getStatus(QString login){
+    QString str = QString("SELECT status FROM contacts WHERE login = '%1';").arg(login);
+    QSqlQuery query;
+    if(!query.exec(str)){
+        qDebug() << "Unable to find status" <<  query.lastError();
+        return 0;
+    }
+    query.next();
+    return query.value(query.record().indexOf("status")).toInt();
 }

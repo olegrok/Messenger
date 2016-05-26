@@ -33,7 +33,6 @@ QVector <contInfo> JsonProtocol::contactListParser(json::value json){
 
 void JsonProtocol::eventsParser(json::value json){
         std::cout << "EventParser " << json << std::endl;
-        QVector<msgCont> mainVector;
         int time = 0;
         if(json.has_field(U("server_time"))){
             time = json.at(U("server_time")).as_integer();
@@ -41,18 +40,29 @@ void JsonProtocol::eventsParser(json::value json){
         }
         else
             return;
-        if(json.has_field("msg_array")){
-            auto msgArray = json.at("msg_array").as_array();
-            for(auto it : msgArray){
-                msgCont data;
-                data.login      = QString::fromStdString(it.at(U("sender_login")).as_string());
-                data.senderUid  = it.at(U("sender_uid")).as_integer();
-                data.text       = QString::fromStdString(it.at(U("text")).as_string());
-                data.time       = it.at(U("time")).as_integer();
-                mainVector.push_back(std::move(data));
-            }
+        if(json.has_field("msg_array"))
+            msgEventParser(json.at("msg_array"));
+        //NOTE FRIEND HERE
+        if(json.has_field("friend")){
 
-            emit messagesPack(mainVector);
-        }
+         }
     }
 
+void JsonProtocol::msgEventParser(json::value json){
+    QVector<msgCont> mainVector;
+    auto msgArray = json.as_array();
+    for(auto it : msgArray){
+        msgCont data;
+        data.login      = QString::fromStdString(it.at(U("sender_login")).as_string());
+        data.senderUid  = it.at(U("sender_uid")).as_integer();
+        data.text       = QString::fromStdString(it.at(U("text")).as_string());
+        data.time       = it.at(U("time")).as_integer();
+        mainVector.push_back(std::move(data));
+    }
+
+    emit messagesPack(mainVector);
+}
+
+void JsonProtocol::contactEventParser(json::value json){
+    emit updateContacts();
+}

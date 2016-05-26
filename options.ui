@@ -39,7 +39,7 @@
     </rect>
    </property>
   </widget>
-  <widget class="QPushButton" name="UnloginButton">
+  <widget class="QPushButton" name="LogoutButton">
    <property name="geometry">
     <rect>
      <x>80</x>

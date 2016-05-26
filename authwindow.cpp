@@ -67,7 +67,6 @@ void authwindow::buttonMenu(account_action property){
 void authwindow::on_connectionSettingsButton_clicked()
 {
     httpSettings win(Url);
-    win.setModal(true);
     qDebug() << win.exec();
     qDebug() << win.getURL();
     if(win.result())

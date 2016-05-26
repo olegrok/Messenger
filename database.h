@@ -13,9 +13,10 @@ enum class msg_status : int {
 };
 
 enum class contact_status : int {
-    unreplied = 0,
-    accepted  = 1,
-    denied    = 2
+    requested_from  = 0,  //исходящий
+    accepted        = 1,
+    denied          = 2,
+    requested_to    = 3  //входящий
 };
 
 class DataBase
@@ -37,6 +38,8 @@ public:
     static int lastTime();
     static int hasUnreaded(QString login);
     static void makeViewed(QString& login);
+    static bool changeContactStatus(QString login, contact_status newStatus);
+    static int getStatus(QString login);
 };
 
 

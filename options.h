@@ -25,11 +25,11 @@ public:
 private slots:
     void on_pushButton_clicked();
     void on_CloseButton_clicked();
-    void on_UnloginButton_clicked();
+    void on_LogoutButton_clicked();
     void on_setLang_clicked();
     void changeEvent(QEvent* event);
 signals:
-    void unloginProfile();
+    void logoutProfile();
 
 private:
     Ui::Options *ui;

@@ -49,8 +49,10 @@ FriendReply Client::friendRequest(QString contact_login, contact_action property
                 break;
         case contact_action::del :
             json["request"] = json::value( U("del_contact") );
-            json["login"]   = json::value( DataBase::getUid(contact_login) );
+            json["uid"]     = json::value( DataBase::getUid(contact_login) );
                 break;
+        //case contact_action::accept :
+        //case contact_action::deny :
     }
 
     json["session"]         = session;
@@ -68,6 +70,17 @@ FriendReply Client::friendRequest(QString contact_login, contact_action property
      }
 
     return reply;
+}
+
+status_code Client::friendReply(int contact_uid, contact_reply property){
+    json::value json;
+    json["request"] = json::value(U("add_contact_reply"));
+    json["uid"]     = json::value(contact_uid);
+    json["status"]  = json::value(static_cast<int>(property));
+    json["session"] = session;
+    status_code status;
+    makeRequest(methods::POST, json, status);
+    return status;
 }
 
 bool Client::setLogin(QString login){

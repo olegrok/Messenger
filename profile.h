@@ -31,6 +31,7 @@ public:
     explicit Profile(QString _login = 0);
     ~Profile();
     FriendReply friendRequest(QString contact_login, contact_action property);
+    status_code friendReply(QString contact_login, contact_reply property);
     accReply accountRequest(accRequest req, account_action property);
     web::http::status_code sendMessage(msgCont msg);
     void databaseInit();
@@ -43,7 +44,7 @@ public:
     Monitor* getMonitor_ptr();
 
 signals:
-    void unlogin(QString = 0);
+    void logout(QString = 0);
     void authorizationError(QString = 0);
     void updateWindow();
 

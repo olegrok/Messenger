@@ -7,6 +7,7 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    //qDebug() << additionEvent("Olegrok");
     qDebug() << *(int*)QThread::currentThreadId();
     ui->setupUi(this);
     this->setGeometry(QDesktopWidget().availableGeometry().width()/2 - this->width()/2,
@@ -17,20 +18,19 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(&auth, &authwindow::showMainWindow, this, &MainWindow::windowInit, Qt::UniqueConnection);
     connect(&addfriend, &AddFriend::sendContact, this, &MainWindow::addContact, Qt::UniqueConnection);
-    connect(&opt, &Options::unloginProfile, this, &MainWindow::unloginProfile, Qt::UniqueConnection);
-    connect(&account, &Profile::authorizationError, this, &MainWindow::unlogin, Qt::UniqueConnection);
+    connect(&opt, &Options::logoutProfile, this, &MainWindow::logoutProfile, Qt::UniqueConnection);
+    connect(&account, &Profile::authorizationError, this, &MainWindow::logout, Qt::UniqueConnection);
     connect(&account, &Profile::updateWindow, this, &MainWindow::updateWindow, Qt::UniqueConnection);
-    connect(&account, SIGNAL(unlogin(QString)), this, SLOT(unlogin(QString)), Qt::DirectConnection);
+    connect(&account, SIGNAL(logout(QString)), this, SLOT(logout(QString)), Qt::DirectConnection);
     connect(ui->lineFindLogin, SIGNAL(textChanged(const QString&)), this, SLOT(findContact(const QString&)));
     connect(ui->lineFindMsg, SIGNAL(textChanged(const QString&)), this, SLOT(changeMsgLineEvent(const QString&)));
-    connect(account.getMonitor_ptr(), SIGNAL(authorizationError()), this, SLOT(unlogin()));
+    connect(account.getMonitor_ptr(), SIGNAL(authorizationError()), this, SLOT(logout()));
     auth.show();
 
 //    this->show();
 //    ui->ContactsList->addItem("Green");
 //    ui->ContactsList->findItems("Green", Qt::MatchExactly).first()->setBackgroundColor(Qt::green);
 //    //ui->ContactsList->findItems("Green", Qt::MatchExactly).first()->setBackground(Qt::gray);
-//    qDebug() << showNotification("Olegrok");
 
 }
 
@@ -116,16 +116,12 @@ void MainWindow::on_AddContactButton_clicked()
     addfriend.show();
 }
 
-//NOTE old function
-void MainWindow::addContact(const contInfo info)
+void MainWindow::addContact()
 {
-    if(info.uid != -1){
-        ui->ContactsList->addItem(info.login);
-        addfriend.close();
-    }
+    loadContacts(ui->lineFindLogin->text());
 }
 
-void MainWindow::unlogin(QString status){
+void MainWindow::logout(QString status){
     if(login.isEmpty())
         return;
     qDebug() << "status: " << status;
@@ -143,17 +139,34 @@ void MainWindow::unlogin(QString status){
     this->close();
 }
 
+
+//TODO
 void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
 {\
     if(item == NULL)
         return;
+    QString login = item->text();
+    int status = DataBase::getStatus(login);
+    switch(status){
+        case static_cast<int>(contact_status::denied):
+            if(deniedEvent(login) == status_codes::OK)
+                loadContacts(ui->lineFindLogin->text());
+            return;
+        case static_cast<int>(contact_status::requested_to):
+                additionEvent(login);
+            return;
+
+
+
+    }
+
     ui->ChatWindow->clear();
     ui->ChatWindow->setHtml(DataBase::getMessages(item->text()));
     VerticalScroll.setValue(VerticalScroll.maximum());
     item->setIcon(QIcon());
 }
 
-void MainWindow::unloginProfile(){
+void MainWindow::logoutProfile(){
     account.closeSession(tr("Welcome to Chat!"));
 }
 
@@ -163,13 +176,44 @@ void MainWindow::updateWindow(){
     loadMsg(ui->findMsgButton->text() == tr("Clear") ? ui->lineFindMsg->text() : 0);
 }
 
-int MainWindow::showNotification(QString login){
+int MainWindow::additionEvent(QString login){
     QMessageBox* note =
         new QMessageBox(QMessageBox::Information, tr("New Contact"), tr("Do you want to add new contact: ") + login,
-                        QMessageBox::Yes|QMessageBox::No/*|QMessageBox::Cancel*/);
+                        QMessageBox::Yes|QMessageBox::No|QMessageBox::Cancel);
     int result = note->exec();
     delete note;
-    return result;
+    qDebug() << result;
+    switch(result){
+        case QMessageBox::StandardButton::Yes:
+            return account.friendReply(login, contact_reply::accepted);
+        case QMessageBox::StandardButton::No:
+            return account.friendReply(login, contact_reply::denied);
+        default: break;
+    }
+
+    return 0;
+}
+
+int MainWindow::deniedEvent(QString &login){
+    QMessageBox* note =
+        new QMessageBox(QMessageBox::Information, tr("The application was not accepted"),
+                        login + tr(" has not received your application."),
+                        QMessageBox::Retry|QMessageBox::Cancel);
+    note->addButton(tr("Delete"), QMessageBox::ApplyRole);
+
+    int result = note->exec();
+    qDebug() << result << note->clickedButton() << note->buttonRole(note->clickedButton());
+    delete note;
+    switch(note->buttonRole(note->clickedButton())){
+        case QMessageBox::AcceptRole:
+            return account.friendRequest(login, contact_action::add).statusCode;
+        case QMessageBox::RejectRole:
+            break;
+        case QMessageBox::ApplyRole:
+            return on_DeleteContactButton_clicked();
+        default: break;
+    }
+    return 0;
 }
 
 void MainWindow::changeEvent(QEvent *event){
@@ -208,16 +252,17 @@ void MainWindow::on_SendButton_clicked()
     }
 }
 
-void MainWindow::on_DeleteContactButton_clicked()
+int MainWindow::on_DeleteContactButton_clicked()
 {
     if(ui->ContactsList->currentRow() == -1)
-        return;
+        return -1;
     QListWidgetItem *item = ui->ContactsList->item(ui->ContactsList->currentRow());
     FriendReply reply = account.friendRequest(item->text(), contact_action::del);
     if(reply.statusCode == web::http::status_codes::OK){
         DataBase::deleteContact(item->text());
         delete item;
     }
+    return reply.statusCode;
 }
 
 void MainWindow::on_OptionButton_clicked()

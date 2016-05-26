@@ -30,9 +30,9 @@ void Options::on_CloseButton_clicked()
     this->close();
 }
 
-void Options::on_UnloginButton_clicked()
+void Options::on_LogoutButton_clicked()
 {
-    emit unloginProfile();
+    emit logoutProfile();
     this->close();
 }
 

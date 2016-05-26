@@ -17,14 +17,21 @@ using namespace web;
 using namespace web::http;
 using namespace web::http::client;
 
-enum class account_action {
+enum class account_action : int {
     registration   = 1,
     authorization  = 2
 };
 
-enum class contact_action {
+enum class contact_action : int {
     add   = 1,
     del  = 2
+};
+
+enum class contact_reply : int {
+    request = 0,
+    accepted = 1,
+    denied = 2,
+    cancel = 3
 };
 
 class Client : public QObject
@@ -36,6 +43,7 @@ public:
     void makeRequest(method mtd, json::value& json, status_code & stcode);
     accReply accountRequest(accRequest req, account_action property);
     FriendReply friendRequest(QString contact_login, contact_action property);
+    status_code friendReply(int contact_uid, contact_reply property);
     bool setLogin(QString login);
     bool logout();
     json::value getData(status_code &statusCode);
