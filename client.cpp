@@ -75,7 +75,7 @@ FriendReply Client::friendRequest(QString contact_login, contact_action property
 status_code Client::friendReply(int contact_uid, contact_reply property){
     json::value json;
     json["request"] = json::value(U("add_contact_reply"));
-    json["uid"]     = json::value(contact_uid);
+    json["contact_uid"]     = json::value(contact_uid);
     json["status"]  = json::value(static_cast<int>(property));
     json["session"] = session;
     status_code status;

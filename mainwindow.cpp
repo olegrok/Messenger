@@ -142,7 +142,7 @@ void MainWindow::logout(QString status){
 
 //TODO
 void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
-{\
+{
     if(item == NULL)
         return;
     QString login = item->text();
@@ -154,6 +154,7 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
             return;
         case static_cast<int>(contact_status::requested_to):
                 additionEvent(login);
+                loadContacts(ui->lineFindLogin->text());
             return;
 
 
@@ -183,11 +184,22 @@ int MainWindow::additionEvent(QString login){
     int result = note->exec();
     delete note;
     qDebug() << result;
+    status_code status;
     switch(result){
         case QMessageBox::StandardButton::Yes:
-            return account.friendReply(login, contact_reply::accepted);
+            status =  account.friendReply(login, contact_reply::accepted);
+            if(status == status_codes::OK){
+                contInfo info;
+                info.lastMsgId = 0;
+                info.login = login;
+                info.status = static_cast<int>(contact_status::accepted);
+                info.unreaded = 0;
+            }
         case QMessageBox::StandardButton::No:
-            return account.friendReply(login, contact_reply::denied);
+            status = account.friendReply(login, contact_reply::denied);
+            if(status == status_codes::OK)
+                DataBase::deleteContact(login);
+            return status;
         default: break;
     }
 
