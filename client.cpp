@@ -44,15 +44,13 @@ FriendReply Client::friendRequest(QString contact_login, contact_action property
     json::value json;
     switch(property){
         case contact_action::add :
-            json["request"] = json::value( U("add_contact_request") );
-            json["login"]   = json::value( U(contact_login.toStdString()) );
+            json["request"]         = json::value( U("add_contact_request") );
+            json["login"]           = json::value( U(contact_login.toStdString()) );
                 break;
         case contact_action::del :
-            json["request"] = json::value( U("del_contact") );
-            json["uid"]     = json::value( DataBase::getUid(contact_login) );
+            json["request"]         = json::value( U("del_contact") );
+            json["contact_uid"]     = json::value( DataBase::getUid(contact_login) );
                 break;
-        //case contact_action::accept :
-        //case contact_action::deny :
     }
 
     json["session"]         = session;

@@ -195,6 +195,7 @@ int MainWindow::additionEvent(QString login){
                 info.status = static_cast<int>(contact_status::accepted);
                 info.unreaded = 0;
             }
+            return status;
         case QMessageBox::StandardButton::No:
             status = account.friendReply(login, contact_reply::denied);
             if(status == status_codes::OK)
