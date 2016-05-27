@@ -6,6 +6,7 @@
 #include <QListWidgetItem>
 #include <utility>
 #include "structsforrequests.h"
+#include "client.h"
 
 enum class msg_status : int {
     sended    = 1,

@@ -40,15 +40,34 @@ void JsonProtocol::eventsParser(json::value json){
         }
         else
             return;
-        if(json.has_field("msg_array"))
-            msgEventParser(json.at("msg_array"));
+        pplx::task< QVector<msgCont> > task_msg_array;
+        if(json.has_field("msg_array")){
+            task_msg_array = pplx::task< QVector<msgCont> >(
+            [&]()
+            {
+                return msgEventParser(json.at("msg_array"));
+            });
+        }
+
+        pplx::task< QVector<contInfo> > task_event_array;
+        if(json.has_field("event_array")){
+            task_event_array = pplx::task< QVector <contInfo> >(
+            [&]()
+            {
+                return contactEventParser(json.at("msg_array"));
+            });
+        }
+
         //NOTE FRIEND HERE
-        if(json.has_field("friend")){
+
+        if(json.has_field("event_array")){
 
          }
+        emit messagesPack(task_msg_array.get());
+        emit contactEventsPack(task_event_array.get());
     }
 
-void JsonProtocol::msgEventParser(json::value json){
+QVector<msgCont> JsonProtocol::msgEventParser(json::value json){
     QVector<msgCont> mainVector;
     auto msgArray = json.as_array();
     for(auto it : msgArray){
@@ -60,9 +79,18 @@ void JsonProtocol::msgEventParser(json::value json){
         mainVector.push_back(std::move(data));
     }
 
-    emit messagesPack(mainVector);
+    return mainVector;
 }
 
-void JsonProtocol::contactEventParser(json::value json){
-    emit updateContacts();
+QVector<contInfo> JsonProtocol::contactEventParser(json::value json){
+    QVector <contInfo> events;
+    auto contactEventArray = json.at("event_array").as_array();
+    for(auto it : contactEventArray){
+        contInfo info;
+        info.uid = it.at("ruid").as_integer();
+        info.login = QString::fromStdString(it.at("addition").as_string());
+        info.status = it.at("eid").as_integer();
+        events.push_back(std::move(info));
+    }
+    return events;
 }

@@ -49,7 +49,8 @@ signals:
     void updateWindow();
 
 public slots:
-    void distributor(QVector<msgCont>);
+    void msgDistributor(QVector<msgCont>);
+    void eventsDistributor(QVector<contInfo>);
     void monitorHandler(web::json::value json);
 
 private:

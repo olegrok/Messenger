@@ -23,12 +23,12 @@ public:
     void eventsParser(json::value json);
     QVector <contInfo> contactListParser(json::value json);
 private:
-    void msgEventParser(json::value json);
-    void contactEventParser(json::value json);
+    QVector <msgCont>  msgEventParser(json::value json);
+    QVector <contInfo> contactEventParser(json::value json);
 
 signals:
     void messagesPack(QVector <msgCont>);
-    void updateContacts();
+    void contactEventsPack(QVector <contInfo>);
 };
 
 #endif // JSONPROTOCOL_H

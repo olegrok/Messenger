@@ -7,7 +7,10 @@ Profile::Profile(QString _login) :
     qRegisterMetaType<json::value>("json::value");
 
     connect(&parser, SIGNAL(messagesPack(QVector<msgCont>)), this,
-            SLOT(distributor(QVector<msgCont>)));
+            SLOT(msgDistributor(QVector<msgCont>)));
+    connect(&parser, SIGNAL(contactEventsPack(QVector<contInfo>)), this,
+            SLOT(eventsDistributor(QVector<contInfo>)));
+
     monitor.moveToThread(&monitor);
     connect(&monitor, SIGNAL(task(web::json::value)), this,
             SLOT(monitorHandler(web::json::value)));
@@ -115,9 +118,26 @@ void Profile::closeSession(QString status){
     emit logout(status);
 }
 
-void Profile::distributor(QVector<msgCont> vector){
+void Profile::msgDistributor(QVector<msgCont> vector){
     for(auto it : vector){
         DataBase::addMessage(it, msg_status::recived);
+    }
+    emit updateWindow();
+}
+
+void Profile::eventsDistributor(QVector<contInfo> vector){
+    for(auto it : vector){
+        switch(it.status){
+        case static_cast<int>(contact_reply::request):
+            it.status = static_cast<int>(contact_status::requested_from);
+            DataBase::addContact(it); break;
+        case static_cast<int>(contact_reply::denied):
+             DataBase::changeContactStatus(it.login, contact_status::denied); break;
+        case static_cast<int>(contact_reply::accepted):
+            DataBase::changeContactStatus(it.login, contact_status::accepted); break;
+        case static_cast<int>(contact_reply::cancel):
+            DataBase::changeContactStatus(it.login, contact_status::denied); break;
+        }
     }
     emit updateWindow();
 }
