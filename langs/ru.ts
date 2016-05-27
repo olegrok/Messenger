@@ -29,19 +29,17 @@
         <translation>Введите логин контакта</translation>
     </message>
     <message>
-        <location filename="../addfriend.cpp" line="29"/>
         <source>Just your friend</source>
-        <translation>Уже ваш друг</translation>
+        <translation type="vanished">Уже ваш друг</translation>
     </message>
     <message>
-        <location filename="../addfriend.cpp" line="36"/>
+        <location filename="../addfriend.cpp" line="33"/>
         <source>Not found</source>
         <translation>Не найдено</translation>
     </message>
     <message>
-        <location filename="../addfriend.cpp" line="38"/>
         <source>Unknown error</source>
-        <translation>Неизвестная ошибка</translation>
+        <translation type="vanished">Неизвестная ошибка</translation>
     </message>
 </context>
 <context>
@@ -88,8 +86,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../mainwindow.ui" line="202"/>
-        <location filename="../mainwindow.cpp" line="233"/>
-        <location filename="../mainwindow.cpp" line="240"/>
+        <location filename="../mainwindow.cpp" line="289"/>
+        <location filename="../mainwindow.cpp" line="296"/>
         <source>Find</source>
         <translation>Найти</translation>
     </message>
@@ -125,31 +123,46 @@ p, li { white-space: pre-wrap; }
         <translation>О Qt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="134"/>
+        <location filename="../mainwindow.cpp" line="129"/>
         <source>Invalid Session</source>
         <translation>Ошибка сессии</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="159"/>
+        <location filename="../mainwindow.cpp" line="171"/>
         <source>Welcome to Chat!</source>
         <translation>Добро пожаловать в чат!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="165"/>
-        <location filename="../mainwindow.cpp" line="207"/>
-        <location filename="../mainwindow.cpp" line="237"/>
+        <location filename="../mainwindow.cpp" line="177"/>
+        <location filename="../mainwindow.cpp" line="262"/>
+        <location filename="../mainwindow.cpp" line="293"/>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="170"/>
+        <location filename="../mainwindow.cpp" line="182"/>
         <source>New Contact</source>
         <translation>Новый контакт</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="170"/>
+        <location filename="../mainwindow.cpp" line="182"/>
         <source>Do you want to add new contact: </source>
         <translation>Вы хотите добавить новый котакт:</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="212"/>
+        <source>The application was not accepted</source>
+        <translation>Предложение не было принято</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="213"/>
+        <source> has not received your application.</source>
+        <translation> не принял ваше предложение.</translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="215"/>
+        <source>Delete</source>
+        <translation>Удалить</translation>
     </message>
 </context>
 <context>
@@ -187,13 +200,13 @@ p, li { white-space: pre-wrap; }
         <translation>Русский</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="111"/>
+        <location filename="../options.ui" line="119"/>
         <location filename="../options.cpp" line="50"/>
         <source>English</source>
         <translation>Английский</translation>
     </message>
     <message>
-        <location filename="../options.ui" line="106"/>
+        <location filename="../options.ui" line="110"/>
         <location filename="../options.cpp" line="46"/>
         <source>Ukrainian</source>
         <translation>Украинский</translation>

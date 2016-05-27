@@ -14,10 +14,10 @@ enum class msg_status : int {
 };
 
 enum class contact_status : int {
-    requested_from  = 0,  //исходящий
+    requested_from  = 3,  //исходящий
     accepted        = 1,
     denied          = 2,
-    requested_to    = 3  //входящий
+    requested_to    = 0  //входящий
 };
 
 class DataBase

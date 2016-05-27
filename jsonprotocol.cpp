@@ -60,11 +60,13 @@ void JsonProtocol::eventsParser(json::value json){
 
         //NOTE FRIEND HERE
 
-        if(json.has_field("event_array")){
+        /*if(json.has_field("event_array")){
 
-         }
-        emit messagesPack(task_msg_array.get());
-        emit contactEventsPack(task_event_array.get());
+         }*/
+        if(json.has_field("msg_array"))
+            emit messagesPack(task_msg_array.get());
+        if(json.has_field("event_array"))
+            emit contactEventsPack(task_event_array.get());
     }
 
 QVector<msgCont> JsonProtocol::msgEventParser(json::value json){

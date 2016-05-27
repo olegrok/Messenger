@@ -25,6 +25,7 @@ void AddFriend::on_AddButton_clicked()
         info.lastMsgId = 0;
         info.unreaded = 0;
         info.status = static_cast<int>(contact_status::requested_to);
+        DataBase::addContact(info);
     }
     else
     {

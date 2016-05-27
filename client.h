@@ -23,15 +23,15 @@ enum class account_action : int {
 };
 
 enum class contact_action : int {
-    add   = 1,
+    add  = 1,
     del  = 2
 };
 
 enum class contact_reply : int {
-    request = 0,
-    accepted = 1,
-    denied = 2,
-    cancel = 3
+    request     = 0,
+    accepted    = 1,
+    denied      = 2,
+    cancel      = 3
 };
 
 class Client : public QObject

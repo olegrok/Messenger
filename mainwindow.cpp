@@ -152,7 +152,7 @@ void MainWindow::on_ContactsList_itemClicked(QListWidgetItem *item)
             if(deniedEvent(login) == status_codes::OK)
                 loadContacts(ui->lineFindLogin->text());
             return;
-        case static_cast<int>(contact_status::requested_to):
+        case static_cast<int>(contact_status::requested_from):
                 additionEvent(login);
                 loadContacts(ui->lineFindLogin->text());
             return;
